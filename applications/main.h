@@ -8,6 +8,7 @@
 #include "distance.h"
 #include "cpuusage.h"
 
+
 extern void cal_init(void);
 extern int msgq_init(void);
 #define KEY_Pin GPIO_PIN_2

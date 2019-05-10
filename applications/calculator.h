@@ -1,6 +1,7 @@
 #include "mailbox.h"
 #include "dji_pid.h"
 #include "drv_can.h"
+#include "sdcard.h"
 
 static rt_thread_t tid_cal = RT_NULL;
 
