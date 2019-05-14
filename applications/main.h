@@ -7,7 +7,7 @@
 #include "calculator.h"
 #include "distance.h"
 #include "cpuusage.h"
-
+#include "sdcard.h"
 
 extern void cal_init(void);
 extern int msgq_init(void);

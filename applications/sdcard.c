@@ -1,8 +1,9 @@
 #include "sdcard.h"
 rt_device_t dev;
-int fd=RT_NULL;
-const rt_uint8_t t[4] = {0x79,0xfe,0xfe,0xfe};
-const rt_uint8_t n[4] = {0xed,0x1e,0xff,0xfe};
+
+const rt_uint8_t black[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+void sd_enter(void * par);
+
 void sd_init(void)
 {
   dev = rt_device_find("sd0");
@@ -18,22 +19,36 @@ void sd_init(void)
 		}			
 	}
 	
-	rt_thread_mdelay(10);
+	tid_sd = rt_thread_create("sd",
+														sd_enter , RT_NULL,
+														1024 ,
+														29 , 10);
+		if(tid_sd != RT_NULL)
+			rt_thread_startup(tid_sd);
 }
 
-void sd_write(const void * buf1,const void * buf2,const void * buf3)
+void sd_enter(void * par)
 {
-	fd = open("/can.txt",O_WRONLY | O_APPEND| O_CREAT);
+	int fd=RT_NULL;
+	rt_uint8_t buf[20];
 	rt_uint32_t time;
-	time = rt_tick_get();
-	write(fd,&time,4);
-	write(fd,&t,4);
-	write(fd,buf1,8);
-	write(fd,&t,4);
-	write(fd,buf2,8);
-	write(fd,&t,4);
-	write(fd,buf3,4);
-	write(fd,&n,4);
-	fsync(fd);
-	close(fd);
+	while(1)
+	{
+		if(rt_mq_recv(&sdcard_mq,buf,16,RT_WAITING_FOREVER) ==RT_EOK)  //接受到buf顺序有问题
+		{
+			fd = open("/can.txt", O_APPEND | O_WRONLY | O_CREAT);
+				time = rt_tick_get();
+				write(fd,&time,4);
+				write(fd,buf,16);
+				if(rt_mq_recv(&sdcard_mq,buf,4,RT_WAITING_FOREVER) ==RT_EOK)
+				{
+					write(fd,buf,4);
+				}
+				write(fd,black,8);
+				fsync(fd);
+				close(fd);
+
+		}
+	}
 }
+

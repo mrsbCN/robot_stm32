@@ -5,6 +5,10 @@
 struct rt_ringbuffer s_cur_rb[2];
 
 struct rt_mailbox	s_tar_mb[2],ele_mb[2],total_mb[2];
+struct rt_event event_dist,event_done;
+
+struct rt_messagequeue sdcard_mq;
+static rt_uint8_t sdcard[80];
 
 static rt_uint8_t lf_s_cur[12]={0};
 static rt_uint8_t ri_s_cur[12]={0};   //从CAN总线接收回来的信息
@@ -18,7 +22,7 @@ static rt_uint8_t ri_ele[4]={0};		//要发送的电流
 static rt_uint8_t total_left[4]={0};	//总的角度
 static rt_uint8_t total_right[4]={0};
 
-struct rt_event event_dist,event_done;
+
 
 
 int msgq_init(void)
@@ -39,7 +43,8 @@ int msgq_init(void)
 	
 		rt_event_init(&event_dist, "event_dist", RT_IPC_FLAG_FIFO);
 		rt_event_init(&event_done, "event_done", RT_IPC_FLAG_FIFO);
-
+		
+		rt_mq_init(&sdcard_mq,"sdcard",&sdcard,20,80,RT_IPC_FLAG_FIFO);
 		
 		return 0;
 }

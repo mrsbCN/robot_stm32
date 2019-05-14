@@ -34,7 +34,8 @@ int main(void)
 	rt_thread_mdelay(2000);
 	cal_init();
 	dis_init();
-	cpu_usage_init();
+	sd_init();
+	//cpu_usage_init();
 	rt_pin_attach_irq(KEY1_PIN,PIN_IRQ_MODE_FALLING,key_irq,RT_NULL);
 	rt_pin_irq_enable(KEY1_PIN, PIN_IRQ_ENABLE);
 	rt_int32_t a,b=0;

@@ -25,7 +25,6 @@ void cal_init(void)
 		msg_send.data[5] = 	0;
 		msg_send.data[6] =  0;
 		msg_send.data[7] = 	0;
-		sd_init();
 		tid_cal = rt_thread_create("ca",cal,RT_NULL,4096,20,10);			
 		
 		if(RT_NULL != tid_cal)
@@ -90,12 +89,13 @@ void cal(void * par)
 				}
 				rt_event_send(&event_dist,EVENT_FLAG1);
 				
-				msg_send.data[0] =  0;//ele[0] >>8 ;
-				msg_send.data[1] =  0;//ele[0];
-				msg_send.data[2] =  0;//ele[1] >>8 ;
-				msg_send.data[3] =  0;//ele[1];
+				msg_send.data[0] =  ele[0] >>8 ;
+				msg_send.data[1] =  ele[0];
+				msg_send.data[2] =  ele[1] >>8 ;
+				msg_send.data[3] =  ele[1];
 				dev_can1.ops->sendmsg(&dev_can1,&msg_send,CAN_TXMAILBOX_0);
-				sd_write(recv[0],recv[1],ele);
+				rt_mq_send(&sdcard_mq,recv,16);
+				rt_mq_send(&sdcard_mq,ele,4);
 				rt_thread_mdelay(3);		
     }
 }
