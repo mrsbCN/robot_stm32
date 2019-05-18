@@ -11,7 +11,7 @@
 
 CAN_HandleTypeDef hcan1;
 SPI_HandleTypeDef hspi5;
-rt_int32_t set_spd = 2500;
+rt_int32_t set_spd = 1000;
 struct rt_spi_device * spi_dev;
 void HAL_UART_MspInit(UART_HandleTypeDef* huart);
 void HAL_UART_MspDeInit(UART_HandleTypeDef* huart);
@@ -39,7 +39,6 @@ int main(void)
 	sd_init();
 	rt_thread_mdelay(2000);
 	cal_init();
-	dis_init();
 	//cpu_usage_init();
 	rt_pin_attach_irq(KEY1_PIN,PIN_IRQ_MODE_FALLING,key_irq,RT_NULL);
 	rt_pin_irq_enable(KEY1_PIN, PIN_IRQ_ENABLE);
@@ -49,16 +48,26 @@ int main(void)
 	
 	while(1)
 	{
-
-		if (RT_EOK == rt_event_recv(&event_done,EVENT_DONE_LEFT|EVENT_DONE_RIGHT,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_NO,&recved))
-			set_spd = 0;
-		a = -set_spd;
-		b = set_spd;
+		//a - ;b+前进
+		//dis_init(284);
+		a = -1600;								//右拐
+		b = 800;
 		rt_mb_send(&s_tar_mb[0],a);
 		rt_mb_send(&s_tar_mb[1],b);
-		//cpu_usage_get(&max,&min);
-		//rt_kprintf("cpuusage:%d.%d\n",max,min);
-		rt_thread_mdelay(100);
+		rt_thread_mdelay(200);
+		
+		a = -800;								//前进
+		b = 800;
+		rt_mb_send(&s_tar_mb[0],a);
+		rt_mb_send(&s_tar_mb[1],b);
+		rt_thread_mdelay(2000);
+		
+		a = 800;								//后退
+		b = -800;
+		rt_mb_send(&s_tar_mb[0],a);
+		rt_mb_send(&s_tar_mb[1],b);
+		rt_thread_mdelay(1000);
+		
 	}
   return RT_EOK;
 }
