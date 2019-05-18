@@ -40,6 +40,7 @@ int main(void)
 	rt_thread_mdelay(2000);
 	cal_init();
 	//cpu_usage_init();
+	dis_init(1000);
 	rt_pin_attach_irq(KEY1_PIN,PIN_IRQ_MODE_FALLING,key_irq,RT_NULL);
 	rt_pin_irq_enable(KEY1_PIN, PIN_IRQ_ENABLE);
 	rt_int32_t a,b=0;
@@ -50,23 +51,66 @@ int main(void)
 	{
 		//a - ;b+前进
 		//dis_init(284);
-		a = -1600;								//右拐
-		b = 800;
+		a = -1000;								//右拐
+		b = 500;
 		rt_mb_send(&s_tar_mb[0],a);
 		rt_mb_send(&s_tar_mb[1],b);
-		rt_thread_mdelay(200);
+		rt_thread_mdelay(4000);
 		
-		a = -800;								//前进
-		b = 800;
+		a = -1000;								//前进
+		b = 1000;
+		rt_mb_send(&s_tar_mb[0],a);
+		rt_mb_send(&s_tar_mb[1],b);
+		rt_thread_mdelay(10000);
+		
+		a = 0;								//stop
+		b = 0;
+		rt_mb_send(&s_tar_mb[0],a);
+		rt_mb_send(&s_tar_mb[1],b);
+		rt_thread_mdelay(3000);
+		
+		a = 1000;								//后退
+		b = -1000;
+		rt_mb_send(&s_tar_mb[0],a);
+		rt_mb_send(&s_tar_mb[1],b);
+		rt_thread_mdelay(5000);
+				
+		a = 1000;								//左转
+		b = 1000;
+		rt_mb_send(&s_tar_mb[0],a);
+		rt_mb_send(&s_tar_mb[1],b);
+		rt_thread_mdelay(1000);
+		
+		a = -1000;								//前进
+		b = 1000;
 		rt_mb_send(&s_tar_mb[0],a);
 		rt_mb_send(&s_tar_mb[1],b);
 		rt_thread_mdelay(2000);
 		
-		a = 800;								//后退
-		b = -800;
+		a = 0;								//stop
+		b = 0;
+		rt_mb_send(&s_tar_mb[0],a);
+		rt_mb_send(&s_tar_mb[1],b);
+		rt_thread_mdelay(3000);
+		
+		a = -1000;								//右转
+		b = -1000;
 		rt_mb_send(&s_tar_mb[0],a);
 		rt_mb_send(&s_tar_mb[1],b);
 		rt_thread_mdelay(1000);
+		
+		a = 1000;								//后退
+		b = -1000;
+		rt_mb_send(&s_tar_mb[0],a);
+		rt_mb_send(&s_tar_mb[1],b);
+		rt_thread_mdelay(3000);
+		
+				
+		a = 0;								//stop
+		b = 0;
+		rt_mb_send(&s_tar_mb[0],a);
+		rt_mb_send(&s_tar_mb[1],b);
+		rt_thread_mdelay(10000);
 		
 	}
   return RT_EOK;

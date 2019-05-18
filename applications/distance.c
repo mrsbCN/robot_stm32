@@ -38,7 +38,6 @@ void distance(void * par)
 						if(  ABS(total_angle[i] - total0[i]) *K >= ((rt_uint32_t)par) )
 						{
 							rt_event_send(&event_done,(EVENT_DONE_LEFT<<i));
-							break;
 						}
 					}
 				}
