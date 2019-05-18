@@ -8,6 +8,8 @@
 #include "distance.h"
 #include "cpuusage.h"
 #include "sdcard.h"
+#include "drv_spi.h"
+//#include "motion_driver_example.h"
 
 extern void cal_init(void);
 extern int msgq_init(void);

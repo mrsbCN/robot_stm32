@@ -107,6 +107,9 @@
 #define RT_MMCSD_STACK_SIZE 1024
 #define RT_MMCSD_THREAD_PREORITY 22
 #define RT_MMCSD_MAX_PARTITION 16
+#define RT_USING_SPI
+#define RT_USING_SENSOR
+#define RT_USING_SENSOR_CMD
 
 /* Using WiFi */
 
@@ -116,6 +119,8 @@
 
 /* POSIX layer and C standard library */
 
+#define RT_USING_LIBC
+#define RT_USING_POSIX
 
 /* Network */
 
@@ -173,8 +178,13 @@
 
 /* peripheral libraries and drivers */
 
-/* sensors drivers */
-
+#define PKG_USING_SENSORS_DRIVERS
+#define PKG_USING_MPU6XXX
+#define PKG_USING_MPU6XXX_LATEST_VERSION
+#define PKG_USING_MPU6XXX_ACCE
+#define PKG_USING_MPU6XXX_GYRO
+#define PKG_USING_MOTIONDRIVER2RTT
+#define PKG_USING_MOTIONDRIVER2RTT_LATEST_VERSION
 
 /* miscellaneous packages */
 
@@ -197,6 +207,8 @@
 #define BSP_USING_UART2
 #define BSP_USING_SDIO
 #define BSP_USING_CAN1
+#define BSP_USING_SPI
+#define BSP_USING_SPI5
 
 /* Board extended module Drivers */
 

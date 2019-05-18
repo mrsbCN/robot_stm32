@@ -446,9 +446,10 @@ static void do_output(rt_uint32_t level, const char *tag, rt_bool_t is_raw, cons
     {
         static rt_bool_t already_output = RT_FALSE;
         if (already_output == RT_FALSE)
-        {
+        {					
             rt_kprintf("Warning: There is no enough buffer for saving async log,"
                     " please increase the ULOG_ASYNC_OUTPUT_BUF_SIZE option.\n");
+						rt_kprintf("%s",log_buf);
             already_output = RT_TRUE;
         }
     }
@@ -1187,6 +1188,8 @@ void ulog_async_waiting_log(rt_int32_t time)
 
 static void async_output_thread_entry(void *param)
 {
+		ulog_async_output();
+	
     while (1)
     {
         ulog_async_waiting_log(RT_WAITING_FOREVER);

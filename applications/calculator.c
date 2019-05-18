@@ -25,7 +25,7 @@ void cal_init(void)
 		msg_send.data[5] = 	0;
 		msg_send.data[6] =  0;
 		msg_send.data[7] = 	0;
-		tid_cal = rt_thread_create("ca",cal,RT_NULL,4096,20,10);			
+		tid_cal = rt_thread_create("cal",cal,RT_NULL,4096,20,10);			
 		
 		if(RT_NULL != tid_cal)
 			rt_thread_startup(tid_cal);
@@ -35,27 +35,20 @@ void cal_init(void)
 void cal(void * par)
 {
 		rt_uint8_t i;
-		rt_uint8_t recv[2][8];
+		rt_uint8_t recv[3][8]={0};
 		rt_int16_t ele[2];
 		rt_int32_t tar[2];
 		PID_TypeDef motor_pid[2];
-		 for(int i=0; i<2; i++)
-    {	
-			pid_init(&motor_pid[i]);
-			motor_pid[i].f_param_init(&motor_pid[i],	//PID_TypeDef * pid
-																PID_Speed,			//PID_ID   id
-																10000,					//rt_uint16_t maxout
-																5000,						//rt_uint16_t intergral_limit
-																5,							//float deadband
-																0,							//rt_uint16_t period
-																4000,						//rt_int16_t  max_err
-																0,							//rt_int16_t  target
-																1.5,						//float 	kp
-																0.1,						//float 	ki
-																0);						  //float 	kd
-    }
 	
-		rt_thread_mdelay(5);
+		
+		do
+		{
+				for(i=0;i<2;i++)
+				{
+					rt_ringbuffer_get(&s_cur_rb[i],recv[i],8);
+				}
+		}while((recv[0][7] !=0) || (recv[1][7] !=0));
+		
 		for(i=0;i<2;i++)
 		{
 		rt_ringbuffer_get(&s_cur_rb[i],recv[i],8);
@@ -66,6 +59,23 @@ void cal(void * par)
 		rt_ringbuffer_get(&s_cur_rb[i],recv[i],8);
 		get_moto_offset(&moto_chassis[i],recv[i]);
 		}
+		rt_thread_mdelay(5);
+		 for(int i=0; i<2; i++)
+    {	
+			pid_init(&motor_pid[i]);
+			motor_pid[i].f_param_init(&motor_pid[i],	//PID_TypeDef * pid
+																PID_Speed,			//PID_ID   id
+																10000,					//rt_uint16_t maxout
+																5000,						//rt_uint16_t intergral_limit
+																10,							//float deadband
+																0,							//rt_uint16_t period
+																4000,						//rt_int16_t  max_err
+																0,							//rt_int16_t  target
+																1.5,						//float 	kp
+																0.1,						//float 	ki
+																0.4);						  //float 	kd
+    }
+	
 		
     while(1)
     {
@@ -94,8 +104,15 @@ void cal(void * par)
 				msg_send.data[2] =  ele[1] >>8 ;
 				msg_send.data[3] =  ele[1];
 				dev_can1.ops->sendmsg(&dev_can1,&msg_send,CAN_TXMAILBOX_0);
-				rt_mq_send(&sdcard_mq,recv,16);
-				rt_mq_send(&sdcard_mq,ele,4);
+				//LOG_I("s:%d,%d;l:%d,%d,%d,%d,%d,%d;r:%d,%d,%d,%d,%d,%d.", 
+				//ele[0],ele[1],recv[0][0],recv[0][1],recv[0][2],recv[0][3],recv[0][4],recv[0][5],
+				//recv[1][0],recv[1][1],recv[1][2],recv[1][3],recv[1][4],recv[1][5]);
+
+				for(i = 0;i<4;i++)
+				{
+					recv[3][i] = msg_send.data[i];
+				}
+				rt_mq_send(&sdcard_mq,recv,20);
 				rt_thread_mdelay(3);		
     }
 }

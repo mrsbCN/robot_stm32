@@ -1,8 +1,9 @@
 #include "sdcard.h"
 rt_device_t dev;
 
-const rt_uint8_t black[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+const rt_uint8_t black[8] = {0xff,0xff,0xff,0x00,0xfe,0xfe,0xfe,0xfe};
 void sd_enter(void * par);
+int fd=RT_NULL;
 
 void sd_init(void)
 {
@@ -18,7 +19,7 @@ void sd_init(void)
 			rt_kprintf("sd card mount to / failed!\n");
 		}			
 	}
-	
+	//fd = open("/can.txt", O_APPEND | O_WRONLY | O_CREAT);
 	tid_sd = rt_thread_create("sd",
 														sd_enter , RT_NULL,
 														1024 ,
@@ -34,16 +35,12 @@ void sd_enter(void * par)
 	rt_uint32_t time;
 	while(1)
 	{
-		if(rt_mq_recv(&sdcard_mq,buf,16,RT_WAITING_FOREVER) ==RT_EOK)  //接受到buf顺序有问题
+		if(rt_mq_recv(&sdcard_mq,buf,20,RT_WAITING_FOREVER) ==RT_EOK)  //接受到buf顺序有问题		
 		{
-			fd = open("/can.txt", O_APPEND | O_WRONLY | O_CREAT);
+				fd = open("/can.txt", O_APPEND | O_WRONLY | O_CREAT);
 				time = rt_tick_get();
 				write(fd,&time,4);
-				write(fd,buf,16);
-				if(rt_mq_recv(&sdcard_mq,buf,4,RT_WAITING_FOREVER) ==RT_EOK)
-				{
-					write(fd,buf,4);
-				}
+				write(fd,buf,20);
 				write(fd,black,8);
 				fsync(fd);
 				close(fd);
@@ -52,3 +49,27 @@ void sd_enter(void * par)
 	}
 }
 
+
+//void ulog_sdcard_backend_output(struct ulog_backend *backend, 
+//																rt_uint32_t level, 
+//																const char *tag, 
+//																rt_bool_t is_raw,
+//																const char *log, 
+//																size_t len)
+//{
+//				
+//				write(fd,log,len);
+//				fsync(fd);
+//				//close(fd);
+//}
+//
+//int ulog_sdcard_backend_init(void)
+//{
+//    ulog_init();
+//    sdcard.output = ulog_sdcard_backend_output;
+//
+//    ulog_backend_register(&sdcard, "sdcard", RT_TRUE);
+//
+//    return 0;
+//}
+//INIT_PREV_EXPORT(ulog_sdcard_backend_init);

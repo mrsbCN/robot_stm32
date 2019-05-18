@@ -1,6 +1,10 @@
 #include "mailbox.h"
 #include "dji_pid.h"
 #include "drv_can.h"
+#include <stdlib.h>
+//#define LOG_TAG              "can"
+//#define LOG_LVL              LOG_LVL_DBG
+//#include "ulog.h"
 
 static rt_thread_t tid_cal = RT_NULL;
 

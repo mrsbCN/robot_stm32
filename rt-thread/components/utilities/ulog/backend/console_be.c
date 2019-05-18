@@ -52,6 +52,6 @@ int ulog_console_backend_init(void)
 
     return 0;
 }
-INIT_PREV_EXPORT(ulog_console_backend_init);
+//INIT_PREV_EXPORT(ulog_console_backend_init);
 
 #endif /* ULOG_BACKEND_USING_CONSOLE */

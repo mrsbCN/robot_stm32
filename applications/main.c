@@ -10,14 +10,17 @@
 #include "main.h"
 
 CAN_HandleTypeDef hcan1;
-rt_int32_t set_spd = 1000;
+SPI_HandleTypeDef hspi5;
+rt_int32_t set_spd = 2500;
+struct rt_spi_device * spi_dev;
 void HAL_UART_MspInit(UART_HandleTypeDef* huart);
 void HAL_UART_MspDeInit(UART_HandleTypeDef* huart);
 void MX_CAN1_Init(void);
 void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle);
 void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle);
+void MX_SPI5_Init(void);
 void can_init(void);
-
+void spi_init(void);
 
 void key_irq(void *args)
 {
@@ -26,15 +29,17 @@ void key_irq(void *args)
 
 int main(void)
 {
+	rt_thread_mdelay(1000);
 	MX_CAN1_Init();
+	MX_SPI5_Init();
 	can_init();
-	//__HAL_CAN_ENABLE_IT(&hcan1,CAN_IT_FF0);
 	msgq_init();
 	led_init();
+	rt_hw_spi_device_attach("spi5", "mpu6500", GPIOF, GPIO_PIN_6);
+	sd_init();
 	rt_thread_mdelay(2000);
 	cal_init();
 	dis_init();
-	sd_init();
 	//cpu_usage_init();
 	rt_pin_attach_irq(KEY1_PIN,PIN_IRQ_MODE_FALLING,key_irq,RT_NULL);
 	rt_pin_irq_enable(KEY1_PIN, PIN_IRQ_ENABLE);
@@ -47,7 +52,7 @@ int main(void)
 
 		if (RT_EOK == rt_event_recv(&event_done,EVENT_DONE_LEFT|EVENT_DONE_RIGHT,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_NO,&recved))
 			set_spd = 0;
-		a = set_spd;
+		a = -set_spd;
 		b = set_spd;
 		rt_mb_send(&s_tar_mb[0],a);
 		rt_mb_send(&s_tar_mb[1],b);
@@ -294,6 +299,96 @@ void HAL_SD_MspDeInit(SD_HandleTypeDef* hsd)
 
 }
 
+
+void MX_SPI5_Init(void)
+{
+
+  hspi5.Instance = SPI5;
+  hspi5.Init.Mode = SPI_MODE_MASTER;
+  hspi5.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi5.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi5.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi5.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi5.Init.NSS = SPI_NSS_SOFT;
+  hspi5.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
+  hspi5.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi5.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi5.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi5.Init.CRCPolynomial = 10;
+  if (HAL_SPI_Init(&hspi5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+}
+
+/**
+* @brief SPI MSP Initialization
+* This function configures the hardware resources used in this example
+* @param hspi: SPI handle pointer
+* @retval None
+*/
+void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  if(hspi->Instance==SPI5)
+  {
+  /* USER CODE BEGIN SPI5_MspInit 0 */
+
+  /* USER CODE END SPI5_MspInit 0 */
+    /* Peripheral clock enable */
+    __HAL_RCC_SPI5_CLK_ENABLE();
+  
+    __HAL_RCC_GPIOF_CLK_ENABLE();
+    /**SPI5 GPIO Configuration    
+    PF7     ------> SPI5_SCK
+    PF9     ------> SPI5_MOSI
+    PF8     ------> SPI5_MISO 
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_7|GPIO_PIN_9|GPIO_PIN_8;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF5_SPI5;
+    HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
+  /* USER CODE BEGIN SPI5_MspInit 1 */
+
+  /* USER CODE END SPI5_MspInit 1 */
+  }
+
+}
+
+/**
+* @brief SPI MSP De-Initialization
+* This function freeze the hardware resources used in this example
+* @param hspi: SPI handle pointer
+* @retval None
+*/
+void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
+{
+  if(hspi->Instance==SPI5)
+  {
+  /* USER CODE BEGIN SPI5_MspDeInit 0 */
+
+  /* USER CODE END SPI5_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_SPI5_CLK_DISABLE();
+  
+    /**SPI5 GPIO Configuration    
+    PF7     ------> SPI5_SCK
+    PF9     ------> SPI5_MOSI
+    PF8     ------> SPI5_MISO 
+    */
+    HAL_GPIO_DeInit(GPIOF, GPIO_PIN_7|GPIO_PIN_9|GPIO_PIN_8);
+
+  /* USER CODE BEGIN SPI5_MspDeInit 1 */
+
+  /* USER CODE END SPI5_MspDeInit 1 */
+  }
+
+}
+
 void can_init(void)
 {
 	rt_hw_can_init();
@@ -307,3 +402,4 @@ void can_init(void)
 	dev_can1.ops->configure(&dev_can1,&cfg);
 	dev_can1.ops->control(&dev_can1,RT_DEVICE_CTRL_SET_INT,(void *)RT_DEVICE_FLAG_INT_RX);
 }
+

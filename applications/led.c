@@ -29,8 +29,11 @@ void led_init(void)
 {
 		rt_pin_mode(POWER1_PIN, PIN_MODE_OUTPUT);
 		rt_pin_mode(POWER2_PIN, PIN_MODE_OUTPUT);
+		rt_pin_mode(SPI5_NSS, PIN_MODE_OUTPUT);
 		rt_pin_write(POWER1_PIN,PIN_HIGH);
 		rt_pin_write(POWER2_PIN,PIN_HIGH);
+		rt_pin_write(SPI5_NSS,PIN_LOW);
+	
 		rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
 		rt_pin_mode(LED1_PIN, PIN_MODE_OUTPUT);
 		rt_pin_mode(KEY1_PIN,PIN_MODE_INPUT_PULLDOWN);

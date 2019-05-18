@@ -44,6 +44,7 @@ int msgq_init(void)
 		rt_event_init(&event_dist, "event_dist", RT_IPC_FLAG_FIFO);
 		rt_event_init(&event_done, "event_done", RT_IPC_FLAG_FIFO);
 		
+	
 		rt_mq_init(&sdcard_mq,"sdcard",&sdcard,20,80,RT_IPC_FLAG_FIFO);
 		
 		return 0;
