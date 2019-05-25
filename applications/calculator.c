@@ -25,7 +25,8 @@ void cal_init(void)
 		msg_send.data[5] = 	0;
 		msg_send.data[6] =  0;
 		msg_send.data[7] = 	0;
-		tid_cal = rt_thread_create("cal",cal,RT_NULL,4096,20,10);			
+		ADRC_Init(&ADRC_SPEED[0],2);
+		tid_cal = rt_thread_create("cal",cal,RT_NULL,4096,10,10);			
 		
 		if(RT_NULL != tid_cal)
 			rt_thread_startup(tid_cal);
@@ -37,7 +38,7 @@ void cal(void * par)
 		rt_uint8_t i;
 		rt_uint8_t recv[3][8]={0};
 		rt_int16_t ele[2];
-		rt_int32_t tar[2];
+		rt_int32_t tar[2]={0,0};
 		PID_TypeDef motor_pid[2];
 	
 		
@@ -60,7 +61,7 @@ void cal(void * par)
 		get_moto_offset(&moto_chassis[i],recv[i]);
 		}
 		rt_thread_mdelay(5);
-		 for(int i=0; i<2; i++)
+		for(int i=0; i<2; i++)
     {	
 			pid_init(&motor_pid[i]);
 			motor_pid[i].f_param_init(&motor_pid[i],	//PID_TypeDef * pid
@@ -84,6 +85,7 @@ void cal(void * par)
 					if(RT_EOK == rt_mb_recv(&s_tar_mb[i],(rt_ubase_t*)&tar[i],RT_WAITING_NO))
 					{
 						motor_pid[i].target = tar[i];
+						rt_kprintf("s_tar_mb[%d]:%d,%d\n",i,motor_pid[i].target,tar[i]);
 					}
 				}
 				
@@ -94,26 +96,26 @@ void cal(void * par)
 							get_moto_measure(&moto_chassis[i],recv[i]);
 							motor_pid[i].f_cal_pid(&motor_pid[i],moto_chassis[i].speed_rpm);
 							ele[i] = motor_pid[i].output;
+							//ADRC_Control(&ADRC_SPEED[i],tar[i],moto_chassis[i].speed_rpm);
+							//ele[i] = (rt_int16_t)ADRC_SPEED[i].u;
 							rt_mb_send(&total_mb[i],moto_chassis[i].total_angle);
 					}
 				}
-				rt_event_send(&event_dist,EVENT_FLAG1);
+				rt_event_send(&event_per,EVENT_PER);
 				
 				msg_send.data[0] =  ele[0] >>8 ;
 				msg_send.data[1] =  ele[0];
 				msg_send.data[2] =  ele[1] >>8 ;
 				msg_send.data[3] =  ele[1];
 				dev_can1.ops->sendmsg(&dev_can1,&msg_send,CAN_TXMAILBOX_0);
-				//LOG_I("s:%d,%d;l:%d,%d,%d,%d,%d,%d;r:%d,%d,%d,%d,%d,%d.", 
-				//ele[0],ele[1],recv[0][0],recv[0][1],recv[0][2],recv[0][3],recv[0][4],recv[0][5],
-				//recv[1][0],recv[1][1],recv[1][2],recv[1][3],recv[1][4],recv[1][5]);
+
 
 				for(i = 0;i<4;i++)
 				{
-					recv[3][i] = msg_send.data[i];
+					recv[2][i] = msg_send.data[i];
 				}
 				rt_mq_send(&sdcard_mq,recv,20);
-				rt_thread_mdelay(3);		
+				rt_thread_mdelay(5);		
     }
 }
 

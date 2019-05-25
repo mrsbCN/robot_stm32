@@ -9,6 +9,7 @@
 #include "cpuusage.h"
 #include "sdcard.h"
 #include "drv_spi.h"
+#include "tid_toR.h"
 //#include "motion_driver_example.h"
 
 extern void cal_init(void);

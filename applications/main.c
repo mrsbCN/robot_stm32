@@ -40,22 +40,23 @@ int main(void)
 	rt_thread_mdelay(2000);
 	cal_init();
 	dis_init();
+	toR_init();
 	//cpu_usage_init();
 	rt_pin_attach_irq(KEY1_PIN,PIN_IRQ_MODE_FALLING,key_irq,RT_NULL);
 	rt_pin_irq_enable(KEY1_PIN, PIN_IRQ_ENABLE);
-	rt_int32_t a,b=0;
-	rt_uint32_t recved;
-	rt_uint8_t max,min;
+	//rt_int32_t a,b=0;
+	//rt_uint32_t recved;
+	//rt_uint8_t max,min;
 	
 	while(1)
 	{
 
-		if (RT_EOK == rt_event_recv(&event_done,EVENT_DONE_LEFT|EVENT_DONE_RIGHT,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_NO,&recved))
-			set_spd = 0;
-		a = -set_spd;
-		b = set_spd;
-		rt_mb_send(&s_tar_mb[0],a);
-		rt_mb_send(&s_tar_mb[1],b);
+		//if (RT_EOK == rt_event_recv(&event_done,EVENT_DONE_LEFT|EVENT_DONE_RIGHT,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_NO,&recved))
+		//	set_spd = 0;
+		//a = -set_spd;
+		//b = set_spd;
+		//rt_mb_send(&s_tar_mb[0],a);
+		//rt_mb_send(&s_tar_mb[1],b);
 		//cpu_usage_get(&max,&min);
 		//rt_kprintf("cpuusage:%d.%d\n",max,min);
 		rt_thread_mdelay(100);

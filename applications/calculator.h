@@ -2,6 +2,7 @@
 #include "dji_pid.h"
 #include "drv_can.h"
 #include <stdlib.h>
+#include "ADRC.h"
 //#define LOG_TAG              "can"
 //#define LOG_LVL              LOG_LVL_DBG
 //#include "ulog.h"
