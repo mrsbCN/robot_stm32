@@ -26,7 +26,7 @@ void cal_init(void)
 		msg_send.data[6] =  0;
 		msg_send.data[7] = 	0;
 		ADRC_Init(&ADRC_SPEED[0],2);
-		tid_cal = rt_thread_create("cal",cal,RT_NULL,4096,10,10);			
+		tid_cal = rt_thread_create("cal",cal,RT_NULL,4096,19,10);			
 		
 		if(RT_NULL != tid_cal)
 			rt_thread_startup(tid_cal);
@@ -85,7 +85,6 @@ void cal(void * par)
 					if(RT_EOK == rt_mb_recv(&s_tar_mb[i],(rt_ubase_t*)&tar[i],RT_WAITING_NO))
 					{
 						motor_pid[i].target = tar[i];
-						rt_kprintf("s_tar_mb[%d]:%d,%d\n",i,motor_pid[i].target,tar[i]);
 					}
 				}
 				

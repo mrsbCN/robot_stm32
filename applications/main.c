@@ -27,6 +27,15 @@ void key_irq(void *args)
 		set_spd +=200;
 }
 
+static void hook_of_put(struct rt_object *object)
+{
+		if (strcmp(object->name,"event_done") ==0)
+		{
+			rt_kprintf("event:%d,%x\n",object->flag,object->list);
+		}
+
+}
+
 int main(void)
 {
 	rt_thread_mdelay(1000);
@@ -37,6 +46,7 @@ int main(void)
 	led_init();
 	rt_hw_spi_device_attach("spi5", "mpu6500", GPIOF, GPIO_PIN_6);
 	sd_init();
+	//rt_object_take_sethook(hook_of_put);
 	rt_thread_mdelay(2000);
 	cal_init();
 	dis_init();
@@ -44,23 +54,23 @@ int main(void)
 	//cpu_usage_init();
 	rt_pin_attach_irq(KEY1_PIN,PIN_IRQ_MODE_FALLING,key_irq,RT_NULL);
 	rt_pin_irq_enable(KEY1_PIN, PIN_IRQ_ENABLE);
-	//rt_int32_t a,b=0;
-	//rt_uint32_t recved;
+	rt_int32_t a,b=0;
+	rt_uint32_t recved;
 	//rt_uint8_t max,min;
 	
-	while(1)
-	{
-
-		//if (RT_EOK == rt_event_recv(&event_done,EVENT_DONE_LEFT|EVENT_DONE_RIGHT,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_NO,&recved))
-		//	set_spd = 0;
-		//a = -set_spd;
-		//b = set_spd;
-		//rt_mb_send(&s_tar_mb[0],a);
-		//rt_mb_send(&s_tar_mb[1],b);
-		//cpu_usage_get(&max,&min);
-		//rt_kprintf("cpuusage:%d.%d\n",max,min);
-		rt_thread_mdelay(100);
-	}
+	//while(1)
+	//{
+	//
+	//	if (RT_EOK == rt_event_recv(&event_done,EVENT_DONE_LEFT|EVENT_DONE_RIGHT,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_NO,&recved))
+	//		set_spd = 0;
+	//	a = -set_spd;
+	//	b = set_spd;
+	//	rt_mb_send(&s_tar_mb[0],a);
+	//	rt_mb_send(&s_tar_mb[1],b);
+	//	//cpu_usage_get(&max,&min);
+	//	//rt_kprintf("cpuusage:%d.%d\n",max,min);
+	//	rt_thread_mdelay(100);
+	//}
   return RT_EOK;
 }
 

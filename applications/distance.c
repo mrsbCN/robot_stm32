@@ -6,7 +6,7 @@ void distance(void * par);
 
 void dis_init(void)
 {
-    tid_dis = rt_thread_create("dis_left",distance,RT_NULL,4096,9,10);
+    tid_dis = rt_thread_create("distance",distance,RT_NULL,4096,13,10);
 		if(RT_NULL != tid_dis)
 			rt_thread_startup(tid_dis);
 }
@@ -21,37 +21,51 @@ void distance(void * par)
 		rt_uint32_t recved;
     while(1)
     {
+			
+							
 			if(RT_EOK == rt_event_recv(&event_per,EVENT_PER,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_FOREVER,&recved))	//如果收到dist事件则开始计算
 			{
-				for(i=0;i<2;i++)
+				for(i=0;i<1;i++)
 				{
 					rt_mb_recv(&total_mb[i],(rt_ubase_t*)&cur_angle[i],RT_WAITING_FOREVER);					//一直更新当前角度
 				}
 			}
-			
+			rt_kprintf("------------\n");
 			if(RT_EOK == rt_event_recv(&event_dist,EVENT_DIST,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_FOREVER,&recved))	//如果收到dist事件则开始计算
-			{
-				for(i=0;i<2;i++)
+			{			
+				for(i=0;i<1;i++)
 				{
 					rt_mb_recv(&dis_tar_mb[i],(rt_ubase_t*)&dis_tar[i],RT_WAITING_NO);	//更新目标
 				}
 				status =1;
 				
+				if(RT_EOK == rt_event_recv(&event_per,EVENT_PER,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_FOREVER,&recved))	//如果收到dist事件则开始计算
+				{
+					for(i=0;i<1;i++)
+					{
+						rt_mb_recv(&total_mb[i],(rt_ubase_t*)&cur_angle[i],RT_WAITING_FOREVER);					//更新当前角度
+					}
+				}
+				
 				while(status ==1 )
 				{
 					if(RT_EOK == rt_event_recv(&event_per,EVENT_PER,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_FOREVER,&recved))	
 					{
-						for(i=0;i<2;i++)
+						for(i=0;i<1;i++)
 						{
 							if(RT_EOK == rt_mb_recv(&total_mb[i],(rt_ubase_t*)&total_angle[i],RT_WAITING_FOREVER))
 							{
-								if(  ABS(total_angle[i] - cur_angle[i]) *K >= ((rt_uint32_t)dis_tar[i]) )
+								if(  labs(labs(total_angle[i]) - labs(cur_angle[i])) *K >= ((rt_int32_t)dis_tar[i]) )
 								{
 									rt_event_send(&event_done,(EVENT_DONE_LEFT<<i));
-									status =0;
+									status = 0;
+									rt_kprintf("dis time:%d\n",(rt_tick_get()));
+									rt_kprintf("angle:%d,%d,%d,%d\n\n",total_angle[i],cur_angle[i],dis_tar[i],i);
+									break;
 								}
 							}
 						}
+						rt_kprintf("total_angle[0]:%d \t cur_angle:%d \t now:%d \n",total_angle[0],cur_angle[0],ABS(ABS(total_angle[0]) - ABS(cur_angle[0])) *K);
 					}
 				}
 				
