@@ -9,7 +9,8 @@
 #include "cpuusage.h"
 #include "sdcard.h"
 #include "drv_spi.h"
-#include "tid_toR.h"
+#include "tid_chatoM.h"
+#include "tid_chatoN.h"
 #include "string.h"
 //#include "motion_driver_example.h"
 

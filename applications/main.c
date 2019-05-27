@@ -50,7 +50,6 @@ int main(void)
 	rt_thread_mdelay(2000);
 	cal_init();
 	dis_init();
-	toR_init();
 	//cpu_usage_init();
 	rt_pin_attach_irq(KEY1_PIN,PIN_IRQ_MODE_FALLING,key_irq,RT_NULL);
 	rt_pin_irq_enable(KEY1_PIN, PIN_IRQ_ENABLE);
@@ -71,6 +70,11 @@ int main(void)
 	//	//rt_kprintf("cpuusage:%d.%d\n",max,min);
 	//	rt_thread_mdelay(100);
 	//}
+	rt_mutex_take(&mission_mu,RT_WAITING_FOREVER);
+	chatoM_init();
+	rt_thread_mdelay(10);
+	chatoN_init();
+	rt_mutex_release(&mission_mu);
   return RT_EOK;
 }
 

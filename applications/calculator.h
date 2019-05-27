@@ -1,3 +1,6 @@
+#ifndef __CALCULATER
+#define __CALCULATER
+
 #include "mailbox.h"
 #include "dji_pid.h"
 #include "drv_can.h"
@@ -6,8 +9,6 @@
 //#define LOG_TAG              "can"
 //#define LOG_LVL              LOG_LVL_DBG
 //#include "ulog.h"
-
-static rt_thread_t tid_cal = RT_NULL;
 
 
 /*CAN发送或是接收的ID*/
@@ -39,7 +40,8 @@ typedef struct{
 	rt_uint32_t			msg_cnt;
 }moto_measure_t;
 
-
+#endif
 /* Extern  ------------------------------------------------------------------*/
 extern moto_measure_t  moto_chassis[];
 extern PID_TypeDef motor_pid[];
+extern void reset_total_angle(moto_measure_t *ptr);

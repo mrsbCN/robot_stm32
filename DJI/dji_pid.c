@@ -52,11 +52,18 @@ static void pid_param_init(
 }
 
 /*中途更改参数设定--------------------------------------------------------------*/
-static void pid_reset(PID_TypeDef * pid, float kp, float ki, float kd)
+static void pid_reset(PID_TypeDef * pid)
 {
-	pid->kp = kp;
-	pid->ki = ki;
-	pid->kd = kd;
+
+	pid->measure = 0;					//测量值
+	pid->err=0;							//误差
+	pid->last_err=0;      		//上次误差
+	pid->pout=0;
+	pid->iout=0;
+	pid->dout=0;
+	pid->output=0;						//本次输出
+	pid->last_output=0;			//上次输出
+	
 }
 
 /*pid计算-----------------------------------------------------------------------*/

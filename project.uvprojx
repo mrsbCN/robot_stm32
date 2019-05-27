@@ -497,14 +497,19 @@
               <FilePath>.\applications\sdcard.c</FilePath>
             </File>
             <File>
-              <FileName>tid_toR.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_toR.c</FilePath>
-            </File>
-            <File>
               <FileName>const.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\const.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_chatoM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_chatoM.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_chatoN.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_chatoN.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -4,8 +4,9 @@
 
 void cal(void * par);
 
+PID_TypeDef motor_pid[2];
 moto_measure_t moto_chassis[2] = {0};
-
+static rt_thread_t tid_cal = RT_NULL;
 struct rt_can_msg msg_send; 
 
 void get_total_angle(moto_measure_t *p);
@@ -39,7 +40,7 @@ void cal(void * par)
 		rt_uint8_t recv[3][8]={0};
 		rt_int16_t ele[2];
 		rt_int32_t tar[2]={0,0};
-		PID_TypeDef motor_pid[2];
+		
 	
 		
 		do
@@ -141,10 +142,19 @@ void get_moto_measure(moto_measure_t *ptr, rt_uint8_t* hcan)
 /*this function should be called after system+can init */
 void get_moto_offset(moto_measure_t *ptr, rt_uint8_t* hcan)     //加入重置所有参数
 {
+	
 	ptr->angle = (uint16_t)(hcan[0]<<8 | hcan[1]) ;
 	ptr->offset_angle = ptr->angle;
 }
 
+
+void reset_total_angle(moto_measure_t *ptr)
+{
+	ptr->round_cnt =0;
+	ptr->offset_angle = ptr->angle;
+	ptr->total_angle =0;
+}
+	
 
 #define ABS(x)	( (x>0) ? (x) : (-x) )
 /**
