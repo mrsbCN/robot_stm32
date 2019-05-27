@@ -11,6 +11,7 @@
 #include "drv_spi.h"
 #include "tid_chatoM.h"
 #include "tid_chatoN.h"
+#include "tid_chaback.h"
 #include "string.h"
 //#include "motion_driver_example.h"
 
