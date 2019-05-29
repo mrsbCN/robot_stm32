@@ -12,6 +12,7 @@
 CAN_HandleTypeDef hcan1;
 SPI_HandleTypeDef hspi5;
 rt_int32_t set_spd = 2500;
+rt_uint8_t status = 0;
 struct rt_spi_device *spi_dev;
 void HAL_UART_MspInit(UART_HandleTypeDef *huart);
 void HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
@@ -38,7 +39,7 @@ static void hook_of_put(struct rt_object *object)
 
 int main(void)
 {
-    rt_thread_mdelay(1000);
+    rt_thread_mdelay(100);
     MX_CAN1_Init();
     MX_SPI5_Init();
     can_init();
@@ -47,7 +48,7 @@ int main(void)
     rt_hw_spi_device_attach("spi5", "mpu6500", GPIOF, GPIO_PIN_6);
     sd_init();
     //rt_object_take_sethook(hook_of_put);
-    rt_thread_mdelay(2000);
+    rt_thread_mdelay(200);
     cal_init();
     dis_init();
     //cpu_usage_init();
@@ -76,6 +77,31 @@ int main(void)
     chatoN_init();
     rt_thread_mdelay(10);
     chaback_init();
+	rt_thread_mdelay(10);
+    tonurse_init();
+	
+	if(status ==0)
+	{
+		rt_thread_mdelay(10);
+		A_toM_init();
+		rt_thread_mdelay(10);
+		A_Mtonurse_init();
+		rt_thread_mdelay(10);
+		A_toN_init();
+		rt_thread_mdelay(10);
+		A_back_init();
+	}
+	else if (status ==1)
+	{
+		rt_thread_mdelay(10);
+		B_toN_init();
+		rt_thread_mdelay(10);
+		B_Ntonurse_init();
+		rt_thread_mdelay(10);
+		B_toM_init();
+		rt_thread_mdelay(10);
+		B_back_init();
+	}
     rt_mutex_release(&mission_mu);
     return RT_EOK;
 }

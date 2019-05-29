@@ -1,6 +1,6 @@
-#include "tid_tonurse.h"
+#include "tid_A_Mtonurse.h"
 
-void tid_tonurse_entry(void *par)
+void tid_A_Mtonurse_entry(void *par)
 {
     rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
     rt_uint32_t recved;
@@ -13,20 +13,20 @@ void tid_tonurse_entry(void *par)
     }
     rt_thread_mdelay(10);
 
-	backward(halfbe_to_R,halfbe_to_R);
+	backward(M_to_Q,M_to_Q);
 
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
 
-	back_turnright(dis_back_tri_left,dis_back_tri_right);
+	back_turnleft(dis_back_tlf_left,dis_back_tlf_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done2:%d,time:%d\n", recved, (rt_tick_get()));
     }
 	
-	backward(R_to_S,R_to_S);
+	backward(Q_to_S,Q_to_S);
 
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
@@ -52,12 +52,12 @@ void tid_tonurse_entry(void *par)
     rt_mutex_release(&mission_mu);
 }
 
-void tonurse_init(void)
+void A_Mtonurse_init(void)
 {
-    tid_tonurse = rt_thread_create("tid_tonurse",
-                                   tid_tonurse_entry, RT_NULL,
+    tid_A_Mtonurse = rt_thread_create("tid_A_Mtonurse",
+                                   tid_A_Mtonurse_entry, RT_NULL,
                                    2048 ,
                                    12 , 10);
-    if(tid_tonurse != RT_NULL)
-        rt_thread_startup(tid_tonurse);
+    if(tid_A_Mtonurse != RT_NULL)
+        rt_thread_startup(tid_A_Mtonurse);
 }

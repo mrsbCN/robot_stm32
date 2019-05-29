@@ -521,6 +521,51 @@
               <FileType>1</FileType>
               <FilePath>.\applications\tid_chaback.c</FilePath>
             </File>
+            <File>
+              <FileName>tid_tonurse.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_tonurse.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_A_toM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_A_toM.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_A_Mtonurse.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_A_Mtonurse.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_A_toN.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_A_toN.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_A_back.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_A_back.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_B_toN.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_B_toN.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_B_Ntonurse.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_B_Ntonurse.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_B_toM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_B_toM.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_B_back.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_B_back.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

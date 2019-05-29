@@ -1,5 +1,5 @@
-#ifndef __TID_NURSE
-#define __TID_NURSE
+#ifndef __TID_A_BACK
+#define __TID_A_BACK
 
 #include "mailbox.h"
 #include "step.h"
@@ -7,7 +7,7 @@
 #include "dji_pid.h"
 #include "calculator.h"
 
-static rt_thread_t tid_tonurse = RT_NULL;
+static rt_thread_t tid_A_back = RT_NULL;
 
-void tonurse_init(void);
+void A_back_init(void);
 #endif

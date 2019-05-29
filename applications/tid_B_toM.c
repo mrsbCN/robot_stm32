@@ -1,6 +1,6 @@
-#include "tid_tonurse.h"
+#include "tid_B_toM.h"
 
-void tid_tonurse_entry(void *par)
+void tid_B_toM_entry(void *par)
 {
     rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
     rt_uint32_t recved;
@@ -13,34 +13,34 @@ void tid_tonurse_entry(void *par)
     }
     rt_thread_mdelay(10);
 
-	backward(halfbe_to_R,halfbe_to_R);
+	forward(nurse_to_S,nurse_to_S);
 
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
 
-	back_turnright(dis_back_tri_left,dis_back_tri_right);
+	for_turnleft(dis_for_tlf_left,dis_for_tlf_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done2:%d,time:%d\n", recved, (rt_tick_get()));
     }
 	
-	backward(R_to_S,R_to_S);
+	forward(S_to_Q,S_to_Q);
 
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done3:%d,time:%d\n", recved, (rt_tick_get()));
     }
 	
-	back_turnright(dis_back_tri_left,dis_back_tri_right);
+	for_turnright(dis_for_tri_left,dis_for_tri_right);
 
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done4:%d,time:%d\n", recved, (rt_tick_get()));
     }
 	
-	backward(S_to_nurse,S_to_nurse);
+	forward(Q_to_M,Q_to_M);
 
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
@@ -52,12 +52,12 @@ void tid_tonurse_entry(void *par)
     rt_mutex_release(&mission_mu);
 }
 
-void tonurse_init(void)
+void B_toM_init(void)
 {
-    tid_tonurse = rt_thread_create("tid_tonurse",
-                                   tid_tonurse_entry, RT_NULL,
+    tid_B_toM = rt_thread_create("tid_B_toM",
+                                   tid_B_toM_entry, RT_NULL,
                                    2048 ,
                                    12 , 10);
-    if(tid_tonurse != RT_NULL)
-        rt_thread_startup(tid_tonurse);
+    if(tid_B_toM != RT_NULL)
+        rt_thread_startup(tid_B_toM);
 }
