@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F427xx, USE_HAL_DRIVER, RT_USING_ARM_LIBC</Define>
               <Undefine></Undefine>
-              <IncludePath>.;rt-thread\include;applications;.;board;board\CubeMX_Config\Inc;libraries\HAL_Drivers;libraries\HAL_Drivers\config;packages\MotionDriver2RTT-latest\core;packages\MotionDriver2RTT-latest\core\driver\eMPL;packages\MotionDriver2RTT-latest\core\driver\include;packages\MotionDriver2RTT-latest\core\driver\stm32L;packages\MotionDriver2RTT-latest\core\eMPL-hal;packages\MotionDriver2RTT-latest\core\mllite;packages\MotionDriver2RTT-latest\core\mpl;packages\MotionDriver2RTT-latest\port;packages\mpu6xxx-latest\inc;rt-thread\libcpu\arm\common;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\dfs\include;rt-thread\components\dfs\filesystems\devfs;rt-thread\components\dfs\filesystems\elmfat;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\spi;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\sensors;rt-thread\components\drivers\include;rt-thread\components\finsh;rt-thread\components\libc\compilers\armlibc;rt-thread\components\libc\compilers\common;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;libraries\STM32F4xx_HAL\CMSIS\Include;.\DJI;.\rt-thread\components\drivers\include\ipc</IncludePath>
+              <IncludePath>.;rt-thread\include;applications;.;board;board\CubeMX_Config\Inc;libraries\HAL_Drivers;libraries\HAL_Drivers\config;packages\button-v1.0.1;packages\MotionDriver2RTT-latest\core;packages\MotionDriver2RTT-latest\core\driver\eMPL;packages\MotionDriver2RTT-latest\core\driver\include;packages\MotionDriver2RTT-latest\core\driver\stm32L;packages\MotionDriver2RTT-latest\core\eMPL-hal;packages\MotionDriver2RTT-latest\core\mllite;packages\MotionDriver2RTT-latest\core\mpl;packages\MotionDriver2RTT-latest\port;packages\mpu6xxx-latest\inc;packages\SystemView-latest;packages\SystemView-latest\SystemView_Src\Config;packages\SystemView-latest;packages\SystemView-latest\SystemView_Src\SEGGER;rt-thread\libcpu\arm\common;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\dfs\include;rt-thread\components\dfs\filesystems\devfs;rt-thread\components\dfs\filesystems\elmfat;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\spi;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\sensors;rt-thread\components\drivers\include;rt-thread\components\finsh;rt-thread\components\libc\compilers\armlibc;rt-thread\components\libc\compilers\common;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;libraries\STM32F4xx_HAL\CMSIS\Include;.\DJI;.\packages\MotionDriver2RTT-latest\examples;.\rt-thread\components\drivers\include\ipc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -472,9 +472,9 @@
               <FilePath>.\applications\calculator.c</FilePath>
             </File>
             <File>
-              <FileName>cpuusage.c</FileName>
+              <FileName>const.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\cpuusage.c</FilePath>
+              <FilePath>.\applications\const.c</FilePath>
             </File>
             <File>
               <FileName>distance.c</FileName>
@@ -497,49 +497,9 @@
               <FilePath>.\applications\sdcard.c</FilePath>
             </File>
             <File>
-              <FileName>const.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\const.c</FilePath>
-            </File>
-            <File>
               <FileName>step.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\step.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_chatoM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_chatoM.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_chatoN.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_chatoN.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_chaback.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_chaback.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_tonurse.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_tonurse.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_A_toM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_A_toM.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_A_Mtonurse.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_A_Mtonurse.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_A_toN.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_A_toN.c</FilePath>
             </File>
             <File>
               <FileName>tid_A_back.c</FileName>
@@ -547,9 +507,24 @@
               <FilePath>.\applications\tid_A_back.c</FilePath>
             </File>
             <File>
-              <FileName>tid_B_toN.c</FileName>
+              <FileName>tid_A_Mtonurse.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\tid_B_toN.c</FilePath>
+              <FilePath>.\applications\tid_A_Mtonurse.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_A_toM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_A_toM.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_A_toN.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_A_toN.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_B_back.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_B_back.c</FilePath>
             </File>
             <File>
               <FileName>tid_B_Ntonurse.c</FileName>
@@ -562,9 +537,29 @@
               <FilePath>.\applications\tid_B_toM.c</FilePath>
             </File>
             <File>
-              <FileName>tid_B_back.c</FileName>
+              <FileName>tid_B_toN.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\tid_B_back.c</FilePath>
+              <FilePath>.\applications\tid_B_toN.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_chaback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_chaback.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_chatoM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_chatoM.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_chatoN.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_chatoN.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_tonurse.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_tonurse.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -666,6 +661,16 @@
               <FileName>drv_common.c</FileName>
               <FileType>1</FileType>
               <FilePath>libraries\HAL_Drivers\drv_common.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>button_drive</GroupName>
+          <Files>
+            <File>
+              <FileName>button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\button-v1.0.1\button.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -825,6 +830,36 @@
               <FileName>sensor_inven_mpu6xxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>packages\mpu6xxx-latest\src\sensor_inven_mpu6xxx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>trace</GroupName>
+          <Files>
+            <File>
+              <FileName>SEGGER_RTT_Device.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\SystemView-latest\SystemView_Src\Config\SEGGER_RTT_Device.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEGGER_SYSVIEW_Config_RTThread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\SystemView-latest\SystemView_Src\Config\SEGGER_SYSVIEW_Config_RTThread.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEGGER_SYSVIEW_RTThread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\SystemView-latest\SystemView_Src\Config\SEGGER_SYSVIEW_RTThread.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEGGER_RTT.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\SystemView-latest\SystemView_Src\SEGGER\SEGGER_RTT.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEGGER_SYSVIEW.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\SystemView-latest\SystemView_Src\SEGGER\SEGGER_SYSVIEW.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1276,6 +1311,11 @@
           <GroupName>DJI</GroupName>
           <Files>
             <File>
+              <FileName>ADRC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\DJI\ADRC.c</FilePath>
+            </File>
+            <File>
               <FileName>dji_pid.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\DJI\dji_pid.c</FilePath>
@@ -1284,11 +1324,6 @@
               <FileName>dji_mytype.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\DJI\dji_mytype.h</FilePath>
-            </File>
-            <File>
-              <FileName>ADRC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\DJI\ADRC.c</FilePath>
             </File>
           </Files>
         </Group>

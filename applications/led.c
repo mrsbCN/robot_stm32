@@ -37,7 +37,8 @@ void led_init(void)
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
     rt_pin_mode(LED1_PIN, PIN_MODE_OUTPUT);
     rt_pin_mode(KEY1_PIN, PIN_MODE_INPUT_PULLDOWN);
-
+	rt_pin_mode(LED2_PIN, PIN_MODE_OUTPUT);
+	
     tid_led1 = rt_thread_create("led1",
                                 led1_entry , RT_NULL,
                                 THREAD_STACK_SIZE ,

@@ -11,8 +11,8 @@
 
 CAN_HandleTypeDef hcan1;
 SPI_HandleTypeDef hspi5;
-rt_int32_t set_spd = 2500;
-rt_uint8_t status = 0;
+rt_uint8_t status = 0x0;
+rt_uint8_t go = 0x1;
 struct rt_spi_device *spi_dev;
 void HAL_UART_MspInit(UART_HandleTypeDef *huart);
 void HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
@@ -22,19 +22,28 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef *canHandle);
 void MX_SPI5_Init(void);
 void can_init(void);
 void spi_init(void);
+Button_t Button1;
 
-void key_irq(void *args)
+uint8_t Read_KEY1_Level(void) { return rt_pin_read(KEY1_PIN);}
+
+void Btn1_Dowm_CallBack(void *btn)		//单击开始运行
 {
-    set_spd += 200;
+	rt_kprintf("Button1 Click!\n");
+	go = 0;
 }
 
-static void hook_of_put(struct rt_object *object)
+void Btn1_Double_CallBack(void *btn)  	//双击切换先去A还是B
 {
-    if (strcmp(object->name, "event_done") == 0)
-    {
-        rt_kprintf("event:%d,%x\n", object->flag, object->list);
-    }
-
+	rt_kprintf("Button1 Double click!\n");
+	if(rt_pin_read(LED2_PIN) ==PIN_HIGH)
+	{
+		rt_pin_write(LED2_PIN,PIN_LOW);
+	}
+	else
+	{
+		rt_pin_write(LED2_PIN,PIN_HIGH);
+	}
+	status = ~status;
 }
 
 int main(void)
@@ -47,59 +56,52 @@ int main(void)
     led_init();
     rt_hw_spi_device_attach("spi5", "mpu6500", GPIOF, GPIO_PIN_6);
     sd_init();
-    //rt_object_take_sethook(hook_of_put);
     rt_thread_mdelay(200);
     cal_init();
     dis_init();
-    //cpu_usage_init();
-    rt_pin_attach_irq(KEY1_PIN, PIN_IRQ_MODE_FALLING, key_irq, RT_NULL);
-    rt_pin_irq_enable(KEY1_PIN, PIN_IRQ_ENABLE);
-    rt_int32_t a, b = 0;
-    rt_uint32_t recved;
-    //rt_uint8_t max,min;
-
-    //while(1)
-    //{
-    //
-    //	if (RT_EOK == rt_event_recv(&event_done,EVENT_DONE_LEFT|EVENT_DONE_RIGHT,RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,RT_WAITING_NO,&recved))
-    //		set_spd = 0;
-    //	a = -set_spd;
-    //	b = set_spd;
-    //	rt_mb_send(&s_tar_mb[0],a);
-    //	rt_mb_send(&s_tar_mb[1],b);
-    //	//cpu_usage_get(&max,&min);
-    //	//rt_kprintf("cpuusage:%d.%d\n",max,min);
-    //	rt_thread_mdelay(100);
-    //}
-    rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
-    chatoM_init();
-    rt_thread_mdelay(10);
-    chatoN_init();
-    rt_thread_mdelay(10);
-    chaback_init();
-	rt_thread_mdelay(10);
-    tonurse_init();
-	
-	if(status ==0)
+ 
+	Button_Create("Button1",
+              &Button1, 
+              Read_KEY1_Level, 
+              PIN_HIGH);
+	Button_Attach(&Button1,BUTTON_DOWM,Btn1_Dowm_CallBack);                       //Click
+	Button_Attach(&Button1,BUTTON_DOUBLE,Btn1_Double_CallBack);                   //Double click
+    while(go)                            
 	{
-		rt_thread_mdelay(10);
+		Button_Process();
+		rt_thread_mdelay(20);
+	}
+	Button_Delete(&Button1);
+	rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
+    chatoM_init();
+    rt_thread_mdelay(1);
+    chatoN_init();
+    rt_thread_mdelay(1);
+    chaback_init();
+	rt_thread_mdelay(1);
+    tonurse_init();
+	if(status == 0)
+	{
+		rt_kprintf("go A first!\n");
+		rt_thread_mdelay(1);
 		A_toM_init();
-		rt_thread_mdelay(10);
+		rt_thread_mdelay(1);
 		A_Mtonurse_init();
-		rt_thread_mdelay(10);
+		rt_thread_mdelay(1);
 		A_toN_init();
-		rt_thread_mdelay(10);
+		rt_thread_mdelay(1);
 		A_back_init();
 	}
-	else if (status ==1)
+	else if (status == 1)
 	{
-		rt_thread_mdelay(10);
+		rt_kprintf("go B first!\n");
+		rt_thread_mdelay(1);
 		B_toN_init();
-		rt_thread_mdelay(10);
+		rt_thread_mdelay(1);
 		B_Ntonurse_init();
-		rt_thread_mdelay(10);
+		rt_thread_mdelay(1);
 		B_toM_init();
-		rt_thread_mdelay(10);
+		rt_thread_mdelay(1);
 		B_back_init();
 	}
     rt_mutex_release(&mission_mu);

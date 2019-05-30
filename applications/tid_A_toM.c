@@ -5,6 +5,7 @@ void tid_A_toM_entry(void *par)
     rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
     rt_uint32_t recved;
 
+	rt_thread_mdelay(1000);
     rt_thread_mdelay(10);
     for(rt_uint8_t i = 0; i < 2; i++)
     {

@@ -23,8 +23,6 @@ static rt_uint8_t ri_ele[4] = {0};		//要发送的电流
 static rt_uint8_t total_left[4] = {0};	//总的角度
 static rt_uint8_t total_right[4] = {0};
 
-static rt_uint8_t fuck_inset = 0;
-
 static rt_uint8_t dis_tar_left[4] = {0};	//距离
 static rt_uint8_t dis_tar_right[4] = {0};
 

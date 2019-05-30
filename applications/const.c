@@ -24,8 +24,8 @@ const rt_int32_t spd_back_tri_right = -speed3;
 
 const rt_int32_t be_to_R = 540;
 
-const rt_int32_t dis_for_tlf_left = 285;
-const rt_int32_t dis_for_tlf_right = 570;
+const rt_int32_t dis_for_tlf_left = 260;
+const rt_int32_t dis_for_tlf_right = 520;
 
 const rt_int32_t dis_for_tri_left = dis_for_tlf_right;
 const rt_int32_t dis_for_tri_right = dis_for_tlf_left;

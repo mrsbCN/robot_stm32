@@ -10,6 +10,7 @@
 #define THREAD_TIMESLICE 5
 #define LED0_PIN    GET_PIN(E, 11)
 #define LED1_PIN    GET_PIN(F, 14)
+#define LED2_PIN    GET_PIN(G, 	1)
 #define POWER1_PIN	GET_PIN(H,	2)
 #define POWER2_PIN	GET_PIN(H,	3)
 #define KEY1_PIN		GET_PIN(B,	2)

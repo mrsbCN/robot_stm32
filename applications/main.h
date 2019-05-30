@@ -6,7 +6,6 @@
 #include "mailbox.h"
 #include "calculator.h"
 #include "distance.h"
-#include "cpuusage.h"
 #include "sdcard.h"
 #include "drv_spi.h"
 #include "tid_chatoM.h"
@@ -22,6 +21,7 @@
 #include "tid_B_toN.h"
 #include "tid_B_back.h"
 #include "string.h"
+#include "button.h"
 //#include "motion_driver_example.h"
 
 extern void cal_init(void);
