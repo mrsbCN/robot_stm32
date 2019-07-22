@@ -1,5 +1,5 @@
-#ifndef __TID_CHABACK
-#define __TID_CHABACK
+#ifndef __TID_TO_LEFT
+#define __TID_TO_LEFT
 
 #include "mailbox.h"
 #include "step.h"
@@ -7,7 +7,7 @@
 #include "dji_pid.h"
 #include "calculator.h"
 
-static rt_thread_t tid_chaback = RT_NULL;
+static rt_thread_t tid_to_left = RT_NULL;
 
-void chaback_init(void);
+void to_left_init(void);
 #endif

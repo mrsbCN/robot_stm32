@@ -1,58 +1,51 @@
-#include "tid_chaback.h"
+#include "tid_right_to_left.h"
 
-void tid_chaback_entry(void *par)
+void tid_right_to_left_entry(void *par)
 {
     rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
     rt_uint32_t recved;
 
-    rt_thread_mdelay(2000);
-    for(rt_uint8_t i = 0; i < 2; i++)
-    {
-        motor_pid[i].f_pid_reset(&motor_pid[i]);
-        reset_total_angle(&moto_chassis[i]);
-    }
-    rt_thread_mdelay(2500);
-
-    forward(N_to_S, N_to_S);
-
+	rt_thread_mdelay(100);
+    backward(right3_to_right2, right3_to_right2); //后退
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
 
-    for_turnright(dis_for_tri_left, dis_for_tri_right);
+    back_turnright(dis_back_tri_left, dis_back_tri_right);//右转
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done2:%d,time:%d\n", recved, (rt_tick_get()));
     }
 
-    forward(S_to_R, S_to_R);
+    backward(right2_to_left2, right2_to_left2);//后退
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done3:%d,time:%d\n", recved, (rt_tick_get()));
     }
 
-    for_turnleft(dis_for_tlf_left, dis_for_tlf_right);
-    if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
-    {
-        rt_kprintf("done4:%d,time:%d\n", recved, (rt_tick_get()));
-    }
-
-    forward(halfR_to_be, halfR_to_be);
+    back_turnright(dis_back_tri_left, dis_back_tri_right);//右转
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done5:%d,time:%d\n", recved, (rt_tick_get()));
     }
+    
+    backward(left2_to_left3, left2_to_left3);//后退
+    if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
+    {
+        rt_kprintf("done5:%d,time:%d\n", recved, (rt_tick_get()));
+    }
+    
     stop();
     rt_mutex_release(&mission_mu);
 }
 
-void chaback_init(void)
+void right_to_left_init(void)
 {
-    tid_chaback = rt_thread_create("tid_chaback",
-                                   tid_chaback_entry, RT_NULL,
+    tid_right_to_left = rt_thread_create("tid_right_to_left",
+                                   tid_right_to_left_entry, RT_NULL,
                                    2048 ,
                                    12 , 10);
-    if(tid_chaback != RT_NULL)
-        rt_thread_startup(tid_chaback);
+    if(tid_right_to_left != RT_NULL)
+        rt_thread_startup(tid_right_to_left);
 }

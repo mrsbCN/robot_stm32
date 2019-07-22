@@ -50,11 +50,11 @@ int main(void)
 {
     rt_thread_mdelay(100);
     MX_CAN1_Init();
-    MX_SPI5_Init();
+    //MX_SPI5_Init();
     can_init();
     msgq_init();
     led_init();
-    rt_hw_spi_device_attach("spi5", "mpu6500", GPIOF, GPIO_PIN_6);
+    //rt_hw_spi_device_attach("spi5", "mpu6500", GPIOF, GPIO_PIN_6);
     sd_init();
     rt_thread_mdelay(200);
     cal_init();
@@ -73,36 +73,27 @@ int main(void)
 	}
 	Button_Delete(&Button1);
 	rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
-    chatoM_init();
-    rt_thread_mdelay(1);
-    chatoN_init();
-    rt_thread_mdelay(1);
-    chaback_init();
-	rt_thread_mdelay(1);
-    tonurse_init();
+
 	if(status == 0)
 	{
 		rt_kprintf("go A first!\n");
 		rt_thread_mdelay(1);
-		A_toM_init();
+		to_left_init();
 		rt_thread_mdelay(1);
-		A_Mtonurse_init();
+		left_to_right_init();
 		rt_thread_mdelay(1);
-		A_toN_init();
-		rt_thread_mdelay(1);
-		A_back_init();
+		right_to_be_init();
+
 	}
 	else if (status == 1)
 	{
 		rt_kprintf("go B first!\n");
 		rt_thread_mdelay(1);
-		B_toN_init();
+		to_right_init();
 		rt_thread_mdelay(1);
-		B_Ntonurse_init();
+		right_to_left_init();
 		rt_thread_mdelay(1);
-		B_toM_init();
-		rt_thread_mdelay(1);
-		B_back_init();
+		left_to_be_init();
 	}
     rt_mutex_release(&mission_mu);
     return RT_EOK;

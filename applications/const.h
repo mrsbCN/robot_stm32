@@ -22,31 +22,55 @@ extern const rt_int32_t spd_back_tlf_right;
 extern const rt_int32_t spd_back_tri_left;
 extern const rt_int32_t spd_back_tri_right;
 
-extern const rt_int32_t be_to_R;
+extern const rt_int32_t spd_tlf_left;	
+extern const rt_int32_t spd_tlf_right;
+
+extern const rt_int32_t spd_tri_left;
+extern const rt_int32_t spd_tri_right;
+
+
+//路程
+extern const rt_int32_t dis_tlf_left;
+extern const rt_int32_t dis_tlf_right;
+
+extern const rt_int32_t dis_tri_left;
+extern const rt_int32_t dis_tri_right;
+
+extern const rt_int32_t dis_for_tlf_left45;
+extern const rt_int32_t dis_for_tlf_right45;
+
+extern const rt_int32_t dis_for_tri_left45;
+extern const rt_int32_t dis_for_tri_right45;
 
 extern const rt_int32_t dis_for_tlf_left;
 extern const rt_int32_t dis_for_tlf_right;
+ 
 extern const rt_int32_t dis_for_tri_left;
 extern const rt_int32_t dis_for_tri_right;
+ 
 extern const rt_int32_t dis_back_tlf_left;
-extern const rt_int32_t dis_back_tlf_right; 
+extern const rt_int32_t dis_back_tlf_right;
+
 extern const rt_int32_t dis_back_tri_left;
 extern const rt_int32_t dis_back_tri_right;
 
-extern const rt_int32_t R_to_Q;
-extern const rt_int32_t Q_to_R;
-extern const rt_int32_t Q_to_M;
-extern const rt_int32_t M_to_Q;
-extern const rt_int32_t Q_to_S;
-extern const rt_int32_t S_to_N;
-extern const rt_int32_t N_to_S;
-extern const rt_int32_t S_to_R;
-extern const rt_int32_t halfR_to_be;
-extern const rt_int32_t halfbe_to_R;
-extern const rt_int32_t R_to_S;
-extern const rt_int32_t S_to_nurse;
-extern const rt_int32_t nurse_to_S;
-extern const rt_int32_t S_to_Q;
-extern const rt_int32_t nurse_to_N;
-extern const rt_int32_t N_to_nurse;
-extern const rt_int32_t R_to_be;
+extern const rt_int32_t be_to_left1;
+extern const rt_int32_t left1_to_left3;
+extern const rt_int32_t left3_to_left2;
+ 
+extern const rt_int32_t left2_to_right2;
+extern const rt_int32_t right2_to_right3;
+ 
+extern const rt_int32_t right3_to_right1;
+extern const rt_int32_t right1_to_be;
+
+//先去右边
+extern const rt_int32_t be_to_right1;
+extern const rt_int32_t right1_to_right3;
+extern const rt_int32_t right3_to_right2;
+ 
+extern const rt_int32_t right2_to_left2;
+extern const rt_int32_t left2_to_left3;
+ 
+extern const rt_int32_t left3_to_left1;
+extern const rt_int32_t left1_to_be;

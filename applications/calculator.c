@@ -25,7 +25,23 @@ void cal_init(void)
     msg_send.data[5] = 	0;
     msg_send.data[6] =  0;
     msg_send.data[7] = 	0;
-    ADRC_Init(&ADRC_SPEED[0], 2);
+    //ADRC_Init(&ADRC_SPEED[0], 2);
+	for(int i = 0; i < 2; i++)
+    {
+        pid_init(&motor_pid[i]);
+        motor_pid[i].f_param_init(&motor_pid[i],			//PID_TypeDef * pid
+                                  PID_Speed,				//PID_ID   id
+                                  10000,					//rt_uint16_t maxout
+                                  5000,						//rt_uint16_t intergral_limit
+                                  10,						//float deadband
+                                  0,						//rt_uint16_t period
+                                  4000,						//rt_int16_t  max_err
+                                  0,						//rt_int16_t  target
+                                  1.5,						//float 	kp
+                                  0.1,						//float 	ki
+                                  0.4);						//float 	kd
+    }
+	
     tid_cal = rt_thread_create("cal", cal, RT_NULL, 4096, 19, 10);
 
     if(RT_NULL != tid_cal)
@@ -39,8 +55,6 @@ void cal(void *par)
     rt_uint8_t recv[3][8] = {0};
     rt_int16_t ele[2];
     rt_int32_t tar[2] = {0, 0};
-
-
 
     do
     {
@@ -62,21 +76,6 @@ void cal(void *par)
         get_moto_offset(&moto_chassis[i], recv[i]);
     }
     rt_thread_mdelay(5);
-    for(int i = 0; i < 2; i++)
-    {
-        pid_init(&motor_pid[i]);
-        motor_pid[i].f_param_init(&motor_pid[i],	//PID_TypeDef * pid
-                                  PID_Speed,			//PID_ID   id
-                                  10000,					//rt_uint16_t maxout
-                                  5000,						//rt_uint16_t intergral_limit
-                                  10,							//float deadband
-                                  0,							//rt_uint16_t period
-                                  4000,						//rt_int16_t  max_err
-                                  0,							//rt_int16_t  target
-                                  1.5,						//float 	kp
-                                  0.1,						//float 	ki
-                                  0.4);						  //float 	kd
-    }
 
 
     while(1)
@@ -183,3 +182,18 @@ void get_total_angle(moto_measure_t *p)
     p->total_angle += delta;
     p->last_angle = p->angle;
 }
+
+static void change_pid(int argc, char *argv[])
+{
+	if(argc ==4)
+	{
+		for(rt_uint8_t j =0;j<2;j++)
+		{
+			motor_pid[j].kp = atof(argv[1]);
+			motor_pid[j].ki = atof(argv[2]);
+			motor_pid[j].kd = atof(argv[3]);
+		}
+	}
+}
+/* 导出到 msh 命令列表中 */
+MSH_CMD_EXPORT(change_pid,change_pid use "change_pid(kp,ki,kd)");

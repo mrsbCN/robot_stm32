@@ -10,5 +10,8 @@ extern void for_turnleft(rt_int32_t left, rt_int32_t right);
 extern void for_turnright(rt_int32_t left, rt_int32_t right);
 extern void back_turnleft(rt_int32_t left, rt_int32_t right);
 extern void back_turnright(rt_int32_t left, rt_int32_t right);
+extern void turnleft(rt_int32_t left, rt_int32_t right);
+extern void turnright(rt_int32_t left, rt_int32_t right);
+
 extern void stop(void);
 #endif
