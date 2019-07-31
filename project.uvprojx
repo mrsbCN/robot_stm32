@@ -537,9 +537,9 @@
               <FilePath>.\applications\tid_to_right.c</FilePath>
             </File>
             <File>
-              <FileName>timer.c</FileName>
+              <FileName>timer_pwm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\timer.c</FilePath>
+              <FilePath>.\applications\timer_pwm.c</FilePath>
             </File>
           </Files>
         </Group>

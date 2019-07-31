@@ -16,6 +16,7 @@
 #include "tid_left_to_be.h"
 #include "string.h"
 #include "button.h"
+#include "timer_pwm.h"
 //#include "motion_driver_example.h"
 
 extern void cal_init(void);
