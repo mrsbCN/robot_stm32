@@ -8,7 +8,7 @@ PID_TypeDef motor_pid[2];
 moto_measure_t moto_chassis[2] = {0};
 static rt_thread_t tid_cal = RT_NULL;
 struct rt_can_msg msg_send;
-
+rt_int16_t speed_l,speed_r,u_l,u_r;
 void get_total_angle(moto_measure_t *p);
 void get_moto_offset(moto_measure_t *ptr, rt_uint8_t *hcan);
 void get_moto_measure(moto_measure_t *ptr, rt_uint8_t *hcan);
@@ -25,7 +25,7 @@ void cal_init(void)
     msg_send.data[5] = 	0;
     msg_send.data[6] =  0;
     msg_send.data[7] = 	0;
-    //ADRC_Init(&ADRC_SPEED[0], &ADRC_SPEED[1]);
+    ADRC_Init(&ADRC_SPEED[0], &ADRC_SPEED[1]);
 	for(int i = 0; i < 2; i++)
     {
         pid_init(&motor_pid[i]);
@@ -33,12 +33,12 @@ void cal_init(void)
                                   PID_Speed,				//PID_ID   id
                                   10000,					//rt_uint16_t maxout
                                   5000,						//rt_uint16_t intergral_limit
-                                  10,						//float deadband
+                                  0,						//float deadband
                                   0,						//rt_uint16_t period
                                   4000,						//rt_int16_t  max_err
                                   0,						//rt_int16_t  target
-                                  1.5,						//float 	kp
-                                  0.2,						//float 	ki
+                                  1,						//float 	kp
+                                  0,						//float 	ki
                                   0);						//float 	kd
     }
 	
@@ -88,18 +88,29 @@ void cal(void *par)
             }
         }
 
-        for(i = 0; i < 2; i++)
-        {
-            if( 8 == rt_ringbuffer_get(&s_cur_rb[i], recv[i], 8))
+            if( 8 == rt_ringbuffer_get(&s_cur_rb[0], recv[0], 8))
             {
-                get_moto_measure(&moto_chassis[i], recv[i]);
-                motor_pid[i].f_cal_pid(&motor_pid[i], moto_chassis[i].speed_rpm);
-                ele[i] = motor_pid[i].output;
-                //ADRC_Control(&ADRC_SPEED[i],tar[i],moto_chassis[i].speed_rpm);
-                //ele[i] = (rt_int16_t)ADRC_SPEED[i].u;
-                rt_mb_send(&total_mb[i], moto_chassis[i].total_angle);
+                get_moto_measure(&moto_chassis[0], recv[0]);
+				speed_l = (int16_t)(recv[0][2] << 8 | recv[0][3]);
+                //motor_pid[0].f_cal_pid(&motor_pid[0], moto_chassis[0].speed_rpm);
+                //ele[0] = motor_pid[0].output;
+				ADRC_Control(&ADRC_SPEED[0],tar[0],speed_l);
+                u_l = (rt_int16_t)ADRC_SPEED[0].v1;
+				ele[0] = (rt_int16_t)ADRC_SPEED[0].u;
+
             }
-        }
+			
+			 if( 8 == rt_ringbuffer_get(&s_cur_rb[1], recv[1], 8))
+            {
+                get_moto_measure(&moto_chassis[1], recv[1]);
+				speed_r = (int16_t)(recv[1][2] << 8 | recv[1][3]);
+                //motor_pid[1].f_cal_pid(&motor_pid[1], moto_chassis[1].speed_rpm);
+                //ele[1] = motor_pid[1].output;
+				ADRC_Control(&ADRC_SPEED[1],tar[1],speed_r);
+                ele[1] = (rt_int16_t)ADRC_SPEED[1].u;
+
+            }
+			
         rt_event_send(&event_per, EVENT_PER);
 
         msg_send.data[0] =  ele[0] >> 8 ;

@@ -79,11 +79,7 @@ int main(void)
 	{
 		rt_kprintf("go A first!\n");
 		rt_thread_mdelay(1);
-		to_left_init();
-		rt_thread_mdelay(1);
-		left_to_right_init();
-		rt_thread_mdelay(1);
-		right_to_be_init();
+		test_init();
 
 	}
 	else if (status == 1)
