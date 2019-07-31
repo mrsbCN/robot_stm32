@@ -5,7 +5,7 @@ void tid_to_left_entry(void *par)
     rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
     rt_uint32_t recved;
 
-	rt_thread_mdelay(100);
+	rt_thread_mdelay(100);	
     turnleft(dis_tlf_left, dis_tlf_right); //左转45度
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
@@ -30,6 +30,10 @@ void tid_to_left_entry(void *par)
         rt_kprintf("done5:%d,time:%d\n", recved, (rt_tick_get()));
     }
     stop();
+	
+	rt_event_send(&event_pwm,EVENT_PWM_LEFT);
+	rt_thread_mdelay(1000);//等待加入按钮
+	rt_event_send(&event_pwm,EVENT_PWM_LEFT);
     rt_mutex_release(&mission_mu);
 }
 

@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F427xx, USE_HAL_DRIVER, RT_USING_ARM_LIBC</Define>
               <Undefine></Undefine>
-              <IncludePath>.;rt-thread\include;applications;.;board;board\CubeMX_Config\Inc;libraries\HAL_Drivers;libraries\HAL_Drivers\config;packages\button-v1.0.1;packages\MotionDriver2RTT-latest\core;packages\MotionDriver2RTT-latest\core\driver\eMPL;packages\MotionDriver2RTT-latest\core\driver\include;packages\MotionDriver2RTT-latest\core\driver\stm32L;packages\MotionDriver2RTT-latest\core\eMPL-hal;packages\MotionDriver2RTT-latest\core\mllite;packages\MotionDriver2RTT-latest\core\mpl;packages\MotionDriver2RTT-latest\port;packages\mpu6xxx-latest\inc;packages\SystemView-latest;packages\SystemView-latest\SystemView_Src\Config;packages\SystemView-latest;packages\SystemView-latest\SystemView_Src\SEGGER;rt-thread\libcpu\arm\common;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\dfs\include;rt-thread\components\dfs\filesystems\devfs;rt-thread\components\dfs\filesystems\elmfat;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\spi;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\sensors;rt-thread\components\drivers\include;rt-thread\components\finsh;rt-thread\components\libc\compilers\armlibc;rt-thread\components\libc\compilers\common;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;libraries\STM32F4xx_HAL\CMSIS\Include;.\DJI;.\packages\MotionDriver2RTT-latest\examples;.\rt-thread\components\drivers\include\ipc</IncludePath>
+              <IncludePath>.;rt-thread\include;applications;.;board;board\CubeMX_Config\Inc;libraries\HAL_Drivers;libraries\HAL_Drivers\config;packages\button-v1.0.1;packages\MotionDriver2RTT-latest\core;packages\MotionDriver2RTT-latest\core\driver\eMPL;packages\MotionDriver2RTT-latest\core\driver\include;packages\MotionDriver2RTT-latest\core\driver\stm32L;packages\MotionDriver2RTT-latest\core\eMPL-hal;packages\MotionDriver2RTT-latest\core\mllite;packages\MotionDriver2RTT-latest\core\mpl;packages\MotionDriver2RTT-latest\port;packages\mpu6xxx-latest\inc;packages\SystemView-latest;packages\SystemView-latest\SystemView_Src\Config;packages\SystemView-latest;packages\SystemView-latest\SystemView_Src\SEGGER;rt-thread\libcpu\arm\common;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\dfs\include;rt-thread\components\dfs\filesystems\devfs;rt-thread\components\dfs\filesystems\elmfat;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\spi;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\sensors;rt-thread\components\drivers\include;rt-thread\components\finsh;rt-thread\components\libc\compilers\armlibc;rt-thread\components\libc\compilers\common;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;libraries\STM32F4xx_HAL\CMSIS\Include;.\rt-thread\components\drivers\include\ipc;.\applications;.\DJI;.\rt-thread\components\drivers\include\drivers</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -477,6 +477,11 @@
               <FilePath>.\applications\const.c</FilePath>
             </File>
             <File>
+              <FileName>cpuusage.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\cpuusage.c</FilePath>
+            </File>
+            <File>
               <FileName>distance.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\distance.c</FilePath>
@@ -502,9 +507,9 @@
               <FilePath>.\applications\step.c</FilePath>
             </File>
             <File>
-              <FileName>tid_to_left.c</FileName>
+              <FileName>tid_left_to_be.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\tid_to_left.c</FilePath>
+              <FilePath>.\applications\tid_left_to_be.c</FilePath>
             </File>
             <File>
               <FileName>tid_left_to_right.c</FileName>
@@ -517,19 +522,24 @@
               <FilePath>.\applications\tid_right_to_be.c</FilePath>
             </File>
             <File>
-              <FileName>tid_to_right.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_to_right.c</FilePath>
-            </File>
-            <File>
               <FileName>tid_right_to_left.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\tid_right_to_left.c</FilePath>
             </File>
             <File>
-              <FileName>tid_left_to_be.c</FileName>
+              <FileName>tid_to_left.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\tid_left_to_be.c</FilePath>
+              <FilePath>.\applications\tid_to_left.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_to_right.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_to_right.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -611,6 +621,16 @@
               <FileName>drv_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>libraries\HAL_Drivers\drv_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_hwtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>libraries\HAL_Drivers\drv_hwtimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>libraries\HAL_Drivers\drv_pwm.c</FilePath>
             </File>
             <File>
               <FileName>drv_spi.c</FileName>
@@ -1065,9 +1085,19 @@
               <FilePath>rt-thread\components\drivers\can\can.c</FilePath>
             </File>
             <File>
+              <FileName>hwtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\hwtimer\hwtimer.c</FilePath>
+            </File>
+            <File>
               <FileName>pin.c</FileName>
               <FileType>1</FileType>
               <FilePath>rt-thread\components\drivers\misc\pin.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_drv_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\misc\rt_drv_pwm.c</FilePath>
             </File>
             <File>
               <FileName>block_dev.c</FileName>
@@ -1335,6 +1365,21 @@
               <FilePath>libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_can.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f4xx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_lptim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_lptim.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f4xx_ll_sdmmc.c</FileName>
               <FileType>1</FileType>
               <FilePath>libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_sdmmc.c</FilePath>
@@ -1358,11 +1403,6 @@
               <FileName>dji_pid.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\DJI\dji_pid.c</FilePath>
-            </File>
-            <File>
-              <FileName>dji_mytype.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\DJI\dji_mytype.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -100,7 +100,9 @@
 #define RT_SERIAL_RB_BUFSZ 64
 #define RT_USING_CAN
 #define RT_CAN_USING_HDR
+#define RT_USING_HWTIMER
 #define RT_USING_PIN
+#define RT_USING_PWM
 #define RT_USING_SDIO
 #define RT_SDIO_STACK_SIZE 512
 #define RT_SDIO_THREAD_PRIORITY 15
@@ -110,7 +112,9 @@
 #define RT_USING_SPI
 #define RT_USING_SENSOR
 #define RT_USING_SENSOR_CMD
-
+#define BSP_USING_PWM8
+#define BSP_USING_PWM8_CH1
+#define BSP_USING_PWM8_CH2
 /* Using WiFi */
 
 

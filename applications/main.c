@@ -35,15 +35,16 @@ void Btn1_Dowm_CallBack(void *btn)		//单击开始运行
 void Btn1_Double_CallBack(void *btn)  	//双击切换先去A还是B
 {
 	rt_kprintf("Button1 Double click!\n");
-	if(rt_pin_read(LED2_PIN) ==PIN_HIGH)
+	if(rt_pin_read(LED2_PIN) ==PIN_HIGH)  
 	{
-		rt_pin_write(LED2_PIN,PIN_LOW);
+		rt_pin_write(LED2_PIN,PIN_LOW); //低电平亮，先去A
+		status = 0;
 	}
 	else
 	{
-		rt_pin_write(LED2_PIN,PIN_HIGH);
+		rt_pin_write(LED2_PIN,PIN_HIGH);//高电平灭，先去B
+		status = 1;
 	}
-	status = ~status;
 }
 
 int main(void)
@@ -422,6 +423,72 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
 
         /* USER CODE END SPI5_MspDeInit 1 */
     }
+
+}
+
+
+void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
+{
+  if(htim_base->Instance==TIM8)
+  {
+  /* USER CODE BEGIN TIM8_MspInit 0 */
+
+  /* USER CODE END TIM8_MspInit 0 */
+    /* Peripheral clock enable */
+    __HAL_RCC_TIM8_CLK_ENABLE();
+  /* USER CODE BEGIN TIM8_MspInit 1 */
+
+  /* USER CODE END TIM8_MspInit 1 */
+  }
+
+}
+
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  if(htim->Instance==TIM8)
+  {
+  /* USER CODE BEGIN TIM8_MspPostInit 0 */
+
+  /* USER CODE END TIM8_MspPostInit 0 */
+  
+    __HAL_RCC_GPIOI_CLK_ENABLE();
+    /**TIM8 GPIO Configuration    
+    PI6     ------> TIM8_CH2
+    PI5     ------> TIM8_CH1 
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_5;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF3_TIM8;
+    HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
+
+  /* USER CODE BEGIN TIM8_MspPostInit 1 */
+
+  /* USER CODE END TIM8_MspPostInit 1 */
+  }
+
+}
+/**
+* @brief TIM_Base MSP De-Initialization
+* This function freeze the hardware resources used in this example
+* @param htim_base: TIM_Base handle pointer
+* @retval None
+*/
+void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
+{
+  if(htim_base->Instance==TIM8)
+  {
+  /* USER CODE BEGIN TIM8_MspDeInit 0 */
+
+  /* USER CODE END TIM8_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_TIM8_CLK_DISABLE();
+  /* USER CODE BEGIN TIM8_MspDeInit 1 */
+
+  /* USER CODE END TIM8_MspDeInit 1 */
+  }
 
 }
 

@@ -28,6 +28,12 @@ extern const rt_int32_t spd_tlf_right;
 extern const rt_int32_t spd_tri_left;
 extern const rt_int32_t spd_tri_right;
 
+extern const rt_int32_t spd_big_tlf_left;	
+extern const rt_int32_t spd_big_tlf_right;//大圆左转
+
+extern const rt_int32_t spd_big_tri_left;
+extern const rt_int32_t spd_big_tri_right;//大圆右转
+
 
 //路程
 extern const rt_int32_t dis_tlf_left;
@@ -53,6 +59,12 @@ extern const rt_int32_t dis_back_tlf_right;
 
 extern const rt_int32_t dis_back_tri_left;
 extern const rt_int32_t dis_back_tri_right;
+
+extern const rt_int32_t dis_big_tlf_left;
+extern const rt_int32_t dis_big_tlf_right;
+
+extern const rt_int32_t dis_big_tri_left;
+extern const rt_int32_t dis_big_tri_right;
 
 extern const rt_int32_t be_to_left1;
 extern const rt_int32_t left1_to_left3;

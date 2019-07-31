@@ -25,7 +25,7 @@ void cal_init(void)
     msg_send.data[5] = 	0;
     msg_send.data[6] =  0;
     msg_send.data[7] = 	0;
-    //ADRC_Init(&ADRC_SPEED[0], 2);
+    //ADRC_Init(&ADRC_SPEED[0], &ADRC_SPEED[1]);
 	for(int i = 0; i < 2; i++)
     {
         pid_init(&motor_pid[i]);
@@ -38,8 +38,8 @@ void cal_init(void)
                                   4000,						//rt_int16_t  max_err
                                   0,						//rt_int16_t  target
                                   1.5,						//float 	kp
-                                  0.1,						//float 	ki
-                                  0.4);						//float 	kd
+                                  0.2,						//float 	ki
+                                  0);						//float 	kd
     }
 	
     tid_cal = rt_thread_create("cal", cal, RT_NULL, 4096, 19, 10);

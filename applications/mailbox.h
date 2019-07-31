@@ -9,11 +9,14 @@
 #define EVENT_DONE_RIGHT (1<<3)
 #define EVENT_DONE_SEE (1<<4)
 
-#define EVENT_DIST (1 << 5)
+#define EVENT_DIST (1 << 5)//计算距离时间
+#define EVENT_PWM_LEFT (1 << 6)//左舵机
+#define EVENT_PWM_RIGHT (1 << 6)//右舵机
+#define EVENT_PWM_CAM (1 << 6)//摄像头舵机
 #endif
 
 extern struct rt_ringbuffer s_cur_rb[];
 extern struct rt_mailbox  s_tar_mb[],ele_mb[],total_mb[],dis_tar_mb[];
-extern struct rt_event event_per,event_done,event_dist;
+extern struct rt_event event_per,event_done,event_dist,event_pwm;
 extern struct rt_messagequeue sdcard_mq;
 extern struct rt_mutex mission_mu;

@@ -13,6 +13,8 @@
 #define LED2_PIN    GET_PIN(G, 	1)
 #define POWER1_PIN	GET_PIN(H,	2)
 #define POWER2_PIN	GET_PIN(H,	3)
+#define SPEAKER1_PIN	GET_PIN(F,	0)
+#define SPEAKER2_PIN	GET_PIN(E,	4)
 #define KEY1_PIN		GET_PIN(B,	2)
 #define SPI5_NSS		GET_PIN(F,	6)
 static rt_thread_t tid_led1 = RT_NULL;
