@@ -32,7 +32,7 @@ void tid_to_left_entry(void *par)
     stop();
 	
 	rt_event_send(&event_pwm,EVENT_PWM_LEFT);
-	rt_thread_mdelay(1000);//等待加入按钮
+	rt_thread_mdelay(10000);//等待加入按钮
 	rt_event_send(&event_pwm,EVENT_PWM_LEFT);
     rt_mutex_release(&mission_mu);
 }

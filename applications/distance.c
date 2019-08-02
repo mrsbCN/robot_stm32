@@ -55,7 +55,7 @@ void distance(void *par)
                     {
                         if(RT_EOK == rt_mb_recv(&total_mb[i], (rt_ubase_t *)&total_angle[i], RT_WAITING_FOREVER))
                         {
-                            now[i] = labs(labs(total_angle[i]) - labs(cur_angle[i])) * K;
+                            now[i] = labs(total_angle[i] - cur_angle[i]) * K;
                             if(  now[i] >= (dis_tar[i]) )
                             {
                                 rt_event_send(&event_done, (EVENT_DONE_LEFT << i));
