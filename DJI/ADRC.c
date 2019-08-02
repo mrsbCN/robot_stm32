@@ -4,8 +4,8 @@ const float ADRC_Unit[2][15]=
 {
 /*TD跟踪微分器   改进最速TD,h0=N*h      扩张状态观测器ESO           扰动补偿     非线性组合*/
 /*  r     h      N0                  beta_01   beta_02    beta_03     b0      beta_1      beta_2      alpha1  alpha2  zeta */
- {3000 ,0.05 , 3,               58,      1152,      7529,      50,    25,      10,     0.8,   1.5,    0.03},
- {3000 ,0.05 , 3,               58,      1152,      7529,      50,    25,      10,     0.8,   1.5,    0.03},
+ {30000 ,0.05 , 5,               	30,      	300,      1000,      100,    	1600,      	80,     		0.8,   1.5,    0.03},
+ {30000 ,0.05 , 5,               	30,      	300,      1000,      100,    	1600,      	80,     		0.8,   1.5,    0.03},
 };
 //状态观测器参数beta01=1/h  beta02=1/(3*h^2)  beta03=2/(8^2*h^3) ...
 
@@ -63,7 +63,7 @@ void ADRC_Init(Fhan_Data *fhan_Input1,Fhan_Data *fhan_Input2)
 }
 
 //fhan
-/*float Fhan_ADRC(float x1,float x2,float r,float h0)
+float Fhan_ADRC(float x1,float x2,float r,float h0)
 {
 	float d=0,a0=0,y=0,a1=0,a2=0,a=0,fh=0;
 	d=r*h0*h0;//d=rh^2;
@@ -74,12 +74,13 @@ void ADRC_Init(Fhan_Data *fhan_Input1,Fhan_Data *fhan_Input2)
 	a=(a0+y)*Fsg_ADRC(y,d)+a2*(1-Fsg_ADRC(y,d));
 	fh=-r*(a/d)*Fsg_ADRC(a,d) - r*Sign_ADRC(a)*(1-Fsg_ADRC(a,d));//得到最速微分加速度跟踪量
 	return fh;
-}*/
+}
 
 //ADRC最速跟踪微分器TD
 void TD_ADRC(Fhan_Data *fhan_Input,float expect_ADRC)
 {
-	fhan_Input->fh = -fhan_Input->r*fhan_Input->r*(fhan_Input->v1 - expect_ADRC)+2*fhan_Input->r*fhan_Input->v2;
+	//fhan_Input->fh = -fhan_Input->r*fhan_Input->r*(fhan_Input->v1 - expect_ADRC)+2*fhan_Input->r*fhan_Input->v2;
+	fhan_Input->fh = Fhan_ADRC(fhan_Input->v1 - expect_ADRC,fhan_Input->v2,fhan_Input->r,fhan_Input->h0);
 	fhan_Input->v1 += fhan_Input->h*fhan_Input->v2;//跟新最速跟踪状态量v1
 	fhan_Input->v2 += fhan_Input->h*fhan_Input->fh;//跟新最速跟踪状态量微分v2
 }
@@ -162,11 +163,11 @@ void ADRC_Control(Fhan_Data *fhan_Input,float expect_ADRC,float feedback_ADRC)
     fhan_Input->e1=fhan_Input->v1-fhan_Input->z1;//状态偏差项
     fhan_Input->e2=fhan_Input->v2-fhan_Input->z2;//状态微分项，
 	
-	fhan_Input->u0=(fhan_Input->beta_1*fhan_Input->e1
-					+fhan_Input->beta_2*fhan_Input->e2)/fhan_Input->b0;
+	fhan_Input->u0=fhan_Input->beta_1*fhan_Input->e1
+					-fhan_Input->beta_2*fhan_Input->z2;
 	//Nolinear_Conbination_ADRC(fhan_Input);
     /**********扰动补偿*******/
-    //fhan_Input->u=fhan_Input->u0-fhan_Input->z3/fhan_Input->b0;
-    fhan_Input->u=Constrain_Float(fhan_Input->u0,-10000,10000);//加入扰动补偿
+    fhan_Input->u=(fhan_Input->u0-fhan_Input->z3)/fhan_Input->b0;
+    fhan_Input->u=Constrain_Float(fhan_Input->u,-10000,10000);//加入扰动补偿
 }
 

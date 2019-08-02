@@ -125,7 +125,7 @@ void cal(void *par)
             recv[2][i] = msg_send.data[i];
         }
         rt_mq_send(&sdcard_mq, recv, 20);
-        rt_thread_mdelay(5);
+		rt_thread_delay(5);
     }
 }
 

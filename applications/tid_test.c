@@ -2,7 +2,7 @@
 
 
 static rt_timer_t timer1;
-static rt_uint16_t cnt = 0;
+static rt_uint16_t cnt = 1;
 rt_int16_t expect = 0;
 rt_uint8_t A =2;
 struct rt_event event_test;
@@ -10,14 +10,14 @@ static rt_uint16_t period = 0;
 static rt_int16_t arr_sin[16] = {0 ,153 ,283 ,370 ,400 ,370 ,283 ,153 ,0 ,-153 ,-283 ,-370 ,-400 ,-370 ,-283 ,-153};
 static rt_tick_t arr_period[] = 
 {
-	625 ,417 ,313 ,250 ,208 ,179 ,156 ,139 ,125 ,114 ,104 ,96 ,89 ,83 ,
+	62500 ,41700 ,3130 ,2500 ,2080 ,1790 ,1560 ,1390 ,1250 ,1140 ,1040 ,960 ,890 ,830 ,
 78 ,74 ,69 ,66 ,63 ,60 ,57 ,54 ,52 ,50 ,48 ,46 ,45 ,43 ,42 ,40 ,39 ,
 38 ,37 ,36 ,35 ,34 ,33 ,32 ,31 ,30 ,30 ,29 ,28 ,26 ,24 ,22 ,21 ,20 ,
 18 ,17 ,16 ,16 ,13 ,10 ,9 ,8 ,7 ,6 
 };
 static void timeout1(void *parameter)
 {
-	expect = 4*arr_sin[cnt%16];
+	expect = 6*arr_sin[cnt%16];
     rt_mb_send(&s_tar_mb[0], expect);
     rt_mb_send(&s_tar_mb[1], -expect);
 		
