@@ -12,7 +12,7 @@ struct rt_can_msg msg_send;
 void get_total_angle(moto_measure_t *p);
 void get_moto_offset(moto_measure_t *ptr, rt_uint8_t *hcan);
 void get_moto_measure(moto_measure_t *ptr, rt_uint8_t *hcan);
-
+rt_int16_t test_sp_l,test_sp_r,test_exp_l,test_exp_r;
 void cal_init(void)
 {
 
@@ -25,7 +25,7 @@ void cal_init(void)
     msg_send.data[5] = 	0;
     msg_send.data[6] =  0;
     msg_send.data[7] = 	0;
-    //ADRC_Init(&ADRC_SPEED[0], &ADRC_SPEED[1]);
+    ADRC_Init(&ADRC_SPEED[0], &ADRC_SPEED[1]);
 	for(int i = 0; i < 2; i++)
     {
         pid_init(&motor_pid[i]);
@@ -85,6 +85,10 @@ void cal(void *par)
             if(RT_EOK == rt_mb_recv(&s_tar_mb[i], (rt_ubase_t *)&tar[i], RT_WAITING_NO))
             {
                 motor_pid[i].target = tar[i];
+				if(i==0)
+				{test_exp_l = tar[0];}
+				else
+				{test_exp_r = tar[1];}
             }
         }
 
@@ -93,11 +97,15 @@ void cal(void *par)
             if( 8 == rt_ringbuffer_get(&s_cur_rb[i], recv[i], 8))
             {
                 get_moto_measure(&moto_chassis[i], recv[i]);
-                motor_pid[i].f_cal_pid(&motor_pid[i], moto_chassis[i].speed_rpm);
-                ele[i] = motor_pid[i].output;
-                //ADRC_Control(&ADRC_SPEED[i],tar[i],moto_chassis[i].speed_rpm);
-                //ele[i] = (rt_int16_t)ADRC_SPEED[i].u;
+                //motor_pid[i].f_cal_pid(&motor_pid[i], moto_chassis[i].speed_rpm);
+                //ele[i] = motor_pid[i].output;
+                ADRC_Control(&ADRC_SPEED[i],tar[i],moto_chassis[i].speed_rpm);
+                ele[i] = (rt_int16_t)ADRC_SPEED[i].u;
                 rt_mb_send(&total_mb[i], moto_chassis[i].total_angle);
+				if(i==0)
+				{test_sp_l = moto_chassis[0].speed_rpm;}
+				else
+				{test_sp_r = moto_chassis[1].speed_rpm;}
             }
         }
         rt_event_send(&event_per, EVENT_PER);
@@ -114,7 +122,7 @@ void cal(void *par)
             recv[2][i] = msg_send.data[i];
         }
         rt_mq_send(&sdcard_mq, recv, 20);
-        rt_thread_mdelay(5);
+        rt_thread_delay(5);
     }
 }
 

@@ -7,6 +7,10 @@ void tid_right_to_left_entry(void *par)
 
 	rt_thread_mdelay(10);
 	big_turnright(dis_big_tri_left,dis_big_tri_right);
+	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
+    {
+        rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
+    }
     /*backward(right3_to_right2, right3_to_right2); //后退
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
@@ -38,7 +42,7 @@ void tid_right_to_left_entry(void *par)
     }*/
     
     stop();
-	rt_thread_mdelay(1000);//等待加入按钮
+	rt_thread_mdelay(10000);//等待加入按钮
     rt_mutex_release(&mission_mu);
 }
 

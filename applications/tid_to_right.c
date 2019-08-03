@@ -9,6 +9,8 @@ void tid_to_right_entry(void *par)
     turnright(dis_tri_left, dis_tri_right); //右转45度
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
+		stop();
+		rt_thread_mdelay(100);
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
 

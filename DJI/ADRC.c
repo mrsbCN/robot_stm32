@@ -4,8 +4,8 @@ const float ADRC_Unit[2][15]=
 {
 /*TD跟踪微分器   改进最速TD,h0=N*h      扩张状态观测器ESO           扰动补偿     非线性组合*/
 /*  r     h      N0                  beta_01   beta_02    beta_03     b0      beta_1      beta_2      alpha1  alpha2  zeta */
- {30000 ,0.005 , 3,               100,      65,      85,      100,    50,      10,     0.8,   1.5,    0.03},
- {30000 ,0.005 , 3,               100,      65,      85,      100,    50,      10,     0.8,   1.5,    0.03},
+ {30000 ,0.05 , 5,               	15,      	75,      125,      50,    	225,      	30,     		0.8,   1.5,    0.03},
+ {30000 ,0.05 , 5,               	15,      	75,      125,      50,    	225,      	30,     		0.8,   1.5,    0.03},
 };
 //状态观测器参数beta01=1/h  beta02=1/(3*h^2)  beta03=2/(8^2*h^3) ...
 
@@ -63,7 +63,7 @@ void ADRC_Init(Fhan_Data *fhan_Input1,Fhan_Data *fhan_Input2)
 }
 
 //fhan
-/*float Fhan_ADRC(float x1,float x2,float r,float h0)
+float Fhan_ADRC(float x1,float x2,float r,float h0)
 {
 	float d=0,a0=0,y=0,a1=0,a2=0,a=0,fh=0;
 	d=r*h0*h0;//d=rh^2;
@@ -74,14 +74,15 @@ void ADRC_Init(Fhan_Data *fhan_Input1,Fhan_Data *fhan_Input2)
 	a=(a0+y)*Fsg_ADRC(y,d)+a2*(1-Fsg_ADRC(y,d));
 	fh=-r*(a/d)*Fsg_ADRC(a,d) - r*Sign_ADRC(a)*(1-Fsg_ADRC(a,d));//得到最速微分加速度跟踪量
 	return fh;
-}*/
+}
 
 //ADRC最速跟踪微分器TD
 void TD_ADRC(Fhan_Data *fhan_Input,float expect_ADRC)
 {
-	fhan_Input->fh = -pow(fhan_Input->r,2)*(fhan_Input->x1 - expect_ADRC)+2*fhan_Input->r*fhan_Input->x2;
-	fhan_Input->x1 += fhan_Input->h*fhan_Input->x2;//跟新最速跟踪状态量x1
-	fhan_Input->x2 += fhan_Input->h*fhan_Input->fh;//跟新最速跟踪状态量微分x2
+	//fhan_Input->fh = -fhan_Input->r*fhan_Input->r*(fhan_Input->v1 - expect_ADRC)+2*fhan_Input->r*fhan_Input->v2;
+	fhan_Input->fh = Fhan_ADRC(fhan_Input->v1 - expect_ADRC,fhan_Input->v2,fhan_Input->r,fhan_Input->h0);
+	fhan_Input->v1 += fhan_Input->h*fhan_Input->v2;//跟新最速跟踪状态量v1
+	fhan_Input->v2 += fhan_Input->h*fhan_Input->fh;//跟新最速跟踪状态量微分v2
 }
 
 //原点附近有连线性段的连续幂次函数
@@ -137,7 +138,7 @@ void ADRC_Control(Fhan_Data *fhan_Input,float expect_ADRC,float feedback_ADRC)
 	/*****
 	安排过度过程，输入为期望给定，
 	由TD跟踪微分器得到：
-	过度期望信号x1，过度期望微分信号x2
+	过度期望信号v1，过度期望微分信号v2
 	******/
 	TD_ADRC(fhan_Input,expect_ADRC);
 	
@@ -151,7 +152,7 @@ void ADRC_Control(Fhan_Data *fhan_Input,float expect_ADRC,float feedback_ADRC)
 	1、状态信号z1；
 	2、状态速度信号z2；
 	3、状态加速度信号z3。
-	其中z1、z2用于作为状态反馈与TD微分跟踪器得到的x1,x2做差后，
+	其中z1、z2用于作为状态反馈与TD微分跟踪器得到的v1,v2做差后，
 	经过非线性函数映射，乘以beta系数后，
 	组合得到未加入状态加速度估计扰动补偿的原始控制量u
 	*********/
@@ -159,14 +160,14 @@ void ADRC_Control(Fhan_Data *fhan_Input,float expect_ADRC,float feedback_ADRC)
 	
 	/*自抗扰控制器第3步*/
     /********状态误差反馈率***/
-    fhan_Input->e1=fhan_Input->x1-fhan_Input->z1;//状态偏差项
-    fhan_Input->e2=fhan_Input->x2-fhan_Input->z2;//状态微分项，
+    fhan_Input->e1=fhan_Input->v1-fhan_Input->z1;//状态偏差项
+    fhan_Input->e2=fhan_Input->v2-fhan_Input->z2;//状态微分项，
 	
-	fhan_Input->u0=(fhan_Input->beta_1*fhan_Input->e1
-					+fhan_Input->beta_2*fhan_Input->e2-fhan_Input->z3)/fhan_Input->b0;
+	fhan_Input->u0=fhan_Input->beta_1*fhan_Input->e1
+					-fhan_Input->beta_2*fhan_Input->z2;
 	//Nolinear_Conbination_ADRC(fhan_Input);
     /**********扰动补偿*******/
-    //fhan_Input->u=fhan_Input->u0-fhan_Input->z3/fhan_Input->b0;
-    fhan_Input->u=Constrain_Float(fhan_Input->u0,-10000,10000);//加入扰动补偿
+    fhan_Input->u=(fhan_Input->u0-fhan_Input->z3)/fhan_Input->b0;
+    fhan_Input->u=Constrain_Float(fhan_Input->u,-10000,10000);//加入扰动补偿
 }
 

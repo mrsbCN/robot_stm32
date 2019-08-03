@@ -9,8 +9,8 @@
 typedef struct
 {
 /*****安排过度过程*******/
-float x1;//跟踪微分期状态量
-float x2;//跟踪微分期状态量微分项
+float v1;//跟踪微分期状态量
+float v2;//跟踪微分期状态量微分项
 float r;//时间尺度
 float h;//ADRC系统积分时间
 rt_uint16_t N0;//跟踪微分器解决速度超调h0=N*h
