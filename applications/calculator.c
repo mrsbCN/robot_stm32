@@ -8,11 +8,18 @@ PID_TypeDef motor_pid[2];
 moto_measure_t moto_chassis[2] = {0};
 static rt_thread_t tid_cal = RT_NULL;
 struct rt_can_msg msg_send;
+float ADRC_Unit[2][15]=
+{
+/*TD跟踪微分器   改进最速TD,h0=N*h      扩张状态观测器ESO(w0=4wc)           扰动补偿     			非线性组合(wc)*/
+/*  r     h      N0                 beta_01   beta_02    beta_03     		b0      	beta_0			beta_1      beta_2      alpha1  alpha2  zeta */
+ {8000 ,0.005 , 	5,               	180,      	10800,      216000,      	60,    		0.005,			225,      	8,     		0.8,   1.5,    0.03},
+ {8000 ,0.005 , 	5,               	180,      	10800,      21600,      	60,    		0.005,			225,      	8,     		0.8,   1.5,    0.03},
+};
 
 void get_total_angle(moto_measure_t *p);
 void get_moto_offset(moto_measure_t *ptr, rt_uint8_t *hcan);
 void get_moto_measure(moto_measure_t *ptr, rt_uint8_t *hcan);
-rt_int16_t test_sp_l,test_sp_r,test_exp_l,test_exp_r;
+rt_int32_t test_sp_l,test_sp_r,test_exp_l,test_exp_r;
 void cal_init(void)
 {
 
@@ -25,7 +32,7 @@ void cal_init(void)
     msg_send.data[5] = 	0;
     msg_send.data[6] =  0;
     msg_send.data[7] = 	0;
-    ADRC_Init(&ADRC_SPEED[0], &ADRC_SPEED[1]);
+    ADRC_Init(ADRC_SPEED, ADRC_Unit);
 	for(int i = 0; i < 2; i++)
     {
         pid_init(&motor_pid[i]);
@@ -37,12 +44,12 @@ void cal_init(void)
                                   0,						//rt_uint16_t period
                                   4000,						//rt_int16_t  max_err
                                   0,						//rt_int16_t  target
-                                  1.5,						//float 	kp
-                                  0.2,						//float 	ki
+                                  1.0,						//float 	kp
+                                  0.02,						//float 	ki
                                   0);						//float 	kd
     }
 	
-    tid_cal = rt_thread_create("cal", cal, RT_NULL, 4096, 19, 10);
+    tid_cal = rt_thread_create("cal", cal, RT_NULL, 4096, 19, 20);
 
     if(RT_NULL != tid_cal)
         rt_thread_startup(tid_cal);
@@ -85,11 +92,9 @@ void cal(void *par)
             if(RT_EOK == rt_mb_recv(&s_tar_mb[i], (rt_ubase_t *)&tar[i], RT_WAITING_NO))
             {
                 motor_pid[i].target = tar[i];
-				if(i==0)
-				{test_exp_l = tar[0];}
-				else
-				{test_exp_r = tar[1];}
             }
+			test_exp_l = tar[0];
+			test_exp_r = tar[1];
         }
 
         for(i = 0; i < 2; i++)
@@ -102,11 +107,9 @@ void cal(void *par)
                 ADRC_Control(&ADRC_SPEED[i],tar[i],moto_chassis[i].speed_rpm);
                 ele[i] = (rt_int16_t)ADRC_SPEED[i].u;
                 rt_mb_send(&total_mb[i], moto_chassis[i].total_angle);
-				if(i==0)
-				{test_sp_l = moto_chassis[0].speed_rpm;}
-				else
-				{test_sp_r = moto_chassis[1].speed_rpm;}
             }
+			test_sp_l = moto_chassis[0].speed_rpm;
+			test_sp_r = moto_chassis[1].speed_rpm;
         }
         rt_event_send(&event_per, EVENT_PER);
 
@@ -137,7 +140,6 @@ void get_moto_measure(moto_measure_t *ptr, rt_uint8_t *hcan)
     ptr->real_current = (hcan[4] << 8 | hcan[5]) * 5.f / 16384.f;
 
     ptr->hall = hcan[6];
-
 
     if(ptr->angle - ptr->last_angle > 4096)
         ptr->round_cnt --;
@@ -191,17 +193,3 @@ void get_total_angle(moto_measure_t *p)
     p->last_angle = p->angle;
 }
 
-static void change_pid(int argc, char *argv[])
-{
-	if(argc ==4)
-	{
-		for(rt_uint8_t j =0;j<2;j++)
-		{
-			motor_pid[j].kp = atof(argv[1]);
-			motor_pid[j].ki = atof(argv[2]);
-			motor_pid[j].kd = atof(argv[3]);
-		}
-	}
-}
-/* 导出到 msh 命令列表中 */
-MSH_CMD_EXPORT(change_pid,change_pid use "change_pid(kp,ki,kd)");

@@ -5,7 +5,7 @@
 struct rt_ringbuffer s_cur_rb[2];
 
 struct rt_mailbox	s_tar_mb[2], ele_mb[2], total_mb[2], dis_tar_mb[2];
-struct rt_event event_per, event_done, event_dist,event_pwm;
+struct rt_event event_per, event_done, event_dist,event_pwm,event_test;
 
 struct rt_messagequeue sdcard_mq;
 struct rt_mutex  mission_mu;
@@ -49,6 +49,7 @@ int msgq_init(void)
     rt_event_init(&event_dist, "event_dist", RT_IPC_FLAG_FIFO);
     rt_event_init(&event_done, "event_done", RT_IPC_FLAG_FIFO);
     rt_event_init(&event_pwm, "event_pwm", RT_IPC_FLAG_FIFO);
+	rt_event_init(&event_test, "event_test", RT_IPC_FLAG_FIFO);
 
     rt_mutex_init(&mission_mu, "mis_mu", RT_IPC_FLAG_FIFO);
 

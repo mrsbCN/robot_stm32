@@ -17,6 +17,6 @@
 
 extern struct rt_ringbuffer s_cur_rb[];
 extern struct rt_mailbox  s_tar_mb[],ele_mb[],total_mb[],dis_tar_mb[];
-extern struct rt_event event_per,event_done,event_dist,event_pwm;
+extern struct rt_event event_per,event_done,event_dist,event_pwm,event_test;
 extern struct rt_messagequeue sdcard_mq;
 extern struct rt_mutex mission_mu;

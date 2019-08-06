@@ -2,11 +2,9 @@
 
 void distance(void *par);
 
-
-
 void dis_init(void)
 {
-    tid_dis = rt_thread_create("distance", distance, RT_NULL, 4096, 13, 10);
+    tid_dis = rt_thread_create("distance", distance, RT_NULL, 4096, 13, 50);
     if(RT_NULL != tid_dis)
         rt_thread_startup(tid_dis);
 }

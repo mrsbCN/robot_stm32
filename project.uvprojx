@@ -541,6 +541,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\timer_pwm.c</FilePath>
             </File>
+            <File>
+              <FileName>tid_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_test.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

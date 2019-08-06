@@ -104,7 +104,7 @@ static float pid_calculate(PID_TypeDef* pid, float measure)//, int16_t target)
 		pid->output = pid->pout + pid->iout + pid->dout;
 		
 
-		pid->output = pid->output*0.7f + pid->last_output*0.3f;  //ÂË²¨£¿
+		//pid->output = pid->output*0.7f + pid->last_output*0.3f;  //ÂË²¨£¿
 		if(pid->output > pid->MaxOutput)         
 		{
 			pid->output = pid->MaxOutput;

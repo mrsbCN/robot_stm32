@@ -9,6 +9,7 @@
 typedef struct
 {
 /*****安排过度过程*******/
+float v0;
 float v1;//跟踪微分期状态量
 float v2;//跟踪微分期状态量微分项
 float r;//时间尺度
@@ -29,7 +30,6 @@ float fe1;
 float beta_01;
 float beta_02;
 float beta_03;
-float b;
 
 
 /**********系统状态误差反馈率*********/
@@ -59,7 +59,7 @@ float c;//u0=-fhan(e1,c*e2*e2,r,h1);
 
 
 
-void ADRC_Init(Fhan_Data *fhan_Input1,Fhan_Data *fhan_Input2);
+void ADRC_Init(Fhan_Data *fhan_Input,float ADRC_Unit[][15]);
 void ADRC_Control(Fhan_Data *fhan_Input,float expect_ADRC,float feedback);
 
 extern Fhan_Data ADRC_SPEED[];

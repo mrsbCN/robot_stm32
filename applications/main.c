@@ -29,7 +29,8 @@ uint8_t Read_KEY1_Level(void) { return rt_pin_read(KEY1_PIN);}
 void Btn1_Dowm_CallBack(void *btn)		//单击开始运行
 {
 	rt_kprintf("Button1 Click!\n");
-	go = 0;
+	//go = 0;
+	test_init();
 }
 
 void Btn1_Double_CallBack(void *btn)  	//双击切换先去A还是B
@@ -72,9 +73,9 @@ int main(void)
 		Button_Process();
 		rt_thread_mdelay(20);
 	}
+	/*
 	Button_Delete(&Button1);
 	rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
-
 	if(status == 0)
 	{
 		rt_kprintf("go A first!\n");
@@ -96,7 +97,7 @@ int main(void)
 		rt_thread_mdelay(1);
 		left_to_be_init();
 	}
-    rt_mutex_release(&mission_mu);
+    rt_mutex_release(&mission_mu);*/
     return RT_EOK;
 }
 
