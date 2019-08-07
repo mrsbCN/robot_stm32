@@ -12,14 +12,18 @@ float ADRC_Unit[2][15]=
 {
 /*TD跟踪微分器   改进最速TD,h0=N*h      扩张状态观测器ESO(w0=4wc)           扰动补偿     			非线性组合(wc)*/
 /*  r     h      N0                 beta_01   beta_02    beta_03     		b0      	beta_0			beta_1      beta_2      alpha1  alpha2  zeta */
- {8000 ,0.005 , 	5,               	180,      	10800,      216000,      	60,    		0.005,			225,      	8,     		0.8,   1.5,    0.03},
- {8000 ,0.005 , 	5,               	180,      	10800,      21600,      	60,    		0.005,			225,      	8,     		0.8,   1.5,    0.03},
+ {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	40,     		0.8,   1.5,    0.03},
+ {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	40,     		0.8,   1.5,    0.03},
 };
+rt_int32_t test_sp_l,test_sp_r,test_exp_l,test_exp_r;
+
+kalman p[2];
 
 void get_total_angle(moto_measure_t *p);
 void get_moto_offset(moto_measure_t *ptr, rt_uint8_t *hcan);
 void get_moto_measure(moto_measure_t *ptr, rt_uint8_t *hcan);
-rt_int32_t test_sp_l,test_sp_r,test_exp_l,test_exp_r;
+
+
 void cal_init(void)
 {
 
@@ -33,6 +37,8 @@ void cal_init(void)
     msg_send.data[6] =  0;
     msg_send.data[7] = 	0;
     ADRC_Init(ADRC_SPEED, ADRC_Unit);
+	kalmanCreate(&p[0],10,500);
+	kalmanCreate(&p[1],10,500);  
 	for(int i = 0; i < 2; i++)
     {
         pid_init(&motor_pid[i]);
@@ -44,8 +50,8 @@ void cal_init(void)
                                   0,						//rt_uint16_t period
                                   4000,						//rt_int16_t  max_err
                                   0,						//rt_int16_t  target
-                                  1.0,						//float 	kp
-                                  0.02,						//float 	ki
+                                  10.0,						//float 	kp
+                                  0,						//float 	ki
                                   0);						//float 	kd
     }
 	
@@ -62,6 +68,7 @@ void cal(void *par)
     rt_uint8_t recv[3][8] = {0};
     rt_int16_t ele[2];
     rt_int32_t tar[2] = {0, 0};
+	rt_uint8_t done[2]={0, 0};
 
     do
     {
@@ -104,28 +111,35 @@ void cal(void *par)
                 get_moto_measure(&moto_chassis[i], recv[i]);
                 //motor_pid[i].f_cal_pid(&motor_pid[i], moto_chassis[i].speed_rpm);
                 //ele[i] = motor_pid[i].output;
-                ADRC_Control(&ADRC_SPEED[i],tar[i],moto_chassis[i].speed_rpm);
+				moto_chassis[i].speed_rpm = KalmanFilter(&p[i],moto_chassis[i].speed_rpm); 
+                ADRC_Control(&ADRC_SPEED[i],motor_pid[i].target,moto_chassis[i].speed_rpm);
                 ele[i] = (rt_int16_t)ADRC_SPEED[i].u;
                 rt_mb_send(&total_mb[i], moto_chassis[i].total_angle);
+				done[i]=1;
             }
 			test_sp_l = moto_chassis[0].speed_rpm;
 			test_sp_r = moto_chassis[1].speed_rpm;
         }
-        rt_event_send(&event_per, EVENT_PER);
+		if(done[0])// && done[1])  //一个电机测试，暂时屏蔽另一个
+		{
+			rt_event_send(&event_per, EVENT_PER);
 
-        msg_send.data[0] =  ele[0] >> 8 ;
-        msg_send.data[1] =  ele[0];
-        msg_send.data[2] =  ele[1] >> 8 ;
-        msg_send.data[3] =  ele[1];
-        dev_can1.ops->sendmsg(&dev_can1, &msg_send, CAN_TXMAILBOX_0);
+			msg_send.data[0] =  ele[0] >> 8 ;
+			msg_send.data[1] =  ele[0];
+			msg_send.data[2] =  ele[1] >> 8 ;
+			msg_send.data[3] =  ele[1];
+			dev_can1.ops->sendmsg(&dev_can1, &msg_send, CAN_TXMAILBOX_0);
+			done[0]=0;
+			done[1]=0;
+		}
 
 
-        for(i = 0; i < 4; i++)
-        {
-            recv[2][i] = msg_send.data[i];
-        }
-        rt_mq_send(&sdcard_mq, recv, 20);
-        rt_thread_delay(5);
+        //for(i = 0; i < 4; i++)
+        //{
+        //    recv[2][i] = msg_send.data[i];
+        //}
+        //rt_mq_send(&sdcard_mq, recv, 20);
+        rt_thread_delay(1);
     }
 }
 

@@ -12,4 +12,5 @@
 static rt_thread_t tid_test = RT_NULL;
 
 void test_init(void);
+void period_test(void);
 #endif

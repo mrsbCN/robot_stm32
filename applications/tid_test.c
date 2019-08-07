@@ -169,7 +169,8 @@ void period_test(void)
 			//}
 			if (period == 58)
 			{
-			   rt_mb_send(&s_tar_mb[0], 0);
+				rt_timer_stop(timer1);
+				rt_mb_send(&s_tar_mb[0], 0);
 				rt_mb_send(&s_tar_mb[1], 0);
 				break;
 			}

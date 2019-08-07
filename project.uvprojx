@@ -1409,6 +1409,11 @@
               <FileType>1</FileType>
               <FilePath>.\DJI\dji_pid.c</FilePath>
             </File>
+            <File>
+              <FileName>kalman.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\DJI\kalman.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

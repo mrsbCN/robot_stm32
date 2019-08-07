@@ -36,6 +36,7 @@ void Btn1_Dowm_CallBack(void *btn)		//单击开始运行
 void Btn1_Double_CallBack(void *btn)  	//双击切换先去A还是B
 {
 	rt_kprintf("Button1 Double click!\n");
+	period_test();
 	if(rt_pin_read(LED2_PIN) ==PIN_HIGH)  
 	{
 		rt_pin_write(LED2_PIN,PIN_LOW); //低电平亮，先去A
