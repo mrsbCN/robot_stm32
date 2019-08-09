@@ -24,19 +24,17 @@ void can_init(void);
 void spi_init(void);
 Button_t Button1;
 
-uint8_t Read_KEY1_Level(void) { return rt_pin_read(KEY1_PIN);}
+uint8_t Read_KEY1_Level(void) { return rt_pin_read(KEY_patient);}
 
 void Btn1_Dowm_CallBack(void *btn)		//单击开始运行
 {
 	rt_kprintf("Button1 Click!\n");
-	//go = 0;
-	test_init();
+	go = 0;
 }
 
 void Btn1_Double_CallBack(void *btn)  	//双击切换先去A还是B
 {
 	rt_kprintf("Button1 Double click!\n");
-	period_test();
 	if(rt_pin_read(LED2_PIN) ==PIN_HIGH)  
 	{
 		rt_pin_write(LED2_PIN,PIN_LOW); //低电平亮，先去A
@@ -53,15 +51,16 @@ int main(void)
 {
     rt_thread_mdelay(100);
     MX_CAN1_Init();
-    //MX_SPI5_Init();
+    MX_SPI5_Init();
     can_init();
     msgq_init();
     led_init();
-    //rt_hw_spi_device_attach("spi5", "mpu6500", GPIOF, GPIO_PIN_6);
+    rt_hw_spi_device_attach("spi5", "mpu6500", GPIOF, GPIO_PIN_6);
     sd_init();
     rt_thread_mdelay(200);
     cal_init();
     dis_init();
+	timer_pwm_init();
  
 	Button_Create("Button1",
               &Button1, 
@@ -74,7 +73,7 @@ int main(void)
 		Button_Process();
 		rt_thread_mdelay(20);
 	}
-	/*
+	
 	Button_Delete(&Button1);
 	rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
 	if(status == 0)
@@ -98,7 +97,7 @@ int main(void)
 		rt_thread_mdelay(1);
 		left_to_be_init();
 	}
-    rt_mutex_release(&mission_mu);*/
+    rt_mutex_release(&mission_mu);
     return RT_EOK;
 }
 

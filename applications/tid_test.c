@@ -28,8 +28,8 @@ void tid_test_entry(void *par)
     rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
     rt_uint32_t recved;
 
-    rt_mb_send(&s_tar_mb[0], 2500);
-    rt_mb_send(&s_tar_mb[1], -2500);
+    rt_mb_send(&s_tar_mb[0], 3000);
+    rt_mb_send(&s_tar_mb[1], -3000);
 	rt_thread_mdelay(5000);
 	//rt_mb_send(&dis_tar_mb[0], 1000);
     //rt_mb_send(&dis_tar_mb[1], 1000);
@@ -42,6 +42,8 @@ void tid_test_entry(void *par)
 
 	rt_mutex_release(&mission_mu);
 }
+MSH_CMD_EXPORT(tid_test_entry,"test thread");
+
 
 void test_init(void)
 {

@@ -44,7 +44,15 @@ void tid_left_to_right_entry(void *par)
     }*/
     
     stop();
-	rt_thread_mdelay(10000);//等待加入按钮
+	
+	rt_event_send(&event_pwm,EVENT_PWM_RIGHT);
+	wait_for_patient();
+	if (RT_EOK == rt_event_recv(&event_patient, EVENT_PATIENT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
+    {
+        rt_kprintf("patient let me go.\n");
+    }
+	rt_event_send(&event_pwm,EVENT_PWM_RIGHT);
+	
     rt_mutex_release(&mission_mu);
 }
 

@@ -11,11 +11,11 @@ struct rt_can_msg msg_send;
 float ADRC_Unit[2][15]=
 {
 /*TD跟踪微分器   改进最速TD,h0=N*h      扩张状态观测器ESO(w0=4wc)           扰动补偿     			非线性组合(wc)*/
-/*  r     h      N0                 beta_01   beta_02    beta_03     		b0      	beta_0			beta_1      beta_2      alpha1  alpha2  zeta */
- {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	40,     		0.8,   1.5,    0.03},
- {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	40,     		0.8,   1.5,    0.03},
+/*  r     h      	N0                 beta_01   beta_02    beta_03     		b0      	beta_0			beta_1      beta_2      alpha1  alpha2  zeta */
+ {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
+ {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
 };
-rt_int32_t test_sp_l,test_sp_r,test_exp_l,test_exp_r;
+rt_int32_t test_sp_l,test_sp_bef_l,test_sp_r,test_exp_l,test_exp_r;
 
 kalman p[2];
 
@@ -111,16 +111,17 @@ void cal(void *par)
                 get_moto_measure(&moto_chassis[i], recv[i]);
                 //motor_pid[i].f_cal_pid(&motor_pid[i], moto_chassis[i].speed_rpm);
                 //ele[i] = motor_pid[i].output;
-				moto_chassis[i].speed_rpm = KalmanFilter(&p[i],moto_chassis[i].speed_rpm); 
+				moto_chassis[i].speed_rpm = KalmanFilter(&p[i],moto_chassis[i].speed_rpm,ADRC_SPEED[i].u); 
                 ADRC_Control(&ADRC_SPEED[i],motor_pid[i].target,moto_chassis[i].speed_rpm);
                 ele[i] = (rt_int16_t)ADRC_SPEED[i].u;
                 rt_mb_send(&total_mb[i], moto_chassis[i].total_angle);
 				done[i]=1;
             }
+			test_sp_bef_l = (rt_int32_t)moto_chassis[0].real_current;
 			test_sp_l = moto_chassis[0].speed_rpm;
 			test_sp_r = moto_chassis[1].speed_rpm;
         }
-		if(done[0])// && done[1])  //一个电机测试，暂时屏蔽另一个
+		if(done[0] && done[1])
 		{
 			rt_event_send(&event_per, EVENT_PER);
 
