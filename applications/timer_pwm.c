@@ -13,9 +13,19 @@ void timer_pwm_entry(void *par)
         {
 			if(recved == EVENT_PWM_LEFT)
 			{
-				if(pulse_l == 500000)
+				if(pulse_l == 5000000)
 				{
 					rt_pin_write(SPEAKER1_PIN, PIN_LOW);
+					for(rt_uint8_t i =0;i<10;i++)
+					{
+						pulse_l -= 200000;
+						rt_pwm_set(pwm_dev_left, PWM_LEFT, period, pulse_l);
+						rt_thread_mdelay(5);
+					}
+					rt_pin_write(SPEAKER1_PIN, PIN_HIGH);
+				}
+				else if(pulse_l == 3000000)
+				{
 					for(rt_uint8_t i =0;i<10;i++)
 					{
 						pulse_l += 200000;
@@ -23,19 +33,10 @@ void timer_pwm_entry(void *par)
 						rt_thread_mdelay(5);
 					}
 				}
-				else if(pulse_l == 2500000)
-				{
-					for(rt_uint8_t i =0;i<10;i++)
-					{
-						pulse_l -= 200000;
-						rt_pwm_set(pwm_dev_left, PWM_LEFT, period, pulse_l);
-						rt_thread_mdelay(5);
-					}
-				}
 			}
 			if(recved == EVENT_PWM_RIGHT)
 			{
-				if(pulse_r == 500000)
+				if(pulse_r == 5000000)
 				{
 					rt_pin_write(SPEAKER2_PIN, PIN_LOW);
 					for(rt_uint8_t i =0;i<10;i++)
@@ -44,8 +45,9 @@ void timer_pwm_entry(void *par)
 						rt_pwm_set(pwm_dev_right, PWM_RIGHT, period, pulse_r);
 						rt_thread_mdelay(5);
 					}
+					rt_pin_write(SPEAKER2_PIN, PIN_HIGH);
 				}
-				else if(pulse_l == 2500000)
+				else if(pulse_l == 3000000)
 				{
 					for(rt_uint8_t i =0;i<10;i++)
 					{
@@ -64,8 +66,8 @@ void timer_pwm_entry(void *par)
 void timer_pwm_init(void)
 {
 	period = 20000000;  //单位ns
-	pulse_l =  500000;	/* PWM脉冲宽度值，单位为纳秒ns */ //暂时假设0度是关闭
-	pulse_r =  500000;
+	pulse_l = 5000000;	/* PWM脉冲宽度值，单位为纳秒ns */ //暂时假设0度是关闭
+	pulse_r = 5000000;
 	pwm_dev_left = (struct rt_device_pwm *)rt_device_find(PWM_DEV_NAME);
 	rt_pwm_set(pwm_dev_left, PWM_LEFT, period, pulse_l);
 	rt_pwm_enable(pwm_dev_left, PWM_LEFT);
