@@ -4,7 +4,7 @@
 
 void cal(void *par);
 
-PID_TypeDef motor_pid[2];
+//PID_TypeDef motor_pid[2];
 moto_measure_t moto_chassis[2] = {0};
 static rt_thread_t tid_cal = RT_NULL;
 struct rt_can_msg msg_send;
@@ -12,12 +12,12 @@ float ADRC_Unit[2][15]=
 {
 /*TD跟踪微分器   改进最速TD,h0=N*h      扩张状态观测器ESO(w0=4wc)           扰动补偿     			非线性组合(wc)*/
 /*  r     h      	N0                 beta_01   beta_02    beta_03     		b0      	beta_0			beta_1      beta_2      alpha1  alpha2  zeta */
- {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
- {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
+ {3000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
+ {3000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
 };
 rt_int32_t test_sp_l,test_sp_bef_l,test_sp_r,test_exp_l,test_exp_r;
 
-kalman p[2];
+kalman spd[2];
 
 void get_total_angle(moto_measure_t *p);
 void get_moto_offset(moto_measure_t *ptr, rt_uint8_t *hcan);
@@ -37,23 +37,23 @@ void cal_init(void)
     msg_send.data[6] =  0;
     msg_send.data[7] = 	0;
     ADRC_Init(ADRC_SPEED, ADRC_Unit);
-	kalmanCreate(&p[0],10,500);
-	kalmanCreate(&p[1],10,500);  
-	for(int i = 0; i < 2; i++)
-    {
-        pid_init(&motor_pid[i]);
-        motor_pid[i].f_param_init(&motor_pid[i],			//PID_TypeDef * pid
-                                  PID_Speed,				//PID_ID   id
-                                  10000,					//rt_uint16_t maxout
-                                  5000,						//rt_uint16_t intergral_limit
-                                  10,						//float deadband
-                                  0,						//rt_uint16_t period
-                                  4000,						//rt_int16_t  max_err
-                                  0,						//rt_int16_t  target
-                                  10.0,						//float 	kp
-                                  0,						//float 	ki
-                                  0);						//float 	kd
-    }
+	kalmanCreate(&spd[0],10,500);
+	kalmanCreate(&spd[1],10,500);  
+	//for(int i = 0; i < 2; i++)
+    //{
+    //    pid_init(&motor_pid[i]);
+    //    motor_pid[i].f_param_init(&motor_pid[i],			//PID_TypeDef * pid
+    //                              PID_Speed,				//PID_ID   id
+    //                              10000,					//rt_uint16_t maxout
+    //                              5000,						//rt_uint16_t intergral_limit
+    //                              10,						//float deadband
+    //                              0,						//rt_uint16_t period
+    //                              4000,						//rt_int16_t  max_err
+    //                              0,						//rt_int16_t  target
+    //                              10.0,						//float 	kp
+    //                              0,						//float 	ki
+    //                              0);						//float 	kd
+    //}
 	
     tid_cal = rt_thread_create("cal", cal, RT_NULL, 4096, 19, 20);
 
@@ -96,14 +96,10 @@ void cal(void *par)
     {
         for(i = 0; i < 2; i++)
         {
-            if(RT_EOK == rt_mb_recv(&s_tar_mb[i], (rt_ubase_t *)&tar[i], RT_WAITING_NO))
-            {
-                motor_pid[i].target = tar[i];
-            }
-			test_exp_l = tar[0];
-			test_exp_r = tar[1];
+			rt_mb_recv(&s_tar_mb[i], (rt_ubase_t *)&tar[i], RT_WAITING_NO);
         }
-
+		test_exp_l = tar[0];
+		test_exp_r = tar[1];
         for(i = 0; i < 2; i++)
         {
             if( 8 == rt_ringbuffer_get(&s_cur_rb[i], recv[i], 8))
@@ -111,8 +107,8 @@ void cal(void *par)
                 get_moto_measure(&moto_chassis[i], recv[i]);
                 //motor_pid[i].f_cal_pid(&motor_pid[i], moto_chassis[i].speed_rpm);
                 //ele[i] = motor_pid[i].output;
-				moto_chassis[i].speed_rpm = KalmanFilter(&p[i],moto_chassis[i].speed_rpm,ADRC_SPEED[i].u); 
-                ADRC_Control(&ADRC_SPEED[i],motor_pid[i].target,moto_chassis[i].speed_rpm);
+				moto_chassis[i].speed_rpm = KalmanFilter(&spd[i],moto_chassis[i].speed_rpm,ADRC_SPEED[i].u); 
+                ADRC_Control(&ADRC_SPEED[i],tar[i],moto_chassis[i].speed_rpm);
                 ele[i] = (rt_int16_t)ADRC_SPEED[i].u;
                 rt_mb_send(&total_mb[i], moto_chassis[i].total_angle);
 				done[i]=1;

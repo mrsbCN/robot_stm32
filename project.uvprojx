@@ -670,21 +670,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>mpu6xxx</GroupName>
-          <Files>
-            <File>
-              <FileName>mpu6xxx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>packages\mpu6xxx-latest\src\mpu6xxx.c</FilePath>
-            </File>
-            <File>
-              <FileName>sensor_inven_mpu6xxx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>packages\mpu6xxx-latest\src\sensor_inven_mpu6xxx.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>trace</GroupName>
           <Files>
             <File>
@@ -1200,11 +1185,6 @@
               <FileName>kalman.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\DJI\kalman.c</FilePath>
-            </File>
-            <File>
-              <FileName>mpu6xxx_sample.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\DJI\mpu6xxx_sample.c</FilePath>
             </File>
           </Files>
         </Group>

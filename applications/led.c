@@ -29,12 +29,14 @@ void led_init(void)
 {
     rt_pin_mode(POWER1_PIN, PIN_MODE_OUTPUT);
     rt_pin_mode(POWER2_PIN, PIN_MODE_OUTPUT);
+	rt_pin_mode(POWER3_PIN, PIN_MODE_OUTPUT);
 	rt_pin_mode(SPEAKER1_PIN, PIN_MODE_OUTPUT);
     rt_pin_mode(SPEAKER2_PIN, PIN_MODE_OUTPUT);
     rt_pin_mode(SPI5_NSS, PIN_MODE_OUTPUT);
     
 	rt_pin_write(POWER1_PIN, PIN_HIGH);
     rt_pin_write(POWER2_PIN, PIN_HIGH);
+	rt_pin_write(POWER3_PIN, PIN_HIGH);
 	rt_pin_write(SPEAKER1_PIN, PIN_HIGH);
     rt_pin_write(SPEAKER2_PIN, PIN_HIGH);
     rt_pin_write(SPI5_NSS, PIN_LOW);
