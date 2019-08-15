@@ -40,6 +40,26 @@ menu "On-chip Peripheral Drivers"
                 depends on BSP_USING_UART2 && RT_SERIAL_USING_DMA
                 default n
         endif
+        if BSP_USING_UART
+            config BSP_USING_UART7
+                bool "Enable UART7"
+                default y
+
+            config BSP_UART2_RX_USING_DMA
+                bool "Enable UART7 RX DMA"
+                depends on BSP_USING_UART7 && RT_SERIAL_USING_DMA
+                default n
+        endif
+        if BSP_USING_UART
+            config BSP_USING_UART8
+                bool "Enable UART8"
+                default y
+
+            config BSP_UART2_RX_USING_DMA
+                bool "Enable UART8 RX DMA"
+                depends on BSP_USING_UART8 && RT_SERIAL_USING_DMA
+                default n
+        endif
         
     config BSP_USING_SDIO
         bool "Enable SDIO BUS"

@@ -7,7 +7,6 @@
 #include "calculator.h"
 #include "distance.h"
 #include "sdcard.h"
-#include "drv_spi.h"
 #include "tid_to_left.h"
 #include "tid_left_to_right.h"
 #include "tid_right_to_be.h"

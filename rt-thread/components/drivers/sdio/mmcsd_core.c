@@ -747,5 +747,5 @@ int rt_mmcsd_core_init(void)
 
 	return 0;
 }
-INIT_PREV_EXPORT(rt_mmcsd_core_init);
+//INIT_PREV_EXPORT(rt_mmcsd_core_init);
 

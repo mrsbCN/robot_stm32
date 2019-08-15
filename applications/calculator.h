@@ -2,7 +2,7 @@
 #define __CALCULATER
 
 #include "mailbox.h"
-#include "dji_pid.h"
+//#include "dji_pid.h"
 #include "drv_can.h"
 #include <stdlib.h>
 #include "ADRC.h"
@@ -45,5 +45,5 @@ typedef struct
 #endif
 /* Extern  ------------------------------------------------------------------*/
 extern moto_measure_t  moto_chassis[];
-extern PID_TypeDef motor_pid[];
+//extern PID_TypeDef motor_pid[];
 extern void reset_total_angle(moto_measure_t *ptr);

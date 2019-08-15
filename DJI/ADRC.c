@@ -74,7 +74,7 @@ float Fhan_ADRC(float x1,float x2,float r,float h0)
 	d=r*h0*h0;//d=rh^2;
 	a0=h0*x2;//a0=h*x2
 	y=x1+a0;//y=x1+a0
-	a1=sqrt(d*(d+8*ABS(y)));//a1=sqrt(d*(d+8*ABS(y))])
+	arm_sqrt_f32(d*(d+8*ABS(y)),&a1);//a1=sqrt(d*(d+8*ABS(y))])
 	a2=a0+Sign_ADRC(y)*(a1-d)/2;//a2=a0+sign(y)*(a1-d)/2;
 	a=(a0+y)*Fsg_ADRC(y,d)+a2*(1-Fsg_ADRC(y,d));
 	fh=-r*(a/d)*Fsg_ADRC(a,d) - r*Sign_ADRC(a)*(1-Fsg_ADRC(a,d));//得到最速微分加速度跟踪量
@@ -99,8 +99,6 @@ float Fal_ADRC(float e,float alpha,float zeta)
     fal_output=e*fsg/(powf(zeta,1-alpha))+powf(ABS(e),alpha)*Sign_ADRC(e)*(1-fsg);
     return fal_output;
 }
-
-
 
 
 /************扩张状态观测器********************/

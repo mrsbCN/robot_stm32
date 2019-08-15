@@ -56,7 +56,7 @@ void kalmanCreate(kalman *p,float T_Q,float T_R)
 
 float KalmanFilter(kalman* p,float dat,float u)
 {
-    p->X_mid =p->A*p->X_last+0.001*u;                     //x(k|k-1) = AX(k-1|k-1)+BU(k)  //在这里加入控制量
+    p->X_mid =p->A*p->X_last;//+0.001*u;                     //x(k|k-1) = AX(k-1|k-1)+BU(k)  //在这里加入控制量
     p->P_mid = p->A*p->P_last+p->Q;               //p(k|k-1) = Ap(k-1|k-1)A'+Q
     p->kg = p->P_mid/(p->P_mid+p->R);             //kg(k) = p(k|k-1)H'/(Hp(k|k-1)'+R)
     p->X_now = p->X_mid+p->kg*(dat-p->X_mid);     //x(k|k) = X(k|k-1)+kg(k)(Z(k)-HX(k|k-1))

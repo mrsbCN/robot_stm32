@@ -1,5 +1,5 @@
 #include <rtthread.h>
-#include <math.h>
+#include <arm_math.h>
 
 #define ABS(x)	( (x>0) ? (x) : (-x) )
 
