@@ -1,6 +1,6 @@
 #include "ADRC.h"
 Fhan_Data ADRC_SPEED[2]={0};
-
+Fhan_Data ADRC_DEV={0};
 
 float Constrain_Float(float amt, float low, float high){
   return ((amt)<(low)?(low):((amt)>(high)?(high):(amt)));
@@ -29,9 +29,9 @@ rt_int16_t Fdb_ADRC(float x,float d)
   return output;
 }
 
-void ADRC_Init(Fhan_Data *fhan_Input,float ADRC_Unit[][15])
+void ADRC_Init(Fhan_Data *fhan_Input,float ADRC_Unit[][15],rt_uint8_t len)
 {
-	for (rt_uint8_t i=0;i<2;i++)
+	for (rt_uint8_t i=0;i<len;i++)
 	{
 		fhan_Input[i].r=ADRC_Unit[i][0];
 		fhan_Input[i].h=ADRC_Unit[i][1];

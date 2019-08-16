@@ -335,7 +335,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F427xx, USE_HAL_DRIVER, RT_USING_ARM_LIBC,__FPU_USED=1,__FPU_PRESENT=1,ARM_MATH_CM4,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
+              <Define>STM32F427xx, USE_HAL_DRIVER, RT_USING_ARM_LIBC,__TARGET_FPU_VFP,__FPU_PRESENT=1U,ARM_MATH_CM4,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
               <IncludePath>.;rt-thread\include;applications;.;board;board\CubeMX_Config\Inc;libraries\HAL_Drivers;libraries\HAL_Drivers\config;packages\button-v1.0.1;packages\SystemView-latest;packages\SystemView-latest\SystemView_Src\Config;packages\SystemView-latest;packages\SystemView-latest\SystemView_Src\SEGGER;rt-thread\libcpu\arm\common;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\dfs\include;rt-thread\components\dfs\filesystems\devfs;rt-thread\components\dfs\filesystems\elmfat;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\sensors;rt-thread\components\drivers\include;rt-thread\components\finsh;rt-thread\components\libc\compilers\armlibc;rt-thread\components\libc\compilers\common;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;libraries\STM32F4xx_HAL\CMSIS\Include;.\rt-thread\components\drivers\include\drivers;.\rt-thread\components\drivers\include\ipc;.\DJI</IncludePath>
             </VariousControls>
@@ -500,6 +500,11 @@
               <FileName>sdcard.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\sdcard.c</FilePath>
+            </File>
+            <File>
+              <FileName>speed_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\speed_control.c</FilePath>
             </File>
             <File>
               <FileName>step.c</FileName>

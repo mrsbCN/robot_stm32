@@ -42,6 +42,15 @@ extern "C" {
 #define UART3_RX_DMA_IRQ                 DMA1_Stream1_IRQn
 #endif
 
+/* DMA1 stream1 */
+#if defined(BSP_UART7_RX_USING_DMA) && !defined(UART3_RX_DMA_INSTANCE)
+#define UART7_DMA_RX_IRQHandler          DMA1_Stream3_IRQHandler
+#define UART7_RX_DMA_RCC                 RCC_AHB1ENR_DMA1EN
+#define UART7_RX_DMA_INSTANCE            DMA1_Stream3
+#define UART7_RX_DMA_CHANNEL             DMA_CHANNEL_5
+#define UART7_RX_DMA_IRQ                 DMA1_Stream3_IRQn
+#endif
+
 /* DMA1 stream2 */
 #if defined(BSP_SPI3_RX_USING_DMA) && !defined(SPI3_RX_DMA_INSTANCE)
 #define SPI3_DMA_RX_IRQHandler           DMA1_Stream2_IRQHandler

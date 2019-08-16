@@ -34,7 +34,7 @@ void tid_test_entry(void *par)
 	//rt_mb_send(&dis_tar_mb[0], 1000);
     //rt_mb_send(&dis_tar_mb[1], 1000);
 	//rt_event_send(&event_dist, EVENT_DIST);
-    //if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE_LEFT | EVENT_DONE_RIGHT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
+    //if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     //{
     //    rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     //}

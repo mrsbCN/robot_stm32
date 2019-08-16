@@ -105,6 +105,18 @@ config RT_USING_PWM
     bool "Using PWM device drivers"
     default n
 
+if RT_USING_PWM
+    config BSP_USING_PWM8
+        bool "BSP_USING_PWM8"
+        default y
+    config BSP_USING_PWM8_CH1
+        bool "BSP_USING_PWM8_CH1"
+        default y
+    config BSP_USING_PWM8_CH2
+        bool "BSP_USING_PWM8_CH2"
+        default y
+endif
+
 config RT_USING_MTD_NOR
     bool "Using MTD Nor Flash device drivers"
     default n

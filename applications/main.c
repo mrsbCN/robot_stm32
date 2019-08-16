@@ -8,17 +8,18 @@
  * 2018-11-06     SummerGift   first version
  */
 #include "main.h"
-
+#define AXIS_UART       "uart2"
+static rt_device_t serial;
 CAN_HandleTypeDef hcan1;
+DMA_HandleTypeDef hdma_usart2_rx;
+DMA_HandleTypeDef hdma_uart7_rx;
 rt_uint8_t status = 0x0;
 rt_uint8_t go = 0x1;
-struct rt_spi_device *spi_dev;
-void HAL_UART_MspInit(UART_HandleTypeDef *huart);
-void HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 void MX_CAN1_Init(void);
 void HAL_CAN_MspInit(CAN_HandleTypeDef *canHandle);
 void HAL_CAN_MspDeInit(CAN_HandleTypeDef *canHandle);
 void can_init(void);
+void uart_init(void);
 Button_t Button1;
 
 uint8_t Read_KEY1_Level(void) { return rt_pin_read(KEY_patient);}
@@ -46,17 +47,16 @@ void Btn1_Double_CallBack(void *btn)  	//双击切换先去A还是B
 
 int main(void)
 {
-    rt_thread_mdelay(100);
+	msgq_init();
     MX_CAN1_Init();
     can_init();
-    msgq_init();
+	uart_init();
     led_init();
-    //sd_init();
-    rt_thread_mdelay(200);
+    rt_thread_mdelay(2000);
     cal_init();
     dis_init();
 	timer_pwm_init();
- 
+	speed_control_init();
 	Button_Create("Button1",
               &Button1, 
               Read_KEY1_Level, 
@@ -132,3 +132,35 @@ void can_init(void)
     dev_can1.ops->control(&dev_can1, RT_DEVICE_CTRL_SET_INT, (void *)RT_DEVICE_FLAG_INT_RX);
 }
 
+struct rx_msg
+{
+    rt_device_t dev;
+    rt_size_t size;
+};
+
+char str[10] = {0xFF,0xAA,0x69,0x88,0xB5,0xFF,0xAA,0x76,0x00,0x00}; //Z轴归0
+static rt_err_t uart_input(rt_device_t dev, rt_size_t size)
+{
+	rt_sem_release(&uart_rx_sem);
+    return RT_EOK;
+}
+
+void uart_init(void)
+{
+	serial = rt_device_find(AXIS_UART);
+	rt_device_open(serial, RT_DEVICE_FLAG_DMA_RX);
+	rt_device_set_rx_indicate(serial, uart_input);
+	struct serial_configure config = RT_SERIAL_CONFIG_DEFAULT; 
+	config.baud_rate = BAUD_RATE_921600;
+	config.data_bits = DATA_BITS_8;
+	config.stop_bits = STOP_BITS_1;
+	config.parity = PARITY_NONE;
+	config.bit_order = BIT_ORDER_LSB;
+	config.invert = NRZ_NORMAL;
+	config.bufsz = 44;
+	config.reserved = 0;	
+	rt_device_control(serial, RT_DEVICE_CTRL_CONFIG, &config);
+	rt_thread_mdelay(200);
+	rt_device_write(serial,RT_NULL,str,sizeof(str));
+	rt_thread_mdelay(100);
+}

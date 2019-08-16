@@ -45,6 +45,12 @@ enum
 #ifdef BSP_USING_UART5
     UART5_INDEX,
 #endif
+#ifdef BSP_USING_UART7
+    UART7_INDEX,
+#endif
+#ifdef BSP_USING_UART8
+    UART8_INDEX,
+#endif	
 #ifdef BSP_USING_LPUART1
     LPUART1_INDEX,
 #endif
@@ -67,6 +73,12 @@ static struct stm32_uart_config uart_config[] =
 #ifdef BSP_USING_UART5
         UART5_CONFIG,
 #endif
+#ifdef BSP_USING_UART7
+        UART7_CONFIG,
+#endif
+#ifdef BSP_USING_UART8
+        UART8_CONFIG,
+#endif	
 #ifdef BSP_USING_LPUART1
         LPUART1_CONFIG,
 #endif
@@ -431,6 +443,56 @@ void UART5_DMA_RX_IRQHandler(void)
 #endif /* defined(RT_SERIAL_USING_DMA) && defined(BSP_UART5_RX_USING_DMA) */
 #endif /* BSP_USING_UART5*/
 
+#if defined(BSP_USING_UART7)
+void UART7_IRQHandler(void)
+{
+    /* enter interrupt */
+    rt_interrupt_enter();
+
+    uart_isr(&(uart_obj[UART7_INDEX].serial));
+    
+    /* leave interrupt */
+    rt_interrupt_leave();
+}
+#if defined(RT_SERIAL_USING_DMA) && defined(BSP_UART7_RX_USING_DMA)
+void UART7_DMA_RX_IRQHandler(void)
+{
+    /* enter interrupt */
+    rt_interrupt_enter();
+
+    HAL_DMA_IRQHandler(&uart_obj[UART7_INDEX].dma.handle);
+
+    /* leave interrupt */
+    rt_interrupt_leave();
+}
+#endif /* defined(RT_SERIAL_USING_DMA) && defined(BSP_UART7_RX_USING_DMA) */
+
+#endif /* BSP_USING_UART8*/
+#if defined(BSP_USING_UART8)
+void UART8_IRQHandler(void)
+{
+    /* enter interrupt */
+    rt_interrupt_enter();
+
+    uart_isr(&(uart_obj[UART8_INDEX].serial));
+    
+    /* leave interrupt */
+    rt_interrupt_leave();
+}
+#if defined(RT_SERIAL_USING_DMA) && defined(BSP_UART8_RX_USING_DMA)
+void UART8_DMA_RX_IRQHandler(void)
+{
+    /* enter interrupt */
+    rt_interrupt_enter();
+
+    HAL_DMA_IRQHandler(&uart_obj[UART8_INDEX].dma.handle);
+
+    /* leave interrupt */
+    rt_interrupt_leave();
+}
+#endif /* defined(RT_SERIAL_USING_DMA) && defined(BSP_UART8_RX_USING_DMA) */
+#endif /* BSP_USING_UART8*/
+
 #if defined(BSP_USING_LPUART1)
 void LPUART1_IRQHandler(void)
 {
@@ -607,6 +669,16 @@ static void stm32_uart_get_dma_config(void)
     uart_obj[UART5_INDEX].uart_dma_flag = 1;
     static struct dma_config uart5_dma_rx = UART5_DMA_CONFIG;
     uart_config[UART5_INDEX].dma_rx = &uart5_dma_rx;
+#endif
+#ifdef BSP_UART7_RX_USING_DMA
+    uart_obj[UART7_INDEX].uart_dma_flag = 1;
+    static struct dma_config uart7_dma_rx = UART7_DMA_CONFIG;
+    uart_config[UART7_INDEX].dma_rx = &uart7_dma_rx;
+#endif
+#ifdef BSP_UART8_RX_USING_DMA
+    uart_obj[UART8_INDEX].uart_dma_flag = 1;
+    static struct dma_config UART8_dma_rx = UART8_DMA_CONFIG;
+    uart_config[UART8_INDEX].dma_rx = &uart8_dma_rx;
 #endif
 #ifdef BSP_LPUART1_RX_USING_DMA
     uart_obj[LPUART1_INDEX].uart_dma_flag = 1;

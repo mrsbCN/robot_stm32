@@ -59,9 +59,9 @@ float c;//u0=-fhan(e1,c*e2*e2,r,h1);
 
 
 
-void ADRC_Init(Fhan_Data *fhan_Input,float ADRC_Unit[][15]);
+void ADRC_Init(Fhan_Data *fhan_Input,float ADRC_Unit[][15],rt_uint8_t len);
 void ADRC_Control(Fhan_Data *fhan_Input,float expect_ADRC,float feedback);
 
-extern Fhan_Data ADRC_SPEED[];
+extern Fhan_Data ADRC_SPEED[],ADRC_DEV;
 #endif
 

@@ -17,6 +17,7 @@
 #include "button.h"
 #include "timer_pwm.h"
 #include "tid_test.h"
+#include "speed_control.h"
 //#include "motion_driver_example.h"
 
 extern void cal_init(void);
