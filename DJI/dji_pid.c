@@ -17,9 +17,6 @@
 
 #define ABS(x)		((x>0)? x: -x) 
 
-PID_TypeDef pid_pitch,pid_pithch_speed,pid_roll,pid_roll_speed,pid_yaw_speed;
-extern int isMove;
-
 /*参数初始化--------------------------------------------------------------*/
 static void pid_param_init(
 	PID_TypeDef * pid, 

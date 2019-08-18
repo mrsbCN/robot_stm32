@@ -2,6 +2,7 @@
 #define __SPEED_CONTROL
 
 #include "mailbox.h"
+#include "dji_pid.h"
 #include "ADRC.h"
 #include "kalman.h"
 #include "arm_math.h"

@@ -8,7 +8,7 @@
  * 2018-11-06     SummerGift   first version
  */
 #include "main.h"
-#define AXIS_UART       "uart2"
+#define AXIS_UART       "uart7"
 static rt_device_t serial;
 CAN_HandleTypeDef hcan1;
 DMA_HandleTypeDef hdma_usart2_rx;

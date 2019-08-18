@@ -10,11 +10,16 @@
 #define EVENT_DIST_TURN (1<<3)
 #define EVENT_DIST_FOR (1<<4)//计算距离事件 前进用
 #define EVENT_DIST_BACK (1 << 5)//计算距离事件 后退用
-#define EVENT_PWM_LEFT (1 << 6)//左舵机
-#define EVENT_PWM_RIGHT (1 << 7)//右舵机
-#define EVENT_PWM_CAM (1 << 8)//摄像头舵机
 
-#define EVENT_PATIENT (1<<9)
+#define EVENT_FOR (1<<5)		//发给cal线程，+-90度用
+#define EVENT_BACK (1 << 6)
+#define EVENT_TURN (1 << 7)
+
+#define EVENT_PWM_LEFT (1 << 8)//左舵机
+#define EVENT_PWM_RIGHT (1 << 9)//右舵机
+#define EVENT_PWM_CAM (1 << 10)//摄像头舵机
+
+#define EVENT_PATIENT (1<<11)
 #endif
 
 extern struct rt_ringbuffer s_cur_rb[];
