@@ -5,25 +5,28 @@ void tid_to_left_entry(void *par)
     rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
     rt_uint32_t recved;
 	
-	turnleft(30,30);
+	turnleft(45,45,0,0);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
-		stop();
-		rt_thread_mdelay(200);
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	forward(1835,1989);
+	forward(1835,1989,spd_for_tri_left,spd_for_tri_right);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done2:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	for_turnright(30,30);
+	for_turnright(90,90,spd_for_left,spd_for_right);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
+		stop();
+		while(1)
+		{
+			rt_thread_mdelay(10);
+		}
         rt_kprintf("done3:%d,time:%d\n", recved, (rt_tick_get()));
     }
 	
-    forward(1250,5100);
+    forward(1250,5100,0,0);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done4:%d,time:%d\n", recved, (rt_tick_get()));

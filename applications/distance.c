@@ -84,6 +84,7 @@ void distance(void *par)
 						E = -E;
 					}
 					rt_mb_send(&s_error,(rt_int32_t)(E*1000));
+					rt_mb_send(&dist_err_mb,(rt_int32_t)(now_dist - tar_dist));
                 }
             }
 
@@ -103,7 +104,7 @@ void distance_turn(void *par)
 			rt_mb_recv(&angle_to_use,(rt_ubase_t *)&start_angle,RT_WAITING_FOREVER);
 			start_ang =start_angle / 6000.0;
             rt_mb_recv(&dis_tar_mb[0], (rt_ubase_t *)&tar_angle, RT_WAITING_NO);	//借用x目标邮箱传递旋转角度
-			tar_ang = tar_angle *PI/180.0;
+			tar_ang = fabs(tar_angle *PI/180.0 - start_ang);
 			//只是为了清空邮箱
 			status = 1;
 			while(status == 1 )
@@ -111,7 +112,7 @@ void distance_turn(void *par)
 				rt_mb_recv(&angle_to_use,(rt_ubase_t *)&now_angle,RT_WAITING_FOREVER);
 				now_ang = now_angle /6000.0;
 				delta_ang = fabs(now_ang - start_ang);
-				if (delta_ang > PI)
+				if (delta_ang > 1.5*PI)
 				{
 					delta_ang = 2*PI-delta_ang;
 				}
@@ -121,6 +122,7 @@ void distance_turn(void *par)
 					status = 0;
 					break;
 				}
+				rt_mb_send(&dist_err_mb,(rt_int32_t)((delta_ang - tar_ang)*6.0*300)); //(PI/6)开始减速，转换成距离的300mm开始减速
 			}
 		}
 	}

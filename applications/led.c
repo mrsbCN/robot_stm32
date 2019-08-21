@@ -15,13 +15,24 @@ void led1_entry(void *par)
 
 void led2_entry(void *par)
 {
-
+	struct rx_msg msg;
+	static char rx_temp_p[RT_SERIAL_RB_BUFSZ+1];
+	rt_err_t result;
+	rt_uint16_t rx_length=0;
     while (1)
     {
-        rt_pin_write(LED1_PIN, PIN_HIGH);
-        rt_thread_mdelay(500);
-        rt_pin_write(LED1_PIN, PIN_LOW);
-        rt_thread_mdelay(500);
+		rt_memset(&msg,0,sizeof(msg));
+		result = rt_mq_recv(&uart_mq,&msg,sizeof(msg),RT_WAITING_FOREVER);
+		if(result == RT_EOK)
+		{
+			rx_length = 0;
+			rx_length = rt_device_read(msg.dev,0,rx_temp_p,msg.size);
+			msg.size = rx_length;
+			if(rx_length >0)
+			{
+				rt_mq_send(&rx_mq,&rx_temp_p,rx_length);
+			}
+		}
     }
 }
 
@@ -55,7 +66,13 @@ void led_init(void)
                                 THREAD_PRIORITY , THREAD_TIMESLICE);
     if(tid_led1 != RT_NULL)
         rt_thread_startup(tid_led1);
-
+	
+	tid_led2 = rt_thread_create("uart_rx",
+                                led2_entry , RT_NULL,
+                                1024 ,
+                                24 , 10);
+    if(tid_led2 != RT_NULL)
+        rt_thread_startup(tid_led2);
 }
 
 

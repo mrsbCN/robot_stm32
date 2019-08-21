@@ -6,19 +6,19 @@ void tid_right_to_be_entry(void *par)
     rt_uint32_t recved;
 
 	rt_thread_mdelay(100);
-    forward(right3_to_right1, right3_to_right1); //前进
+    forward(4165,1989,spd_for_tri_left,spd_for_tri_right); //前进
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
 
-    for_turnright(dis_for_tri_left45, dis_for_tri_left45);//圆弧右转45
+    for_turnright(45, 45,spd_for_left,spd_for_right);//圆弧右转45
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done2:%d,time:%d\n", recved, (rt_tick_get()));
     }
 
-    forward(right1_to_be, right1_to_be); //前进
+    forward(3000, 650,0,0); //前进
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done3:%d,time:%d\n", recved, (rt_tick_get()));

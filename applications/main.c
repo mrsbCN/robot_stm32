@@ -50,9 +50,9 @@ int main(void)
 	msgq_init();
     MX_CAN1_Init();
     can_init();
-	uart_init();
     led_init();
-    rt_thread_mdelay(2000);
+	uart_init();
+	rt_thread_mdelay(1000);
     cal_init();
     dis_init();
 	timer_pwm_init();
@@ -132,21 +132,22 @@ void can_init(void)
     dev_can1.ops->control(&dev_can1, RT_DEVICE_CTRL_SET_INT, (void *)RT_DEVICE_FLAG_INT_RX);
 }
 
-struct rx_msg
-{
-    rt_device_t dev;
-    rt_size_t size;
-};
-
 char str[10] = {0xFF,0xAA,0x69,0x88,0xB5,0xFF,0xAA,0x76,0x00,0x00}; //Z轴归0
 static rt_err_t uart_input(rt_device_t dev, rt_size_t size)
 {
-	rt_sem_release(&uart_rx_sem);
-    return RT_EOK;
+	struct rx_msg msg;
+    rt_err_t result;
+    msg.dev = dev;
+    msg.size = size;
+
+    result = rt_mq_send(&uart_mq, &msg, sizeof(msg));
+    return result;
 }
 
 void uart_init(void)
 {
+	char uart_rx[44];
+	float zeta=180.0;
 	serial = rt_device_find(AXIS_UART);
 	rt_device_open(serial, RT_DEVICE_FLAG_DMA_RX);
 	rt_device_set_rx_indicate(serial, uart_input);
@@ -161,6 +162,19 @@ void uart_init(void)
 	config.reserved = 0;	
 	rt_device_control(serial, RT_DEVICE_CTRL_CONFIG, &config);
 	rt_thread_mdelay(200);
-	rt_device_write(serial,RT_NULL,str,sizeof(str));
-	rt_thread_mdelay(100);
+	do//Z轴置零有问题，这样保证清零
+	{
+		rt_device_write(serial,RT_NULL,str,10);
+		rt_thread_mdelay(50);
+		if(RT_EOK == rt_mq_recv(&rx_mq,uart_rx,44,RT_WAITING_FOREVER))
+		{
+			for(rt_uint8_t i=0;i<34;i++)
+			{
+				if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x53)
+				{
+					zeta= (short)((uart_rx[i+7]<<8|uart_rx[i+6]))/32768.0*180; 
+				}
+			}
+		}
+	}while(zeta > 1E-6 ||zeta < -1E-6);
 }

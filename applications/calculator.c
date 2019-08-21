@@ -8,8 +8,7 @@ moto_measure_t moto_chassis[2] = {0};
 static rt_thread_t tid_cal = RT_NULL;
 kalman spd_filter[2];
 kalman angle_filter;
-static rt_device_t serial;
-rt_int32_t test_s_l,test_s_r;
+rt_int32_t test_x,test_y,test_zeta;
 
 void get_total_angle(moto_measure_t *p);
 void get_moto_offset(moto_measure_t *ptr, rt_uint8_t *hcan);
@@ -22,7 +21,6 @@ void cal_init(void)
 	kalmanCreate(&spd_filter[0],10,500);
 	kalmanCreate(&spd_filter[1],10,500);
 	kalmanCreate(&angle_filter,10,20);	
-	serial = rt_device_find(AXIS_UART);
     tid_cal = rt_thread_create("cal", cal, RT_NULL, 4096, 18, 20);
 
     if(RT_NULL != tid_cal)
@@ -38,7 +36,7 @@ void cal(void *par)
 	rt_uint8_t done[2]={0, 0};
 	char uart_rx[44];
 	float x=3000,y=800,dr=0;
-	float zeta=0.0;
+	float omg,last_zeta,zeta=0.0;
     do
     {
         for(i = 0; i < 2; i++)
@@ -71,14 +69,35 @@ void cal(void *par)
     {
 		rt_event_recv(&event_loca, EVENT_FOR|EVENT_BACK|EVENT_TURN, RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR, RT_WAITING_NO, &recved);
 
-		if(RT_EOK == rt_sem_take(&uart_rx_sem,RT_WAITING_NO))
+		if(RT_EOK == rt_mq_recv(&rx_mq,uart_rx,44,RT_WAITING_NO))
 		{
-			rt_device_read(serial, RT_NULL, &uart_rx, 44);
+			
 			for(i=0;i<34;i++)
 			{
 				if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x53)
 				{
-					zeta= (short)((uart_rx[i+7]<<8|uart_rx[i+6]))/32768.0*PI; 
+					zeta= (short)((uart_rx[i+7]<<8|uart_rx[i+6]))/32768.0*PI;
+					for(rt_uint8_t j=i+11;j<34;j++)
+					{
+						if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x53)
+						{
+							omg = (short)((uart_rx[j+7]<<8|uart_rx[j+6]))/32768.0*2000/180.0*PI;
+							break;
+						}
+					}
+					break;
+				}
+				else if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x52)
+				{
+					omg= (short)((uart_rx[i+7]<<8|uart_rx[i+6]))/32768.0*2000/180.0*PI;
+					for(rt_uint8_t j=i+11;j<34;j++)
+					{
+						if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x52)
+						{
+							zeta = (short)((uart_rx[j+7]<<8|uart_rx[j+6]))/32768.0*PI;
+							break;
+						}
+					}
 					break;
 				}
 			}
@@ -103,7 +122,7 @@ void cal(void *par)
         }
 		if(done[0] && done[1])
 		{
-			dr = (moto_chassis[0].delta_angle-moto_chassis[1].delta_angle)/2 * K; //因为两轮相反安装，所以加-
+			dr = abs(moto_chassis[0].delta_angle-moto_chassis[1].delta_angle)/2 * K; //因为两轮相反安装，所以加-
 			x += dr*arm_cos_f32(zeta);
 			y += dr*arm_sin_f32(zeta);
 			rt_mb_send(&loc_now_mb[0],(rt_int32_t)x);
@@ -114,9 +133,9 @@ void cal(void *par)
 			rt_event_send(&event_per, EVENT_PER);
 			
 		}
-		test_s_l = x;
-		test_s_r = y;
-		
+		test_x = x;
+		test_y = y;
+		test_zeta =zeta*5730;
         rt_thread_delay(1);
     }
 }

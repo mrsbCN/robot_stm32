@@ -7,44 +7,13 @@ void tid_left_to_right_entry(void *par)
 
 	rt_thread_mdelay(10);
 	
-	big_turnleft(dis_big_tlf_left, dis_big_tlf_right); //大圆
+	big_turnleft(dis_big_tlf_left, dis_big_tlf_right,0,0); //大圆
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	
-    /*backward(left3_to_left2, left3_to_left2); //后退
-    if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
-    {
-        rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
-    }
-
-    back_turnleft(dis_back_tlf_left, dis_back_tlf_right);//左转
-    if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
-    {
-        rt_kprintf("done2:%d,time:%d\n", recved, (rt_tick_get()));
-    }
-
-    backward(left2_to_right2, left2_to_right2);//后退
-    if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
-    {
-        rt_kprintf("done3:%d,time:%d\n", recved, (rt_tick_get()));
-    }
-
-    back_turnleft(dis_back_tlf_left, dis_back_tlf_right);//左转
-    if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
-    {
-        rt_kprintf("done5:%d,time:%d\n", recved, (rt_tick_get()));
-    }
-    
-    backward(right2_to_right3, right2_to_right3);//后退
-    if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
-    {
-        rt_kprintf("done5:%d,time:%d\n", recved, (rt_tick_get()));
-    }*/
-    
+	   
     stop();
-	
 	rt_event_send(&event_pwm,EVENT_PWM_RIGHT);
 	wait_for_patient();
 	if (RT_EOK == rt_event_recv(&event_patient, EVENT_PATIENT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
