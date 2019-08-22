@@ -27,51 +27,6 @@ void backward(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
 	rt_event_send(&event_loca, EVENT_BACK);
 }
 
-void for_turnleft(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
-{
-	rt_mb_send(&s_tar_mb[0], spd_for_tlf_left);
-    rt_mb_send(&s_tar_mb[1], spd_for_tlf_right);
-    rt_mb_send(&dis_tar_mb[0], x);
-	rt_mb_send(&s_nx_mb[0],nl);
-	rt_mb_send(&s_nx_mb[1],nr);
-	
-    rt_event_send(&event_loca, EVENT_DIST_TURN);
-	rt_event_send(&event_loca, EVENT_FOR);
-}
-
-void for_turnright(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
-{
-	rt_mb_send(&s_tar_mb[0], spd_for_tri_left);
-    rt_mb_send(&s_tar_mb[1], spd_for_tri_right);
-    rt_mb_send(&dis_tar_mb[0], x);
-	rt_mb_send(&s_nx_mb[0],nl);
-	rt_mb_send(&s_nx_mb[1],nr);
-	
-    rt_event_send(&event_loca, EVENT_DIST_TURN);
-	rt_event_send(&event_loca, EVENT_FOR);
-}
-
-void back_turnleft(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
-{
-
-}
-
-void back_turnright(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
-{
-
-}
-
-void big_turnleft(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
-{
-
-}
-
-void big_turnright(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
-{
-
-}
-
-
 void turnleft(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
 {
     rt_mb_send(&s_tar_mb[0], spd_tlf_left);
@@ -102,4 +57,23 @@ void stop(void)
     rt_mb_send(&s_tar_mb[1], 0);
 	rt_mb_send(&s_nx_mb[0],0);
 	rt_mb_send(&s_nx_mb[1],0);
+	rt_event_send(&event_loca, EVENT_TURN);
+}
+
+void stop_to_for(void)
+{
+	rt_mb_send(&s_tar_mb[0], 0);
+    rt_mb_send(&s_tar_mb[1], 0);
+	rt_mb_send(&s_nx_mb[0],0);
+	rt_mb_send(&s_nx_mb[1],0);
+	rt_event_send(&event_loca, EVENT_FOR);
+}
+
+void stop_to_back(void)
+{
+	rt_mb_send(&s_tar_mb[0], 0);
+    rt_mb_send(&s_tar_mb[1], 0);
+	rt_mb_send(&s_nx_mb[0],0);
+	rt_mb_send(&s_nx_mb[1],0);
+	rt_event_send(&event_loca, EVENT_BACK);
 }

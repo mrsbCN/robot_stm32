@@ -12,7 +12,7 @@ float ADRC_Unit[3][15]=
 /*  r     h      	N0                 beta_01   beta_02    beta_03     	b0      	beta_0			beta_1      beta_2      alpha1  alpha2  zeta */
  {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
  {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
- {30000 ,0.005 , 	5,               	100,      	300,      1000,      	50,    		0,				1.2,      	0.005,     		0.8,   1.5,    0.03},
+ {30000 ,0.005 , 	5,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,	     		0.8,   1.5,    0.03},
 };
 
 void speed_control_init(void)
@@ -31,15 +31,15 @@ void speed_control_init(void)
 	pid_init(&pid_yaw);
     pid_yaw.f_param_init(&pid_yaw,			//PID_TypeDef * pid
                               PID_Speed,				//PID_ID   id
-                              200,					//rt_uint16_t maxout
+                              1000,					//rt_uint16_t maxout
                               1000,						//rt_uint16_t intergral_limit
                               0,						//float deadband
                               0,						//rt_uint16_t period
                               1000,						//rt_int16_t  max_err
                               0,						//rt_int16_t  target
-                              1.5,						//float 	kp
+                              15,						//float 	kp
                               0,						//float 	ki
-                              0);						//float 	kd
+                              5);						//float 	kd
 	pid_init(&pid_dist);
 	pid_dist.f_param_init(&pid_dist,			//PID_TypeDef * pid
                               PID_Position,				//PID_ID   id
@@ -79,9 +79,9 @@ void speed_control(void *par)
         }
 		if(RT_EOK == rt_mb_recv(&s_error, (rt_ubase_t *)&error, RT_WAITING_NO))
 		{
-			ADRC_Control(&ADRC_DEV,0,error/1000.0);
-			//pid_yaw.f_cal_pid(&pid_yaw, error/1000.0);
-			u = ADRC_DEV.u / 70000.0;//限幅0.1
+			//ADRC_Control(&ADRC_DEV,0,error/1000.0);
+			pid_yaw.f_cal_pid(&pid_yaw, error/1000.0);
+			u = pid_yaw.output / 2000.0;//限幅0.2
 		}
 		else
 		{
@@ -96,12 +96,11 @@ void speed_control(void *par)
 		{
 			pid_dist.output = 0.3;
 		}
-		
 		tl = (tar[0]+(1-pid_dist.output)*(tar_next[0]-tar[0]))*(1+u);
 		tr = (tar[1]+(1-pid_dist.output)*(tar_next[1]-tar[1]))*(1-u);
 		
-		test_u = (rt_int32_t)tl;//(rt_int32_t)(ADRC_DEV.u);
-		test_e = (rt_int32_t)tr;//error/1000.0;
+		test_u = (rt_int32_t)pid_yaw.output;
+		test_e = (rt_int32_t)error;
 		
 		if(RT_EOK == rt_mb_recv(&s_kf_mb[0],(rt_ubase_t *)&real_v[0],RT_WAITING_FOREVER))
 		{

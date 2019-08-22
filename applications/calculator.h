@@ -1,6 +1,7 @@
 #ifndef __CALCULATER
 #define __CALCULATER
 
+#include "const.h"
 #include "mailbox.h"
 #include "ADRC.h"
 #include "kalman.h"

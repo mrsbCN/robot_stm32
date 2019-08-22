@@ -1,6 +1,5 @@
 #include "calculator.h"
 #define K   0.0013315      //(3.1415*125/8192/36)     //总角度-->距离(mm)系数 pi，轮子直径，一圈信号数，减速比
-#define AXIS_UART       "uart7"
 
 void cal(void *par);
 
@@ -35,7 +34,9 @@ void cal(void *par)
     rt_uint8_t recv[3][8] = {0};
 	rt_uint8_t done[2]={0, 0};
 	char uart_rx[44];
-	float x=3000,y=800,dr=0;
+	float x,y,dr=0;
+	x = loc_begin_x;
+	y = loc_begin_y;
 	float omg,last_zeta,zeta=0.0;
     do
     {
@@ -77,29 +78,29 @@ void cal(void *par)
 				if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x53)
 				{
 					zeta= (short)((uart_rx[i+7]<<8|uart_rx[i+6]))/32768.0*PI;
-					for(rt_uint8_t j=i+11;j<34;j++)
-					{
-						if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x53)
-						{
-							omg = (short)((uart_rx[j+7]<<8|uart_rx[j+6]))/32768.0*2000/180.0*PI;
-							break;
-						}
-					}
+					//for(rt_uint8_t j=i+11;j<34;j++)//暂时不用omg
+					//{
+					//	if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x53)
+					//	{
+					//		omg = (short)((uart_rx[j+7]<<8|uart_rx[j+6]))/32768.0*2000/180.0*PI;
+					//		break;
+					//	}
+					//}
 					break;
 				}
-				else if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x52)
-				{
-					omg= (short)((uart_rx[i+7]<<8|uart_rx[i+6]))/32768.0*2000/180.0*PI;
-					for(rt_uint8_t j=i+11;j<34;j++)
-					{
-						if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x52)
-						{
-							zeta = (short)((uart_rx[j+7]<<8|uart_rx[j+6]))/32768.0*PI;
-							break;
-						}
-					}
-					break;
-				}
+				//lse if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x52)
+				//
+				//	omg= (short)((uart_rx[i+7]<<8|uart_rx[i+6]))/32768.0*2000/180.0*PI;
+				//	for(rt_uint8_t j=i+11;j<34;j++)
+				//	{
+				//		if(uart_rx[i] == 0x55 && uart_rx[i+1] == 0x52)
+				//		{
+				//			zeta = (short)((uart_rx[j+7]<<8|uart_rx[j+6]))/32768.0*PI;
+				//			break;
+				//		}
+				//	}
+				//	break;
+				//
 			}
 			if(recved == EVENT_FOR)
 			{

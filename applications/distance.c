@@ -1,6 +1,6 @@
 #include "distance.h"
-#define Kh 20
-#define Ka 1    //弧度制，相当于角度制ka*57.3
+#define Kh 0.2
+#define Ka 45.84  //弧度制，相当于角度制ka*57.3
 
 void distance(void *par);
 void distance_turn(void *par);
@@ -37,7 +37,7 @@ void distance(void *par)
                 rt_mb_recv(&dis_tar_mb[i], (rt_ubase_t *)&tar_loca[i], RT_WAITING_NO);	//更新目标
             }
 		
-			if(RT_EOK == rt_event_recv(&event_per, EVENT_PER, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
+			if(RT_EOK == rt_event_recv(&event_per, EVENT_PER, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, RT_NULL))
 			{
 				for(i = 0; i < 2; i++)
 				{
@@ -53,7 +53,7 @@ void distance(void *par)
 			arm_sqrt_f32(del[0],&tar_dist); //d=sqrt((y2-y1)^2+(x2-x1)^2)
             while(status == 1 )
             {
-                if(RT_EOK == rt_event_recv(&event_per, EVENT_PER, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
+                if(RT_EOK == rt_event_recv(&event_per, EVENT_PER, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, RT_NULL))
                 {
 					rt_mb_recv(&loc_now_mb[0], (rt_ubase_t *)&now_loca[0], RT_WAITING_FOREVER);
 					rt_mb_recv(&loc_now_mb[1], (rt_ubase_t *)&now_loca[1], RT_WAITING_FOREVER);
@@ -78,10 +78,14 @@ void distance(void *par)
 					{
 						alpha -=2*PI;
 					}
-					E = Kh*H+Ka*alpha;
-					if(recved == EVENT_DIST_BACK)
+					
+					if(recved == EVENT_DIST_FOR)
 					{
-						E = -E;
+						E = Kh*H+Ka*alpha;
+					}
+					else if(recved == EVENT_DIST_BACK)
+					{
+						E = -Kh*H-Ka*alpha;
 					}
 					rt_mb_send(&s_error,(rt_int32_t)(E*1000));
 					rt_mb_send(&dist_err_mb,(rt_int32_t)(now_dist - tar_dist));

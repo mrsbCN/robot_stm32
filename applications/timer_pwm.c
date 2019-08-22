@@ -13,7 +13,7 @@ void timer_pwm_entry(void *par)
         {
 			if(recved == EVENT_PWM_LEFT)
 			{
-				if(pulse_l == 2700000)
+				if(pulse_l == 2700000)//开
 				{
 					rt_pin_write(SPEAKER1_PIN, PIN_LOW);
 					for(rt_uint8_t i =0;i<5;i++)
@@ -22,9 +22,8 @@ void timer_pwm_entry(void *par)
 						rt_pwm_set(pwm_dev_left, PWM_LEFT, period, pulse_l);
 						rt_thread_mdelay(5);
 					}
-					rt_pin_write(SPEAKER1_PIN, PIN_HIGH);
 				}
-				else if(pulse_l == 3700000)
+				else if(pulse_l == 3700000)//关
 				{
 					for(rt_uint8_t i =0;i<5;i++)
 					{
@@ -32,11 +31,12 @@ void timer_pwm_entry(void *par)
 						rt_pwm_set(pwm_dev_left, PWM_LEFT, period, pulse_l);
 						rt_thread_mdelay(5);
 					}
+					rt_pin_write(SPEAKER1_PIN, PIN_HIGH);
 				}
 			}
 			if(recved == EVENT_PWM_RIGHT)
 			{
-				if(pulse_r == 2400000)
+				if(pulse_r == 2400000)//开
 				{
 					rt_pin_write(SPEAKER2_PIN, PIN_LOW);
 					for(rt_uint8_t i =0;i<8;i++)
@@ -45,9 +45,8 @@ void timer_pwm_entry(void *par)
 						rt_pwm_set(pwm_dev_right, PWM_RIGHT, period, pulse_r);
 						rt_thread_mdelay(5);
 					}
-					rt_pin_write(SPEAKER2_PIN, PIN_HIGH);
 				}
-				else if(pulse_l == 800000)
+				else if(pulse_l == 800000)//关
 				{
 					for(rt_uint8_t i =0;i<10;i++)
 					{
@@ -55,6 +54,7 @@ void timer_pwm_entry(void *par)
 						rt_pwm_set(pwm_dev_right, PWM_RIGHT, period, pulse_r);
 						rt_thread_mdelay(5);
 					}
+					rt_pin_write(SPEAKER2_PIN, PIN_HIGH);
 				}
 			}
 			
