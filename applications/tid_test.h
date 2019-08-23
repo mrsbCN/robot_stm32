@@ -3,6 +3,8 @@
 
 #define EVENT_TEST (1 << 0)
 
+#include "rtthread.h"
+#include "led.h"
 #include "mailbox.h"
 #include "step.h"
 #include "const.h"

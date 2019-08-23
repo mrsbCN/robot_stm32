@@ -5,7 +5,7 @@ void tid_to_right_entry(void *par)
     rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
     rt_uint32_t recved;	
 	
-	turnright(45,45,0,0);
+	turnright(-45,-45,0,0);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
 		stop_to_for();

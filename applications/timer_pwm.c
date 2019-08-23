@@ -3,10 +3,11 @@
 
 struct rt_device_pwm *pwm_dev_left,*pwm_dev_right;
 rt_uint32_t period, pulse_l,pulse_r;
-rt_uint32_t recved;
+
 
 void timer_pwm_entry(void *par)
 {
+	rt_uint32_t recved;
 	while(1)
 	{
 		if(RT_EOK == rt_event_recv(&event_pwm, EVENT_PWM_LEFT|EVENT_PWM_RIGHT|EVENT_PWM_CAM, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))	//如果收到dist事件则开始计算
@@ -16,16 +17,16 @@ void timer_pwm_entry(void *par)
 				if(pulse_l == 2700000)//开
 				{
 					rt_pin_write(SPEAKER1_PIN, PIN_LOW);
-					for(rt_uint8_t i =0;i<5;i++)
+					for(rt_uint8_t i =0;i<6;i++)
 					{
 						pulse_l += 200000;
 						rt_pwm_set(pwm_dev_left, PWM_LEFT, period, pulse_l);
 						rt_thread_mdelay(5);
 					}
 				}
-				else if(pulse_l == 3700000)//关
+				else if(pulse_l == 3900000)//关
 				{
-					for(rt_uint8_t i =0;i<5;i++)
+					for(rt_uint8_t i =0;i<6;i++)
 					{
 						pulse_l -= 200000;
 						rt_pwm_set(pwm_dev_left, PWM_LEFT, period, pulse_l);
@@ -41,16 +42,16 @@ void timer_pwm_entry(void *par)
 					rt_pin_write(SPEAKER2_PIN, PIN_LOW);
 					for(rt_uint8_t i =0;i<8;i++)
 					{
-						pulse_l -= 200000;
+						pulse_r -= 200000;
 						rt_pwm_set(pwm_dev_right, PWM_RIGHT, period, pulse_r);
 						rt_thread_mdelay(5);
 					}
 				}
-				else if(pulse_l == 800000)//关
+				else if(pulse_r == 800000)//关
 				{
 					for(rt_uint8_t i =0;i<10;i++)
 					{
-						pulse_l += 200000;
+						pulse_r += 200000;
 						rt_pwm_set(pwm_dev_right, PWM_RIGHT, period, pulse_r);
 						rt_thread_mdelay(5);
 					}

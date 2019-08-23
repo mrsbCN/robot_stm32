@@ -30,6 +30,7 @@ void distance(void *par)
     rt_uint32_t recved;
     while(1)
     {
+		recved = 0x99;
         if(RT_EOK == rt_event_recv(&event_loca, EVENT_DIST_FOR|EVENT_DIST_BACK, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))	//如果收到dist事件则开始计算
         {
             for(i = 0; i < 2; i++)
@@ -107,7 +108,7 @@ void distance_turn(void *par)
         {
 			rt_mb_recv(&angle_to_use,(rt_ubase_t *)&start_angle,RT_WAITING_FOREVER);
 			start_ang =start_angle / 6000.0;
-            rt_mb_recv(&dis_tar_mb[0], (rt_ubase_t *)&tar_angle, RT_WAITING_NO);	//借用x目标邮箱传递旋转角度
+            rt_mb_recv(&dis_tar_mb[0], (rt_ubase_t *)&tar_angle, RT_WAITING_NO);	//借用x目标邮箱传递目标角度
 			tar_ang = fabs(tar_angle *PI/180.0 - start_ang);
 			//只是为了清空邮箱
 			status = 1;

@@ -68,7 +68,7 @@ void cal(void *par)
 	
     while(1)
     {
-		rt_event_recv(&event_loca, EVENT_FOR|EVENT_BACK|EVENT_TURN, RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR, RT_WAITING_NO, &recved);
+		rt_event_recv(&event_dir, EVENT_FOR|EVENT_BACK|EVENT_TURN, RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR, RT_WAITING_NO, &recved);
 
 		if(RT_EOK == rt_mq_recv(&rx_mq,uart_rx,44,RT_WAITING_NO))
 		{

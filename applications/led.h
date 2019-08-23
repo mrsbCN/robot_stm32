@@ -18,9 +18,10 @@
 #define POWER3_PIN	GET_PIN(G,	13)
 #define SPEAKER1_PIN	GET_PIN(F,	0)
 #define SPEAKER2_PIN	GET_PIN(E,	4)
-//#define KEY1_PIN		GET_PIN(B,	2)
+#define SPEAKER3_PIN	GET_PIN(F,	1)
+#define SPEAKER4_PIN	GET_PIN(E,	5)
+#define OPENMV_PIN		GET_PIN(E,	12)
 #define KEY_patient		GET_PIN(A,	4)
-#define SPI5_NSS		GET_PIN(F,	6)
 static rt_thread_t tid_led1 = RT_NULL;
 static rt_thread_t tid_led2 = RT_NULL;
 static Button_t But_patient;

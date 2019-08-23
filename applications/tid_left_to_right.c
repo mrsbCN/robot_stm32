@@ -6,6 +6,7 @@ void tid_left_to_right_entry(void *par)
     rt_uint32_t recved;
 
 	rt_thread_mdelay(10);
+	rt_pin_write(OPENMV_PIN,PIN_LOW);
 	
 	turnleft(20,20,0,0);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
@@ -81,7 +82,7 @@ void tid_left_to_right_entry(void *par)
     }
     stop();
 	rt_thread_mdelay(20);
-	turnleft(20,20,0,0);
+	turnleft(180,180,0,0);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));

@@ -30,6 +30,6 @@ struct rx_msg
 
 extern struct rt_ringbuffer s_cur_rb[];
 extern struct rt_mailbox  s_tar_mb[],dis_tar_mb[],loc_now_mb[],s_kf_mb[],s_error,angle_to_use,dist_err_mb,s_nx_mb[];
-extern struct rt_event event_per,event_done,event_loca,event_pwm,event_patient,event_test;
+extern struct rt_event event_per,event_done,event_loca,event_dir,event_pwm,event_patient,event_test;
 extern struct rt_messagequeue sdcard_mq,uart_mq,rx_mq;
 extern struct rt_mutex mission_mu;

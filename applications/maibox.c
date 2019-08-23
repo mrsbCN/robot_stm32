@@ -7,7 +7,7 @@ struct rt_mailbox		s_tar_mb[2], 	dis_tar_mb[2],	loc_now_mb[2],	s_kf_mb[2],		s_er
 //以上邮箱分别是		目标速度		目标路程		目前的位置xy	滤波后的速度	位置和角度合成的速度偏差	传感器得到的角度
 struct rt_mailbox		dist_err_mb,	s_nx_mb[2];
 //距离差邮箱，KP控制					下一步的速度
-struct rt_event event_per, event_done, event_loca,event_pwm,event_patient,event_test;
+struct rt_event event_per, event_done, event_loca,event_dir,event_pwm,event_patient,event_test;
 
 struct rt_messagequeue sdcard_mq,uart_mq,rx_mq;
 struct rt_mutex  mission_mu;
@@ -61,6 +61,7 @@ int msgq_init(void)
 	
     rt_event_init(&event_per, "event_per", RT_IPC_FLAG_FIFO);
     rt_event_init(&event_loca, "event_dist", RT_IPC_FLAG_FIFO);
+	rt_event_init(&event_dir, "event_dir", RT_IPC_FLAG_FIFO);
     rt_event_init(&event_done, "event_done", RT_IPC_FLAG_FIFO);
     rt_event_init(&event_pwm, "event_pwm", RT_IPC_FLAG_FIFO);
 	rt_event_init(&event_test, "event_test", RT_IPC_FLAG_FIFO);

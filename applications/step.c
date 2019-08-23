@@ -11,7 +11,7 @@ void forward(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
 	rt_mb_send(&s_nx_mb[1],nr);
 	
     rt_event_send(&event_loca, EVENT_DIST_FOR);
-	rt_event_send(&event_loca, EVENT_FOR);
+	rt_event_send(&event_dir, EVENT_FOR);
 }
 
 void backward(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
@@ -24,7 +24,7 @@ void backward(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
 	rt_mb_send(&s_nx_mb[1],nr);
 	
     rt_event_send(&event_loca, EVENT_DIST_BACK);
-	rt_event_send(&event_loca, EVENT_BACK);
+	rt_event_send(&event_dir, EVENT_BACK);
 }
 
 void turnleft(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
@@ -36,7 +36,7 @@ void turnleft(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
 	rt_mb_send(&s_nx_mb[1],nr);
 	
     rt_event_send(&event_loca, EVENT_DIST_TURN);
-	rt_event_send(&event_loca, EVENT_TURN);
+	rt_event_send(&event_dir, EVENT_TURN);
 }
 
 void turnright(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)  //输入x为角度*100倍，y不用
@@ -48,7 +48,7 @@ void turnright(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)  //输�
 	rt_mb_send(&s_nx_mb[1],nr);
 	
     rt_event_send(&event_loca, EVENT_DIST_TURN);
-	rt_event_send(&event_loca, EVENT_TURN);
+	rt_event_send(&event_dir, EVENT_TURN);
 }
 
 void stop(void)
@@ -57,7 +57,7 @@ void stop(void)
     rt_mb_send(&s_tar_mb[1], 0);
 	rt_mb_send(&s_nx_mb[0],0);
 	rt_mb_send(&s_nx_mb[1],0);
-	rt_event_send(&event_loca, EVENT_TURN);
+	rt_event_send(&event_dir, EVENT_TURN);
 }
 
 void stop_to_for(void)
@@ -66,7 +66,7 @@ void stop_to_for(void)
     rt_mb_send(&s_tar_mb[1], 0);
 	rt_mb_send(&s_nx_mb[0],0);
 	rt_mb_send(&s_nx_mb[1],0);
-	rt_event_send(&event_loca, EVENT_FOR);
+	rt_event_send(&event_dir, EVENT_FOR);
 }
 
 void stop_to_back(void)
@@ -75,5 +75,5 @@ void stop_to_back(void)
     rt_mb_send(&s_tar_mb[1], 0);
 	rt_mb_send(&s_nx_mb[0],0);
 	rt_mb_send(&s_nx_mb[1],0);
-	rt_event_send(&event_loca, EVENT_BACK);
+	rt_event_send(&event_dir, EVENT_BACK);
 }

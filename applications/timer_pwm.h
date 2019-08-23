@@ -13,6 +13,5 @@ static rt_thread_t tid_timer_pwm = RT_NULL;
 
 extern struct rt_device_pwm *pwm_dev_left,*pwm_dev_right;      /* PWMÉè±¸¾ä±ú */   
 extern rt_uint32_t period, pulse_l,pulse_r;
-extern rt_uint32_t recved;
 extern void timer_pwm_init(void);
 #endif
