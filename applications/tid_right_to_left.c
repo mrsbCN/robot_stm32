@@ -6,7 +6,6 @@ void tid_right_to_left_entry(void *par)
     rt_uint32_t recved;
 
 	rt_thread_mdelay(10);
-	rt_pin_write(OPENMV_PIN,PIN_LOW);
 	turnright(-20,-20,0,0);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
@@ -14,67 +13,70 @@ void tid_right_to_left_entry(void *par)
 		rt_thread_mdelay(200);
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_right2_x,loc_cir_right2_y,spd_back_left,spd_back_right);
+	backward(loc_cir_right2_x+120,loc_cir_right2_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_right3_x,loc_cir_right3_y,spd_back_left,spd_back_right);
+	backward(loc_cir_right3_x+120,loc_cir_right3_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_right4_x,loc_cir_right4_y,spd_back_left,spd_back_right);
+	backward(loc_cir_right4_x+120,loc_cir_right4_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_right5_x,loc_cir_right5_y,spd_back_left,spd_back_right);
+	backward(loc_cir_right5_x+120,loc_cir_right5_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_right6_x,loc_cir_right6_y,spd_back_left,spd_back_right);
+	backward(loc_cir_right6_x+120,loc_cir_right6_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_right7_x,loc_cir_right7_y,spd_back_left,spd_back_right);
+	backward(loc_cir_right7_x+120,loc_cir_right7_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_left7_x,loc_cir_left7_y,spd_back_left,spd_back_right);
+	
+	rt_pin_write(OPENMV_PIN,PIN_LOW);
+	
+	backward(loc_cir_left7_x+120,loc_cir_left7_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_left6_x,loc_cir_left6_y,spd_back_left,spd_back_right);
+	backward(loc_cir_left6_x+120,loc_cir_left6_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_left5_x,loc_cir_left5_y,spd_back_left,spd_back_right);
+	backward(loc_cir_left5_x+120,loc_cir_left5_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_left4_x,loc_cir_left4_y,spd_back_left,spd_back_right);
+	backward(loc_cir_left4_x+120,loc_cir_left4_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_left3_x,loc_cir_left3_y,spd_back_left,spd_back_right);
+	backward(loc_cir_left3_x+120,loc_cir_left3_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_cir_left2_x,loc_cir_left2_y,spd_back_left,spd_back_right);
+	backward(loc_cir_left2_x+120,loc_cir_left2_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_left_done_x,loc_left_done_y,0,0);
+	backward(loc_left_done_x+120,loc_left_done_y-60,0,0);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
@@ -89,10 +91,6 @@ void tid_right_to_left_entry(void *par)
     stop_to_for();
 	rt_event_send(&event_pwm,EVENT_PWM_LEFT);
 	wait_for_patient();
-	if (RT_EOK == rt_event_recv(&event_patient, EVENT_PATIENT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
-    {
-        rt_kprintf("patient let me go.\n");
-    }
 	rt_event_send(&event_pwm,EVENT_PWM_LEFT);
 	
     rt_mutex_release(&mission_mu);

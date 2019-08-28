@@ -1,11 +1,46 @@
 #include "led.h"
 //存放各类GPIO初始化
 
-void led1_entry(void *par)
-{
 
+uint8_t Read_KEY(void) { return rt_pin_read(KEY1_PIN);}
+
+void Btnpwm_Dowm_CallBack(void *btn)		//单击开始运行
+{
+	rt_pin_write(OPENMV_PIN,PIN_LOW);
+	rt_thread_mdelay(10000);
+	rt_pin_write(OPENMV_PIN,PIN_HIGH);
+	rt_thread_mdelay(50);
+	rt_pin_write(OPENMV_PIN,PIN_LOW);
+}
+
+
+void openmv_entry(void *par)
+{
+	Button_t Button_pwm;
+	Button_Create("Button_pwm",
+             &Button_pwm, 
+             Read_KEY, 
+             PIN_HIGH);
+	Button_Attach(&Button_pwm,BUTTON_DOWM,Btnpwm_Dowm_CallBack); 
     while (1)
     {
+		Button_Process();
+        rt_thread_mdelay(50);
+    }
+}
+
+
+void led1_entry(void *par)
+{
+	Button_t Button_pwm;
+	Button_Create("Button_pwm",
+             &Button_pwm, 
+             Read_KEY, 
+             PIN_HIGH);
+	Button_Attach(&Button_pwm,BUTTON_DOWM,Btnpwm_Dowm_CallBack); 
+    while (1)
+    {
+		Button_Process();
         rt_pin_write(LED0_PIN, PIN_HIGH);
         rt_thread_mdelay(500);
         rt_pin_write(LED0_PIN, PIN_LOW);
@@ -59,6 +94,7 @@ void led_init(void)
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);//CAN正常闪烁
     rt_pin_mode(LED1_PIN, PIN_MODE_OUTPUT);//程序正常闪烁
 	rt_pin_mode(LED2_PIN, PIN_MODE_OUTPUT);//亮表示先去A
+	rt_pin_mode(KEY1_PIN, PIN_MODE_INPUT_PULLDOWN);
 	rt_pin_mode(KEY_patient, PIN_MODE_INPUT_PULLDOWN);
 	
 	rt_pin_write(LED2_PIN, PIN_LOW);
@@ -76,6 +112,13 @@ void led_init(void)
                                 24 , 10);
     if(tid_led2 != RT_NULL)
         rt_thread_startup(tid_led2);
+	
+	tid_led3 = rt_thread_create("openmv",
+                                openmv_entry , RT_NULL,
+                                THREAD_STACK_SIZE ,
+                                THREAD_PRIORITY , THREAD_TIMESLICE);
+    if(tid_led3 != RT_NULL)
+        rt_thread_startup(tid_led3);
 }
 
 
@@ -96,7 +139,8 @@ void wait_for_patient(void)
               PIN_HIGH);
 	Button_Attach(&But_patient,BUTTON_DOWM,Btn_patient_Dowm);
 	go_patient = 1;
-	while(go_patient)                            
+	rt_tick_t tim = rt_tick_get();
+	while((go_patient == 1) && (rt_tick_get() - tim) < 20000)                            
 	{
 		Button_Process();
 		rt_thread_mdelay(20);

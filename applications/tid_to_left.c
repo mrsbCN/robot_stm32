@@ -5,7 +5,8 @@ void tid_to_left_entry(void *par)
     rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
     rt_uint32_t recved;	
 	stop();
-	rt_thread_mdelay(10);
+	rt_thread_mdelay(20);
+	
 	turnleft(45,45,0,0);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
@@ -32,25 +33,21 @@ void tid_to_left_entry(void *par)
 	forward(loc_left5_x,loc_left5_y,spd_for_left,spd_for_right);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
-        rt_kprintf("done4:%d,time:%d\n", recved, (rt_tick_get()));
+        rt_kprintf("done5:%d,time:%d\n", recved, (rt_tick_get()));
     }
 	forward(loc_left6_x,loc_left6_y,spd_for_left,spd_for_right);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
-        rt_kprintf("done4:%d,time:%d\n", recved, (rt_tick_get()));
+        rt_kprintf("done6:%d,time:%d\n", recved, (rt_tick_get()));
     }
 	forward(loc_left_done_x,loc_left_done_y,0,0);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
-        rt_kprintf("done4:%d,time:%d\n", recved, (rt_tick_get()));
+        rt_kprintf("done7:%d,time:%d\n", recved, (rt_tick_get()));
     }
 	stop();
 	rt_event_send(&event_pwm,EVENT_PWM_LEFT);
-	wait_for_patient();
-	if (RT_EOK == rt_event_recv(&event_patient, EVENT_PATIENT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
-    {
-        rt_kprintf("patient let me go.\n");
-    }
+	wait_for_patient();//一直在按键事件中等待，或20s
 	rt_event_send(&event_pwm,EVENT_PWM_LEFT);
     rt_mutex_release(&mission_mu);
 }

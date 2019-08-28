@@ -5,9 +5,7 @@ void tid_left_to_right_entry(void *par)
     rt_mutex_take(&mission_mu, RT_WAITING_FOREVER);
     rt_uint32_t recved;
 
-	rt_thread_mdelay(10);
-	rt_pin_write(OPENMV_PIN,PIN_LOW);
-	
+	rt_thread_mdelay(10);	
 	turnleft(20,20,0,0);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
@@ -45,6 +43,9 @@ void tid_left_to_right_entry(void *par)
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
+	
+	rt_pin_write(OPENMV_PIN,PIN_LOW);
+	
 	backward(loc_cir_right7_x,loc_cir_right7_y,spd_back_left,spd_back_right);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
@@ -75,7 +76,7 @@ void tid_left_to_right_entry(void *par)
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_right_done_x,loc_right_done_y,0,0);
+	backward(loc_right_done_x+100,loc_right_done_y-70,0,0);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
@@ -90,10 +91,6 @@ void tid_left_to_right_entry(void *par)
     stop_to_for();
 	rt_event_send(&event_pwm,EVENT_PWM_RIGHT);
 	wait_for_patient();
-	if (RT_EOK == rt_event_recv(&event_patient, EVENT_PATIENT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
-    {
-        rt_kprintf("patient let me go.\n");
-    }
 	rt_event_send(&event_pwm,EVENT_PWM_RIGHT);
 	
     rt_mutex_release(&mission_mu);

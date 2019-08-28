@@ -1,7 +1,6 @@
 #include "ADRC.h"
 Fhan_Data ADRC_SPEED[2]={0};
 Fhan_Data ADRC_DEV={0};
-
 float Constrain_Float(float amt, float low, float high){
   return ((amt)<(low)?(low):((amt)>(high)?(high):(amt)));
 }
@@ -126,7 +125,6 @@ void ESO_ADRC(Fhan_Data *fhan_Input)
 }
 
 
-/*完全线性的*/
 void ADRC_Control(Fhan_Data *fhan_Input,float expect_ADRC,float feedback_ADRC)
 {
 	
@@ -158,10 +156,6 @@ void ADRC_Control(Fhan_Data *fhan_Input,float expect_ADRC,float feedback_ADRC)
 	fhan_Input->u0=fhan_Input->beta_1*Fal_ADRC(fhan_Input->e1,fhan_Input->alpha1,fhan_Input->zeta)
                 +fhan_Input->beta_2*Fal_ADRC(temp_e2,fhan_Input->alpha2,fhan_Input->zeta);
 	
-	//fhan_Input->u=(fhan_Input->beta_1*fhan_Input->e1
-	//				+fhan_Input->beta_2*fhan_Input->e2
-	//				-fhan_Input->z3)/fhan_Input->b0
-	//				+fhan_Input->e0;
 	fhan_Input->u = (fhan_Input->u0-fhan_Input->z3)/fhan_Input->b0+fhan_Input->e0;
-    fhan_Input->u=Constrain_Float(fhan_Input->u,-7000,7000);//加入扰动补偿
+    fhan_Input->u=Constrain_Float(fhan_Input->u,-10000,10000);//加入扰动补偿
 }

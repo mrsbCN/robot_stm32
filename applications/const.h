@@ -1,4 +1,6 @@
 #include "rtthread.h"
+#define K   0.001278317      //(3.1415*125/8192/36)     //总角度-->距离(mm)系数 pi，轮子直径，一圈信号数，减速比
+
 
 extern const rt_int32_t speed1 ;  	//直行速度
 

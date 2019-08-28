@@ -126,7 +126,7 @@ static void change_adrc(int argc, char *argv[])
 	}
 }
 /* 导出到 msh 命令列表中 */
-MSH_CMD_EXPORT(change_adrc,"change_adrc canshu  daxiao(h,h0,beta_0 is 1000 plus)");
+//MSH_CMD_EXPORT(change_adrc,"change_adrc canshu  daxiao(h,h0,beta_0 is 1000 plus)");
 
 
 static void timeout1(void *parameter)
@@ -180,37 +180,12 @@ void period_test(void)
 	}
 }
 
-MSH_CMD_EXPORT(period_test,"period test");
+//MSH_CMD_EXPORT(period_test,"period test");
 
-void speaker_test(int argc, char *argv[])
+void openmv_test(int argc, char *argv[])
 {
-	rt_int32_t cmd1,cmd2;
-	cmd1 = atoi(argv[1]);
-	cmd2 = atoi(argv[2]);
-	if(argc ==3)
-	{
-		if(cmd1 == 1)
-		{
-			if(cmd2 == 0)
-			{
-				rt_pin_write(SPEAKER1_PIN,PIN_LOW);
-			}
-			else if(cmd2 == 1)
-			{
-				rt_pin_write(SPEAKER1_PIN,PIN_HIGH);
-			}
-		}
-		else if(cmd1 == 2)
-		{
-			if(cmd2 == 0)
-			{
-				rt_pin_write(SPEAKER2_PIN,PIN_LOW);
-			}
-			else if(cmd2 == 1)
-			{
-				rt_pin_write(SPEAKER2_PIN,PIN_HIGH);
-			}
-		}
-	}
+	rt_pin_write(OPENMV_PIN,PIN_LOW);
+	rt_thread_mdelay(100);
+	rt_pin_write(OPENMV_PIN,PIN_HIGH);
 }
-MSH_CMD_EXPORT(speaker_test,"speaker_test");
+MSH_CMD_EXPORT(openmv_test,"openmv_test");

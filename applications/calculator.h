@@ -6,6 +6,8 @@
 #include "ADRC.h"
 #include "kalman.h"
 #include "arm_math.h"
+#include "const.h"
+
 typedef struct
 {
     rt_int16_t	 	speed_rpm;

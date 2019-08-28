@@ -1,5 +1,4 @@
 #include "calculator.h"
-#define K   0.0013315      //(3.1415*125/8192/36)     //总角度-->距离(mm)系数 pi，轮子直径，一圈信号数，减速比
 
 void cal(void *par);
 

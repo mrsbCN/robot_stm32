@@ -31,13 +31,15 @@ void tid_left_to_be_entry(void *par)
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	forward(loc_begin_x,loc_begin_y,spd_for_left,spd_for_right); //前进
+	forward(loc_begin_x,loc_begin_y-100,0,0); //前进
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	
     stop();
+	rt_pin_write(OPENMV_PIN,PIN_HIGH);
+	rt_thread_mdelay(10);
+	rt_pin_write(OPENMV_PIN,PIN_LOW);
     rt_mutex_release(&mission_mu);
 }
 

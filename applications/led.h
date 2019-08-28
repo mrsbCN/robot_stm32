@@ -21,9 +21,11 @@
 #define SPEAKER3_PIN	GET_PIN(F,	1)
 #define SPEAKER4_PIN	GET_PIN(E,	5)
 #define OPENMV_PIN		GET_PIN(E,	12)
+#define KEY1_PIN		GET_PIN(B,	2)
 #define KEY_patient		GET_PIN(A,	4)
 static rt_thread_t tid_led1 = RT_NULL;
 static rt_thread_t tid_led2 = RT_NULL;
+static rt_thread_t tid_led3 = RT_NULL;
 static Button_t But_patient;
 static rt_uint8_t go_patient = 1;
 void led_init(void);

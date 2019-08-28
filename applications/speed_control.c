@@ -1,5 +1,4 @@
 #include "speed_control.h"
-#define K   0.0013315      //(3.1415*125/8192/36)     //总角度-->距离(mm)系数 pi，轮子直径，一圈信号数，减速比
 
 void speed_control(void *par);
 static rt_thread_t tid_speed_control = RT_NULL;
@@ -10,9 +9,9 @@ float ADRC_Unit[3][15]=
 {
 /*TD跟踪微分器   改进最速TD,h0=N*h      扩张状态观测器ESO(w0=4wc)           扰动补偿     			非线性组合(wc)*/
 /*  r     h      	N0                 beta_01   beta_02    beta_03     	b0      	beta_0			beta_1      beta_2      alpha1  alpha2  zeta */
- {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
- {30000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
- {30000 ,0.005 , 	5,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,	     		0.8,   1.5,    0.03},
+ {10000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
+ {10000 ,0.005 , 	20,               	100,      	300,      1000,      	60,    		0.005,			400,      	20,     		0.8,   1.5,    0.03},
+ {30000 ,0.005 , 	5,               	300,		4000,	  10000,      	100,   		0,				1.2,      	0.05,	    	0.8,   1.5,    0.03},
 };
 
 void speed_control_init(void)
@@ -37,9 +36,9 @@ void speed_control_init(void)
                               0,						//rt_uint16_t period
                               1000,						//rt_int16_t  max_err
                               0,						//rt_int16_t  target
-                              15,						//float 	kp
+                              20,						//float 	kp
                               0,						//float 	ki
-                              5);						//float 	kd
+                              8);						//float 	kd
 	pid_init(&pid_dist);
 	pid_dist.f_param_init(&pid_dist,			//PID_TypeDef * pid
                               PID_Position,				//PID_ID   id
