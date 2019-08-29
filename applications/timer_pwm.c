@@ -28,7 +28,7 @@ void timer_pwm_entry(void *par)
 				{
 					for(rt_uint8_t i =0;i<9;i++)
 					{
-						pulse_l -= 200000;
+						pulse_l += 200000;
 						rt_pwm_set(pwm_dev_left, PWM_LEFT, period, pulse_l);
 						rt_thread_mdelay(5);
 					}
@@ -51,7 +51,7 @@ void timer_pwm_entry(void *par)
 				{
 					for(rt_uint8_t i =0;i<6;i++)
 					{
-						pulse_r += 200000;
+						pulse_r -= 200000;
 						rt_pwm_set(pwm_dev_right, PWM_RIGHT, period, pulse_r);
 						rt_thread_mdelay(5);
 					}

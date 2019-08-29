@@ -76,7 +76,7 @@ void tid_right_to_left_entry(void *par)
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_left_done_x+120,loc_left_done_y-60,0,0);
+	backward(loc_left_done_x+120,loc_left_done_y-20,0,0);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));

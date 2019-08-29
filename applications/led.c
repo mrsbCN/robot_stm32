@@ -140,7 +140,7 @@ void wait_for_patient(void)
 	Button_Attach(&But_patient,BUTTON_DOWM,Btn_patient_Dowm);
 	go_patient = 1;
 	rt_tick_t tim = rt_tick_get();
-	while((go_patient == 1) && (rt_tick_get() - tim) < 20000)                            
+	while((go_patient == 1) && (rt_tick_get() - tim) < 10000)                            
 	{
 		Button_Process();
 		rt_thread_mdelay(20);

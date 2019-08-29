@@ -35,12 +35,12 @@ void tid_to_right_entry(void *par)
     {
         rt_kprintf("done4:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	forward(loc_right6_x,loc_right6_y,spd_for_left,spd_for_right);
+	forward(loc_right6_x+120,loc_right6_y-60,spd_for_left,spd_for_right);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done4:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	forward(loc_right_done_x+120,loc_right_done_y-60,0,0);
+	forward(loc_right_done_x+120,loc_right_done_y-10,0,0);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done4:%d,time:%d\n", recved, (rt_tick_get()));
