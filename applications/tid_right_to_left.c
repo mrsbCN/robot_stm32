@@ -44,6 +44,8 @@ void tid_right_to_left_entry(void *par)
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
 	
+	
+	rt_pwm_set(pwm_dev_top,PWM_TOP,period,4400000);
 	rt_pin_write(OPENMV_PIN,PIN_LOW);
 	
 	backward(loc_cir_left7_x+120,loc_cir_left7_y,spd_back_left,spd_back_right);
@@ -91,6 +93,12 @@ void tid_right_to_left_entry(void *par)
     stop_to_for();
 	rt_event_send(&event_pwm,EVENT_PWM_LEFT);
 	wait_for_patient();
+	rt_pwm_set(pwm_dev_top,PWM_TOP,period,4300000);
+	rt_thread_mdelay(3000);
+	
+	rt_pwm_set(pwm_dev_top,PWM_TOP,period,4500000);
+	rt_thread_mdelay(3000);
+	
 	rt_event_send(&event_pwm,EVENT_PWM_LEFT);
 	
     rt_mutex_release(&mission_mu);

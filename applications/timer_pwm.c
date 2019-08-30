@@ -1,8 +1,8 @@
 #include "timer_pwm.h"
 
 
-struct rt_device_pwm *pwm_dev_left,*pwm_dev_right;
-rt_uint32_t period, pulse_l,pulse_r;
+struct rt_device_pwm *pwm_dev_left,*pwm_dev_right,*pwm_dev_top;
+rt_uint32_t period, pulse_l,pulse_r,pulse_t;
 
 
 void timer_pwm_entry(void *par)
@@ -69,12 +69,18 @@ void timer_pwm_init(void)
 	period = 20000000;  //单位ns
 	pulse_l = 4700000;	/* PWM脉冲宽度值，单位为纳秒ns */
 	pulse_r = 2700000;
+	pulse_t = 3000000;
 	pwm_dev_left = (struct rt_device_pwm *)rt_device_find(PWM_DEV_NAME);
 	rt_pwm_set(pwm_dev_left, PWM_LEFT, period, pulse_l);
 	rt_pwm_enable(pwm_dev_left, PWM_LEFT);
 	pwm_dev_right = (struct rt_device_pwm *)rt_device_find(PWM_DEV_NAME);
 	rt_pwm_set(pwm_dev_right, PWM_RIGHT, period, pulse_r);
 	rt_pwm_enable(pwm_dev_left, PWM_RIGHT);
+	
+	pwm_dev_top = (struct rt_device_pwm *)rt_device_find(PWM_DEV_NAME);
+	rt_pwm_set(pwm_dev_top, PWM_TOP, period, pulse_t);
+	rt_pwm_enable(pwm_dev_top, PWM_TOP);
+	
 	
 	tid_timer_pwm = rt_thread_create("tid_timer_pwm",
                                    timer_pwm_entry, RT_NULL,

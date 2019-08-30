@@ -44,6 +44,7 @@ void tid_left_to_right_entry(void *par)
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
 	
+	rt_pwm_set(pwm_dev_top,PWM_TOP,period,4000000);
 	rt_pin_write(OPENMV_PIN,PIN_LOW);
 	
 	backward(loc_cir_right7_x,loc_cir_right7_y,spd_back_left,spd_back_right);
@@ -76,7 +77,7 @@ void tid_left_to_right_entry(void *par)
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
     }
-	backward(loc_right_done_x+100,loc_right_done_y-70,0,0);
+	backward(loc_right_done_x+120,loc_right_done_y-30,0,0);
     if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
         rt_kprintf("done1:%d,time:%d\n", recved, (rt_tick_get()));
@@ -91,6 +92,13 @@ void tid_left_to_right_entry(void *par)
     stop_to_for();
 	rt_event_send(&event_pwm,EVENT_PWM_RIGHT);
 	wait_for_patient();
+	
+	rt_pwm_set(pwm_dev_top,PWM_TOP,period,3900000);
+	rt_thread_mdelay(3000);
+	
+	rt_pwm_set(pwm_dev_top,PWM_TOP,period,4100000);
+	rt_thread_mdelay(3000);
+	
 	rt_event_send(&event_pwm,EVENT_PWM_RIGHT);
 	
     rt_mutex_release(&mission_mu);

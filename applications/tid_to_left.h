@@ -7,6 +7,8 @@
 #include "dji_pid.h"
 #include "calculator.h"
 #include "led.h"
+#include "timer_pwm.h"
+
 static rt_thread_t tid_to_left = RT_NULL;
 
 void to_left_init(void);

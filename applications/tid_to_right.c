@@ -7,6 +7,8 @@ void tid_to_right_entry(void *par)
 	stop();
 	rt_thread_mdelay(20);
 	
+	rt_pwm_set(pwm_dev_top,PWM_TOP,period,1600000);
+	
 	turnright(-45,-45,0,0);
 	if (RT_EOK == rt_event_recv(&event_done, EVENT_DONE, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))
     {
@@ -48,6 +50,13 @@ void tid_to_right_entry(void *par)
 	stop();
 	rt_event_send(&event_pwm,EVENT_PWM_RIGHT);
 	wait_for_patient();
+	
+	rt_pwm_set(pwm_dev_top,PWM_TOP,period,1500000);
+	rt_thread_mdelay(3000);
+	
+	rt_pwm_set(pwm_dev_top,PWM_TOP,period,1700000);
+	rt_thread_mdelay(3000);
+	
 	rt_event_send(&event_pwm,EVENT_PWM_RIGHT);
     rt_mutex_release(&mission_mu);
 }
