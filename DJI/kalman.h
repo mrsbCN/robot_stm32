@@ -12,7 +12,7 @@
 #define _KALMAN_H
 
 #include "stdlib.h"
-
+#include "rtthread.h"
 typedef struct {
     float X_last; //上一时刻的最优结果
     float X_mid;  //当前时刻的预测结果
@@ -25,9 +25,10 @@ typedef struct {
     float Q;
     float R;
     float H;
+	rt_int32_t target_last;
 }kalman;
 
 void kalmanCreate(kalman *p,float T_Q,float T_R);
-float KalmanFilter(kalman* p,float dat);
+float KalmanFilter(kalman* p,float dat,rt_int32_t target);
 
 #endif

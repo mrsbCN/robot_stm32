@@ -31,10 +31,10 @@ void speed_control_init(void)
     pid_yaw.f_param_init(&pid_yaw,			//PID_TypeDef * pid
                               PID_Speed,				//PID_ID   id
                               1000,					//rt_uint16_t maxout
-                              1000,						//rt_uint16_t intergral_limit
+                              2000,						//rt_uint16_t intergral_limit
                               0,						//float deadband
                               0,						//rt_uint16_t period
-                              1000,						//rt_int16_t  max_err
+                              2000,						//rt_int16_t  max_err
                               0,						//rt_int16_t  target
                               20,						//float 	kp
                               0,						//float 	ki
@@ -108,6 +108,8 @@ void speed_control(void *par)
 			ADRC_Control(&ADRC_SPEED[1],tr,real_v[1]);
 			ele[0] = (rt_int16_t)ADRC_SPEED[0].u;
 			ele[1] = (rt_int16_t)ADRC_SPEED[1].u;
+			rt_mb_send(&adrc_v1_mb[0],(rt_int32_t)ADRC_SPEED[0].v1);
+			rt_mb_send(&adrc_v1_mb[1],(rt_int32_t)ADRC_SPEED[1].v1);
 			done = 1;
 		}
 		

@@ -39,7 +39,7 @@ void turnleft(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)
 	rt_event_send(&event_dir, EVENT_TURN);
 }
 
-void turnright(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)  //输入x为角度*100倍，y不用
+void turnright(rt_int32_t x, rt_int32_t y,rt_int32_t nl, rt_int32_t nr)  //输入x为目标角度（不是变化角），y不用
 {
 	rt_mb_send(&s_tar_mb[0], spd_tri_left);
     rt_mb_send(&s_tar_mb[1], spd_tri_right);

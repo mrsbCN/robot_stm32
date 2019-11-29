@@ -37,6 +37,7 @@ void cal(void *par)
 	x = loc_begin_x;
 	y = loc_begin_y;
 	float omg,last_zeta,zeta=0.0;
+	rt_int32_t adrc_v1[2];
     do
     {
         for(i = 0; i < 2; i++)
@@ -113,12 +114,16 @@ void cal(void *par)
 		
         for(i = 0; i < 2; i++)
         {
+			rt_mb_recv(&adrc_v1_mb[0],(rt_ubase_t *)&adrc_v1[0],RT_WAITING_NO);
+			rt_mb_recv(&adrc_v1_mb[1],(rt_ubase_t *)&adrc_v1[1],RT_WAITING_NO);
+			
             if( 8 == rt_ringbuffer_get(&s_cur_rb[i], recv[i], 8))
             {
                 get_moto_measure(&moto_chassis[i], recv[i]);
-				moto_chassis[i].speed_rpm = KalmanFilter(&spd_filter[i],moto_chassis[i].speed_rpm); 
+				moto_chassis[i].speed_rpm = KalmanFilter(&spd_filter[i],moto_chassis[i].speed_rpm,adrc_v1[i]); 
 				done[i] = 1;
             }
+
         }
 		if(done[0] && done[1])
 		{

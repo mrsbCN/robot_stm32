@@ -75,6 +75,7 @@ void led_init(void)
 {
     rt_pin_mode(POWER1_PIN, PIN_MODE_OUTPUT);
     rt_pin_mode(POWER2_PIN, PIN_MODE_OUTPUT);
+	rt_pin_mode(POWERCI_PIN, PIN_MODE_OUTPUT);
 	rt_pin_mode(POWER3_PIN, PIN_MODE_OUTPUT);
 	rt_pin_mode(SPEAKER1_PIN, PIN_MODE_OUTPUT);
     rt_pin_mode(SPEAKER2_PIN, PIN_MODE_OUTPUT);
@@ -84,6 +85,7 @@ void led_init(void)
     
 	rt_pin_write(POWER1_PIN, PIN_HIGH);
     rt_pin_write(POWER2_PIN, PIN_HIGH);
+	rt_pin_write(POWERCI_PIN, PIN_HIGH);
 	rt_pin_write(POWER3_PIN, PIN_HIGH);
 	rt_pin_write(SPEAKER1_PIN, PIN_HIGH);
     rt_pin_write(SPEAKER2_PIN, PIN_HIGH);
@@ -140,7 +142,7 @@ void wait_for_patient(void)
 	Button_Attach(&But_patient,BUTTON_DOWM,Btn_patient_Dowm);
 	go_patient = 1;
 	rt_tick_t tim = rt_tick_get();
-	while((go_patient == 1) && (rt_tick_get() - tim) < 7000)                            
+	while((go_patient == 1) && (rt_tick_get() - tim) < 5000)                            
 	{
 		Button_Process();
 		rt_thread_mdelay(20);

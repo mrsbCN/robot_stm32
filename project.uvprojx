@@ -512,44 +512,29 @@
               <FilePath>.\applications\step.c</FilePath>
             </File>
             <File>
-              <FileName>tid_left_to_be.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_left_to_be.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_left_to_right.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_left_to_right.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_right_to_be.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_right_to_be.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_right_to_left.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_right_to_left.c</FilePath>
-            </File>
-            <File>
               <FileName>tid_test.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\tid_test.c</FilePath>
             </File>
             <File>
-              <FileName>tid_to_left.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_to_left.c</FilePath>
-            </File>
-            <File>
-              <FileName>tid_to_right.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\tid_to_right.c</FilePath>
-            </File>
-            <File>
               <FileName>timer_pwm.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\timer_pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_chafang.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_chafang.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_to_a.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_to_a.c</FilePath>
+            </File>
+            <File>
+              <FileName>tid_to_b.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\tid_to_b.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -23,7 +23,6 @@
   *****************************************************************************************/
 
 #include "kalman.h"
-#include "rtthread.h"
 /**
   * @name   kalmanCreate
   * @brief  创建一个卡尔曼滤波器
@@ -43,6 +42,7 @@ void kalmanCreate(kalman *p,float T_Q,float T_R)
     p->A = 1;
     p->H = 1;
     p->X_mid = p->X_last;
+	p->target_last = 0;
     //return p;
 }
 
@@ -54,14 +54,15 @@ void kalmanCreate(kalman *p,float T_Q,float T_R)
   * @retval 滤波后的数据
   */
 
-float KalmanFilter(kalman* p,float dat)
+float KalmanFilter(kalman* p,float dat,rt_int32_t target)
 {
-    p->X_mid =p->A*p->X_last;                    //x(k|k-1) = AX(k-1|k-1)+BU(k)  //在这里加入控制量
-    p->P_mid = p->A*p->P_last+p->Q;               //p(k|k-1) = Ap(k-1|k-1)A'+Q
-    p->kg = p->P_mid/(p->P_mid+p->R);             //kg(k) = p(k|k-1)H'/(Hp(k|k-1)'+R)
-    p->X_now = p->X_mid+p->kg*(dat-p->X_mid);     //x(k|k) = X(k|k-1)+kg(k)(Z(k)-HX(k|k-1))
-    p->P_now = (1-p->kg)*p->P_mid;                //p(k|k) = (I-kg(k)H)P(k|k-1)
-    p->P_last = p->P_now;                         //状态更新
+    p->X_mid =p->A*p->X_last;//+(target - p->target_last);         //x(k|k-1) = AX(k-1|k-1)+BU(k)  //在这里加入控制量
+    p->P_mid = p->A*p->P_last+p->Q;               				//p(k|k-1) = Ap(k-1|k-1)A'+Q
+    p->kg = p->P_mid/(p->P_mid+p->R);             				//kg(k) = p(k|k-1)H'/(Hp(k|k-1)'+R)
+    p->X_now = p->X_mid+p->kg*(dat-p->X_mid);     				//x(k|k) = X(k|k-1)+kg(k)(Z(k)-HX(k|k-1))
+    p->P_now = (1-p->kg)*p->P_mid;                				//p(k|k) = (I-kg(k)H)P(k|k-1)
+    p->P_last = p->P_now;                         				//状态更新
     p->X_last = p->X_now;
+	p->target_last = target;
     return p->X_now;
 }

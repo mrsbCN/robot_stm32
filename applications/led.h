@@ -15,6 +15,7 @@
 #define LED2_PIN    GET_PIN(G, 	1)
 #define POWER1_PIN	GET_PIN(H,	2)
 #define POWER2_PIN	GET_PIN(H,	3)
+#define POWERCI_PIN	GET_PIN(H,	4)
 #define POWER3_PIN	GET_PIN(G,	13)
 #define SPEAKER1_PIN	GET_PIN(F,	0)
 #define SPEAKER2_PIN	GET_PIN(E,	4)

@@ -75,22 +75,17 @@ int main(void)
 	{
 		rt_kprintf("go A first!\n");
 		rt_thread_mdelay(1);
-		to_left_init();
+		chafang_init();
 		rt_thread_mdelay(1);
-		left_to_right_init();
-		rt_thread_mdelay(1);
-		right_to_be_init();
-
+		to_A_init();
 	}
 	else if (status == 1)
 	{
 		rt_kprintf("go B first!\n");
 		rt_thread_mdelay(1);
-		to_right_init();
+		chafang_init();
 		rt_thread_mdelay(1);
-		right_to_left_init();
-		rt_thread_mdelay(1);
-		left_to_be_init();
+		to_B_init();
 	}
     rt_mutex_release(&mission_mu);
     return RT_EOK;

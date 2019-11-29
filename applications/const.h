@@ -20,74 +20,26 @@ extern const rt_int32_t spd_tri_right;
 extern const rt_int32_t loc_begin_x;
 extern const rt_int32_t loc_begin_y;
 
-extern const rt_int32_t loc_left2_x;
-extern const rt_int32_t loc_left2_y;
+extern const rt_int32_t loc_R_x;
+extern const rt_int32_t loc_R_y;
 
-extern const rt_int32_t loc_left3_x;
-extern const rt_int32_t loc_left3_y;
+extern const rt_int32_t loc_Q_x;
+extern const rt_int32_t loc_Q_y;
 
-extern const rt_int32_t loc_left4_x;
-extern const rt_int32_t loc_left4_y;
+extern const rt_int32_t loc_M_x;
+extern const rt_int32_t loc_M_y;
 
-extern const rt_int32_t loc_left5_x;
-extern const rt_int32_t loc_left5_y;
+extern const rt_int32_t loc_S_x;
+extern const rt_int32_t loc_S_y;
 
-extern const rt_int32_t loc_left6_x;
-extern const rt_int32_t loc_left6_y;
+extern const rt_int32_t loc_N_x;
+extern const rt_int32_t loc_N_y;
 
-extern const rt_int32_t loc_left_done_x;
-extern const rt_int32_t loc_left_done_y;
+extern const rt_int32_t loc_nurse_x;
+extern const rt_int32_t loc_nurse_y;
 
-extern const rt_int32_t loc_cir_left2_x;
-extern const rt_int32_t loc_cir_left2_y;
+extern const rt_int32_t loc_nurse2_x;
+extern const rt_int32_t loc_nurse2_y;
 
-extern const rt_int32_t loc_cir_left3_x;
-extern const rt_int32_t loc_cir_left3_y;
-
-extern const rt_int32_t loc_cir_left4_x;
-extern const rt_int32_t loc_cir_left4_y;
-
-extern const rt_int32_t loc_cir_left5_x;
-extern const rt_int32_t loc_cir_left5_y;
-
-extern const rt_int32_t loc_cir_left6_x;
-extern const rt_int32_t loc_cir_left6_y;
-
-extern const rt_int32_t loc_cir_left7_x;
-extern const rt_int32_t loc_cir_left7_y;
-
-extern const rt_int32_t loc_right2_x;
-extern const rt_int32_t loc_right2_y;
-
-extern const rt_int32_t loc_right3_x;
-extern const rt_int32_t loc_right3_y;
-
-extern const rt_int32_t loc_right4_x;
-extern const rt_int32_t loc_right4_y;
-
-extern const rt_int32_t loc_right5_x;
-extern const rt_int32_t loc_right5_y;
-
-extern const rt_int32_t loc_right6_x;
-extern const rt_int32_t loc_right6_y;
-
-extern const rt_int32_t loc_right_done_x;
-extern const rt_int32_t loc_right_done_y;
-
-extern const rt_int32_t loc_cir_right2_x;
-extern const rt_int32_t loc_cir_right2_y;
-
-extern const rt_int32_t loc_cir_right3_x;
-extern const rt_int32_t loc_cir_right3_y;
-
-extern const rt_int32_t loc_cir_right4_x;
-extern const rt_int32_t loc_cir_right4_y;
-
-extern const rt_int32_t loc_cir_right5_x;
-extern const rt_int32_t loc_cir_right5_y;
-
-extern const rt_int32_t loc_cir_right6_x;
-extern const rt_int32_t loc_cir_right6_y;
-
-extern const rt_int32_t loc_cir_right7_x;
-extern const rt_int32_t loc_cir_right7_y;
+extern const rt_int32_t loc_half_be_x;
+extern const rt_int32_t loc_half_be_y;

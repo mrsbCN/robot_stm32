@@ -31,7 +31,16 @@ void distance(void *par)
     while(1)
     {
 		recved = 0x99;
-        if(RT_EOK == rt_event_recv(&event_loca, EVENT_DIST_FOR|EVENT_DIST_BACK, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &recved))	//如果收到dist事件则开始计算
+		if(RT_EOK == rt_event_recv(&event_per, EVENT_PER, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, RT_NULL))
+		{
+			for(i = 0; i < 2; i++)
+			{
+				rt_mb_recv(&loc_now_mb[i], (rt_ubase_t *)&start_loca[i], RT_WAITING_FOREVER);					//更新当前位置
+			}
+		}
+		rt_mb_recv(&angle_to_use,(rt_ubase_t *)&angle100,RT_WAITING_FOREVER);
+		
+        if(RT_EOK == rt_event_recv(&event_loca, EVENT_DIST_FOR|EVENT_DIST_BACK, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_NO, &recved))	//如果收到dist事件则开始计算
         {
             for(i = 0; i < 2; i++)
             {
@@ -94,6 +103,10 @@ void distance(void *par)
             }
 
         }
+		else
+		{
+			rt_thread_mdelay(1);
+		}
     }
 }
 
